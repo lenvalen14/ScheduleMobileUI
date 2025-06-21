@@ -1,0 +1,15 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.ScheduleMedical" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="windowSplashScreenBackground">@drawable/splash_background</item>
+
+        <item name="windowSplashScreenAnimatedIcon">@drawable/ic_logo_splash</item>
+
+        <item name="postSplashScreenTheme">@style/Theme.ScheduleMedical</item>
+
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+    </style>
+
+    <style name="Theme.ScheduleMedical" parent="Base.Theme.ScheduleMedical" />
+</resources>
