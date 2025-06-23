@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="2dp"
+    app:strokeColor="#F0F0F0"
+    app:strokeWidth="1dp"
+    app:cardBackgroundColor="#FFFFFF">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+        <!-- Hospital Logo -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="0dp"
+            app:strokeColor="#F0F0F0"
+            app:strokeWidth="1dp">
+
+            <ImageView
+                android:id="@+id/ivHospitalLogo"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:background="#F8F9FA"
+                tools:src="@drawable/logo_benh_vien_mat" />
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Hospital Information -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="16dp"
+            android:orientation="vertical">
+
+            <!-- Hospital Name -->
+            <TextView
+                android:id="@+id/tvHospitalName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#212529"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:maxLines="2"
+                android:ellipsize="end"
+                tools:text="Bệnh viện Mắt TP.HCM" />
+
+            <!-- Hospital Address -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/ic_map"
+                    app:tint="#6C757D" />
+
+                <TextView
+                    android:id="@+id/tvHospitalAddress"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:textColor="#6C757D"
+                    android:textSize="14sp"
+                    android:maxLines="2"
+                    android:ellipsize="end"
+                    tools:text="280 Nam Kỳ Khởi Nghĩa, Quận 3, TP.HCM" />
+
+            </LinearLayout>
+
+            <!-- Rating and Distance -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <!-- Rating -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/ic_star_filled"
+                        app:tint="#FFC107" />
+
+                    <TextView
+                        android:id="@+id/tvRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:textColor="#212529"
+                        android:textSize="12sp"
+                        android:textStyle="bold"
+                        tools:text="4.8" />
+
+                </LinearLayout>
+
+                <!-- Separator -->
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="4dp"
+                    android:layout_marginHorizontal="12dp"
+                    android:background="@drawable/circle_dot"
+                    android:backgroundTint="#DEE2E6" />
+
+                <!-- Distance -->
+                <TextView
+                    android:id="@+id/tvDistance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#6C757D"
+                    android:textSize="12sp"
+                    tools:text="2.5 km" />
+
+                <!-- Spacer -->
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1" />
+
+                <!-- Book Now Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnBookNow"
+                    style="@style/Widget.MaterialComponents.Button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="32dp"
+                    android:backgroundTint="#447F98"
+                    android:text="Đặt lịch"
+                    android:textSize="12sp"
+                    android:minWidth="0dp"
+                    android:paddingHorizontal="16dp"
+                    app:cornerRadius="6dp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>
