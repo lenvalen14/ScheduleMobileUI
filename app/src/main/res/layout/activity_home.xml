@@ -23,49 +23,41 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="20dp"
-                android:paddingTop="16dp"
-                android:paddingBottom="20dp">
+                android:paddingHorizontal="24dp"
+                android:paddingTop="32dp"
+                android:paddingBottom="16dp">
 
                 <ImageView
                     android:id="@+id/ivLogo"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:src="@drawable/ic_medical_logo"
                     app:tint="#007BFF"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/tvBrandName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:text="MEDICALIFE"
-                    android:textColor="#007BFF"
-                    android:textSize="12sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.1"
-                    app:layout_constraintStart_toEndOf="@id/ivLogo"
-                    app:layout_constraintTop_toTopOf="@id/ivLogo"
-                    app:layout_constraintBottom_toBottomOf="@id/ivLogo" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
                 <LinearLayout
-                    android:layout_width="0dp"
+                    android:id="@+id/layoutWelcome"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
                     android:orientation="vertical"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/ivLogo"
-                    app:layout_constraintEnd_toStartOf="@id/ivNotification">
+                    app:layout_constraintStart_toEndOf="@id/ivLogo"
+                    app:layout_constraintEnd_toStartOf="@id/ivNotification"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/tvWelcome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Welcome back,"
-                        android:textColor="#6C757D"
-                        android:textSize="14sp" />
+                        android:textColor="#212529"
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
                     <TextView
                         android:id="@+id/tvUsername"
@@ -74,87 +66,87 @@
                         android:text="JsonDoe"
                         android:textColor="#212529"
                         android:textSize="18sp"
-                        android:textStyle="bold"
-                        android:layout_marginTop="2dp" />
+                        android:textStyle="bold" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/ivNotification"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
                     android:src="@drawable/ic_notification_bell"
                     app:tint="#6C757D"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/tvWelcome"
-                    app:layout_constraintBottom_toBottomOf="@id/tvUsername" />
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <!-- Search Bar -->
-            <com.google.android.material.card.MaterialCardView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_height="48dp"
+                android:layout_marginHorizontal="24dp"
                 android:layout_marginBottom="20dp"
-                app:cardCornerRadius="25dp"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#F1F3F4">
+                android:background="@drawable/search_bar_bg"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_search"
+                    app:tint="#9E9E9E" />
+
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="16dp"
-                    android:gravity="center_vertical">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_search"
-                        app:tint="#9E9E9E" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
-                        android:text="Search Doctor, Hospital"
-                        android:textColor="#9E9E9E"
-                        android:textSize="14sp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                    android:layout_marginStart="12dp"
+                    android:text="Search Doctor, Hospital"
+                    android:textColor="#9E9E9E"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <!-- Appointment Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="20dp"
+                android:layout_marginHorizontal="24dp"
                 android:layout_marginBottom="20dp"
                 app:cardCornerRadius="16dp"
-                app:cardElevation="2dp"
-                app:cardBackgroundColor="#E91E63">
+                app:cardElevation="6dp">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="20dp"
-                    android:gravity="center_vertical">
+                    android:background="@drawable/appointment_card_gradient"
+                    android:padding="20dp">
 
                     <ImageView
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
+                        android:id="@+id/ivDoctorAvatar"
+                        android:layout_width="56dp"
+                        android:layout_height="56dp"
                         android:src="@drawable/ic_doctor_avatar"
                         android:background="@drawable/bg_icon_circular"
-                        android:scaleType="centerCrop" />
+                        android:scaleType="centerCrop"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
 
                     <LinearLayout
+                        android:id="@+id/layoutAppointmentText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
+                        android:orientation="vertical"
                         android:layout_marginStart="16dp"
-                        android:orientation="vertical">
+                        app:layout_constraintStart_toEndOf="@id/ivDoctorAvatar"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
 
                         <TextView
+                            android:id="@+id/tvDoctorName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ths. BS. Chae Song Hwa"
@@ -163,6 +155,7 @@
                             android:textStyle="bold" />
 
                         <TextView
+                            android:id="@+id/tvAppointmentDesc"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="You have a doctor's appointment"
@@ -175,12 +168,12 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            android:layout_marginTop="12dp"
+                            android:layout_marginTop="16dp"
                             android:gravity="center_vertical">
 
                             <ImageView
-                                android:layout_width="16dp"
-                                android:layout_height="16dp"
+                                android:layout_width="18dp"
+                                android:layout_height="18dp"
                                 android:src="@drawable/ic_calendar"
                                 app:tint="#FFFFFF" />
 
@@ -190,20 +183,33 @@
                                 android:layout_marginStart="8dp"
                                 android:text="June 1, 9:30 AM"
                                 android:textColor="#FFFFFF"
-                                android:textSize="12sp"
-                                android:textStyle="bold" />
+                                android:textSize="13sp"
+                                android:textStyle="bold"
+                                android:background="@drawable/appointment_date_bg"
+                                android:paddingLeft="12dp"
+                                android:paddingRight="12dp"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                android:layout_marginEnd="12dp"
+                                android:backgroundTint="#FFFFFF20"
+                                android:alpha="0.95" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginStart="16dp"
                                 android:text="11 days"
-                                android:textColor="#FFFFFF"
+                                android:textColor="#E91E63"
                                 android:textSize="12sp"
-                                android:alpha="0.8" />
+                                android:textStyle="bold"
+                                android:background="@drawable/appointment_days_badge"
+                                android:paddingLeft="12dp"
+                                android:paddingRight="12dp"
+                                android:paddingTop="4dp"
+                                android:paddingBottom="4dp"
+                                android:alpha="0.95" />
                         </LinearLayout>
                     </LinearLayout>
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </com.google.android.material.card.MaterialCardView>
 
             <!-- Specialist Banner -->
@@ -293,7 +299,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingHorizontal="20dp"
+                android:paddingHorizontal="24dp"
                 android:layout_marginBottom="24dp">
 
                 <LinearLayout
@@ -301,7 +307,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="12dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -315,9 +321,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="see all >"
-                        android:textColor="#007BFF"
-                        android:textSize="14sp" />
+                        android:text="see all >>"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -336,7 +343,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingHorizontal="20dp"
+                android:paddingHorizontal="24dp"
                 android:layout_marginBottom="24dp">
 
                 <LinearLayout
@@ -344,7 +351,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="12dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -358,9 +365,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="see all >"
-                        android:textColor="#007BFF"
-                        android:textSize="14sp" />
+                        android:text="see all >>"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -379,14 +387,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingHorizontal="20dp">
+                android:paddingHorizontal="24dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:layout_marginBottom="16dp">
+                    android:layout_marginBottom="12dp">
 
                     <TextView
                         android:layout_width="0dp"
@@ -400,9 +408,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="see all >"
-                        android:textColor="#007BFF"
-                        android:textSize="14sp" />
+                        android:text="see all >>"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
                 </LinearLayout>
 
                 <androidx.recyclerview.widget.RecyclerView

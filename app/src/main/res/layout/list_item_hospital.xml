@@ -2,41 +2,64 @@
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="170dp"
+    android:layout_width="240dp"
     android:layout_height="wrap_content"
     android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    app:strokeColor="#F0F0F0"
+    app:cardElevation="4dp"
+    app:cardBackgroundColor="#FFFFFF"
+    app:strokeColor="#E0E0E0"
     app:strokeWidth="1dp">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="12dp">
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="16dp">
 
         <ImageView
             android:id="@+id/ivHospitalLogo"
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:scaleType="fitCenter"
+            android:layout_width="201dp"
+            android:layout_height="149dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/logo_benh_vien_mat"
+            app:layout_constraintBottom_toTopOf="@id/tvHospitalName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:src="@drawable/logo_benh_vien_mat" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:id="@+id/tvHospitalName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="8dp"
+            android:text="Bệnh viện Mắt Sài Gòn"
+            android:textColor="#212529"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/ivHospitalLogo"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/layoutAddress"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            app:layout_constraintTop_toBottomOf="@id/tvHospitalName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
                 android:id="@+id/ivLocationIcon"
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/ic_map"
-                app:tint="?android:attr/textColorSecondary" />
+                app:tint="#007BFF" />
 
             <TextView
                 android:id="@+id/tvHospitalAddress"
@@ -44,22 +67,55 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:maxLines="2"
-                android:textSize="14sp"
-                tools:text="Quận 3, TP.HCM" />
+                android:text="Quận 3, TP.HCM"
+                android:textColor="#6C757D"
+                android:textSize="14sp" />
+        </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/layoutRating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toBottomOf="@id/layoutAddress"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/ic_star_filled"
+                app:tint="#FFC107" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="4.7"
+                android:textColor="#212529"
+                android:textSize="14sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBookNow"
             style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_width="204dp"
+            android:layout_height="49dp"
+            android:layout_marginTop="16dp"
             android:backgroundTint="#447F98"
             android:text="Đặt lịch ngay"
+            android:textColor="#FFFFFF"
             android:textSize="12sp"
-            app:cornerRadius="8dp" />
+            app:cornerRadius="18dp"
+            app:iconPadding="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layoutRating"
+            app:layout_constraintVertical_bias="1.0" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
