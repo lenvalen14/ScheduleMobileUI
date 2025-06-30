@@ -9,7 +9,7 @@ public class ApiClient {
     private static final String BASE_URL = "http://10.0.2.2:8080/";
     private static Retrofit retrofit;
 
-    public static ApiService getApiService() {
+    private static Retrofit getRetrofit() {
         if (retrofit == null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -24,6 +24,15 @@ public class ApiClient {
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
-        return retrofit.create(ApiService.class);
+        return retrofit;
+    }
+
+    public static ApiService getApiService() {
+        return getRetrofit().create(ApiService.class);
+    }
+
+    public static ApiDoctor getDoctorApi() {
+        return getRetrofit().create(ApiDoctor.class);
     }
 }
+
