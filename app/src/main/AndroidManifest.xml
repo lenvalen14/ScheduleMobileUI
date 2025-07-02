@@ -14,6 +14,15 @@
         android:theme="@style/Theme.ScheduleMedical"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.chat.ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.chat.ChatActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.filterDoctor.FilterDoctorActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.hospital.HospitalActivity"
             android:exported="false" />
         <activity
