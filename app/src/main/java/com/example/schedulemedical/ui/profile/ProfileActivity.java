@@ -102,21 +102,21 @@ public class ProfileActivity extends AppCompatActivity {
     
     private void initializeViews() {
         ivBack = findViewById(R.id.ivBack);
-        ivProfileImage = findViewById(R.id.ivProfileImage);
-        cardChangePhoto = findViewById(R.id.cardChangePhoto);
+        // ivProfileImage = findViewById(R.id.ivProfileImage); // Not in layout
+        // cardChangePhoto = findViewById(R.id.cardChangePhoto); // Not in layout
         etFullName = findViewById(R.id.etFullName);
         etEmail = findViewById(R.id.etEmail);
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
-        etDateOfBirth = findViewById(R.id.etDateOfBirth);
+        // etDateOfBirth = findViewById(R.id.etDateOfBirth); // Not in layout
         rgGender = findViewById(R.id.rgGender);
         rbMale = findViewById(R.id.rbMale);
         rbFemale = findViewById(R.id.rbFemale);
         rbOther = findViewById(R.id.rbOther);
-        etAddress = findViewById(R.id.etAddress);
-        etEmergencyContact = findViewById(R.id.etEmergencyContact);
-        btnSaveProfile = findViewById(R.id.btnSaveProfile);
-        btnLogout = findViewById(R.id.btnLogout);
-        tvChangePassword = findViewById(R.id.tvChangePassword);
+        // etAddress = findViewById(R.id.etAddress); // Not in layout
+        // etEmergencyContact = findViewById(R.id.etEmergencyContact); // Not in layout
+        // btnSaveProfile = findViewById(R.id.btnSaveProfile); // Not in layout
+        // btnLogout = findViewById(R.id.btnLogout); // Not in layout
+        // tvChangePassword = findViewById(R.id.tvChangePassword); // Not in layout
         
         // Disable email editing (usually not changeable)
         if (etEmail != null) {
@@ -151,23 +151,23 @@ public class ProfileActivity extends AppCompatActivity {
         ivBack.setOnClickListener(v -> finish());
         
         // Change photo
-        cardChangePhoto.setOnClickListener(v -> selectImage());
+        // cardChangePhoto.setOnClickListener(v -> selectImage()); // View commented out
         
         // Date of birth picker
-        etDateOfBirth.setOnClickListener(v -> showDatePicker());
-        etDateOfBirth.setFocusable(false);
+        // etDateOfBirth.setOnClickListener(v -> showDatePicker()); // View commented out
+        // etDateOfBirth.setFocusable(false); // View commented out
         
         // Save profile
-        btnSaveProfile.setOnClickListener(v -> saveProfile());
+        // btnSaveProfile.setOnClickListener(v -> saveProfile()); // View commented out
         
         // Logout
-        btnLogout.setOnClickListener(v -> logout());
+        // btnLogout.setOnClickListener(v -> logout()); // View commented out
         
         // Change password
-        tvChangePassword.setOnClickListener(v -> {
-            // TODO: Navigate to change password screen
-            Toast.makeText(this, "Tính năng đổi mật khẩu sẽ có sớm!", Toast.LENGTH_SHORT).show();
-        });
+        // tvChangePassword.setOnClickListener(v -> {
+        //     // TODO: Navigate to change password screen
+        //     Toast.makeText(this, "Tính năng đổi mật khẩu sẽ có sớm!", Toast.LENGTH_SHORT).show();
+        // }); // View commented out
     }
     
     private void setupProgressDialog() {
@@ -208,9 +208,9 @@ public class ProfileActivity extends AppCompatActivity {
     
     private void updateUIWithProfile(ProfileResponse profile) {
         // Profile image
-        if (ivProfileImage != null && profile.getAvatarUrl() != null && !profile.getAvatarUrl().isEmpty()) {
+        if (ivProfileImage != null && profile.getAvatar() != null && !profile.getAvatar().isEmpty()) {
             Glide.with(this)
-                    .load(profile.getAvatarUrl())
+                    .load(profile.getAvatar())
                     .transform(new CircleCrop())
                     .placeholder(R.drawable.sample_profile_image)
                     .error(R.drawable.sample_profile_image)
@@ -227,7 +227,7 @@ public class ProfileActivity extends AppCompatActivity {
         }
         
         if (etPhoneNumber != null) {
-            etPhoneNumber.setText(profile.getPhoneNumber() != null ? profile.getPhoneNumber() : "");
+            etPhoneNumber.setText(profile.getPhone() != null ? profile.getPhone() : "");
         }
         
         // Date of birth
@@ -263,9 +263,9 @@ public class ProfileActivity extends AppCompatActivity {
         }
         
         // Emergency contact
-        if (etEmergencyContact != null) {
-            etEmergencyContact.setText(profile.getEmergencyContact() != null ? profile.getEmergencyContact() : "");
-        }
+        // if (etEmergencyContact != null) {
+        //     etEmergencyContact.setText(profile.getEmergencyContact() != null ? profile.getEmergencyContact() : "");
+        // }
     }
     
     private void selectImage() {
@@ -307,11 +307,10 @@ public class ProfileActivity extends AppCompatActivity {
         // Create update request
         ProfileResponse updateRequest = new ProfileResponse();
         updateRequest.setFullName(etFullName.getText().toString().trim());
-        updateRequest.setPhoneNumber(etPhoneNumber.getText().toString().trim());
+        updateRequest.setPhone(etPhoneNumber.getText().toString().trim());
         updateRequest.setDateOfBirth(apiDateFormatter.format(selectedDateOfBirth.getTime()));
         updateRequest.setGender(getSelectedGender());
         updateRequest.setAddress(etAddress.getText().toString().trim());
-        updateRequest.setEmergencyContact(etEmergencyContact.getText().toString().trim());
         
         // TODO: If image was selected, upload it first then update profile
         if (selectedImageUri != null) {
@@ -334,7 +333,7 @@ public class ProfileActivity extends AppCompatActivity {
         // Update local auth manager data
         authManager.updateUserInfo(
             updateRequest.getFullName(),
-            updateRequest.getPhoneNumber()
+            updateRequest.getPhone()
         );
         
         // TODO: Implement actual API call

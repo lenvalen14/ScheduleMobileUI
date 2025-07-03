@@ -144,31 +144,39 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     private void loadDoctors() {
         showLoading();
         
-        // Call API to get all doctors with current filters
-        doctorApiService.getAllDoctors(
-            1, // page
-            50, // limit
-            currentSpecialty,
-            null, // hospitalId
-            currentMinRating > 0 ? currentMinRating : null,
-            null, // experience
-            currentSortBy,
-            currentSortOrder
-        ).enqueue(new Callback<ApiResponse<Object>>() {
+        // TODO: Call API to get all doctors with current filters
+        // doctorApiService.getAllDoctors(
+        //     1, // page
+        //     50, // limit
+        //     currentSpecialty,
+        //     null, // hospitalId
+        //     currentMinRating > 0 ? currentMinRating : null,
+        //     null, // experience
+        //     currentSortBy,
+        //     currentSortOrder
+        // ).enqueue(new Callback<ApiResponse<Object>>() {
+        
+        // Mock for now - create empty list for testing
+        List<DoctorResponse> mockDoctors = new ArrayList<>();
+        allDoctors.clear();
+        allDoctors.addAll(mockDoctors);
+        doctorAdapter.updateDoctors(allDoctors);
+        updateNoResultsVisibility();
+        hideLoading();
+        
+        /*
+        // Original API call - commented out until getAllDoctors method is implemented
+        doctorApiService.getAllDoctors(parameters).enqueue(new Callback<ApiResponse<Object>>() {
             @Override
             public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
                 hideLoading();
-                
                 if (response.isSuccessful() && response.body() != null) {
                     try {
-                        // Parse the response data
                         Object data = response.body().getData();
                         Gson gson = new Gson();
                         String jsonString = gson.toJson(data);
-                        
                         Type listType = new TypeToken<List<DoctorResponse>>(){}.getType();
                         List<DoctorResponse> doctors = gson.fromJson(jsonString, listType);
-                        
                         if (doctors != null) {
                             allDoctors.clear();
                             allDoctors.addAll(doctors);
@@ -177,7 +185,6 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
                         } else {
                             showError("Không có dữ liệu bác sĩ");
                         }
-                        
                     } catch (Exception e) {
                         Log.e(TAG, "Error parsing doctors data", e);
                         showError("Lỗi xử lý dữ liệu");
@@ -186,7 +193,6 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
                     showError("Không thể tải danh sách bác sĩ");
                 }
             }
-            
             @Override
             public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
                 hideLoading();
@@ -194,6 +200,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
                 showError("Lỗi kết nối: " + t.getMessage());
             }
         });
+        */
     }
     
     private void showFilterDialog() {
@@ -210,8 +217,13 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     }
     
     private void setupSpecialtyFilter(View bottomSheetView) {
-        ChipGroup chipGroupSpecialty = bottomSheetView.findViewById(R.id.chipGroupSpecialty);
+        // ChipGroup chipGroupSpecialty = bottomSheetView.findViewById(R.id.chipGroupSpecialty); // Not in layout
         
+        // TODO: Use the actual Spinner instead
+        // Spinner spinnerSpecialty = bottomSheetView.findViewById(R.id.spinnerSpecialty);
+        
+        // For now, comment out the chip group logic
+        /*
         if (chipGroupSpecialty != null) {
             chipGroupSpecialty.removeAllViews();
             
@@ -242,11 +254,17 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
                 }
             });
         }
+        */
     }
     
     private void setupRatingFilter(View bottomSheetView) {
-        ChipGroup chipGroupRating = bottomSheetView.findViewById(R.id.chipGroupRating);
+        // ChipGroup chipGroupRating = bottomSheetView.findViewById(R.id.chipGroupRating); // Not in layout
         
+        // TODO: Use the actual SeekBar instead
+        // SeekBar seekBarRating = bottomSheetView.findViewById(R.id.seekBarRating);
+        
+        // For now, comment out the chip group logic
+        /*
         if (chipGroupRating != null) {
             chipGroupRating.removeAllViews();
             
@@ -269,11 +287,13 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
                 }
             });
         }
+        */
     }
     
     private void setupFilterActions(View bottomSheetView, BottomSheetDialog dialog) {
         View btnApplyFilter = bottomSheetView.findViewById(R.id.btnApplyFilter);
-        View btnClearFilter = bottomSheetView.findViewById(R.id.btnClearFilter);
+        // View btnClearFilter = bottomSheetView.findViewById(R.id.btnClearFilter); // Not in layout
+        View btnCancel = bottomSheetView.findViewById(R.id.btnCancel);
         
         if (btnApplyFilter != null) {
             btnApplyFilter.setOnClickListener(v -> {
@@ -282,14 +302,20 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
             });
         }
         
-        if (btnClearFilter != null) {
-            btnClearFilter.setOnClickListener(v -> {
-                currentSpecialty = null;
-                currentMinRating = 0f;
+        if (btnCancel != null) {
+            btnCancel.setOnClickListener(v -> {
                 dialog.dismiss();
-                applyFilters();
             });
         }
+        
+        // if (btnClearFilter != null) {
+        //     btnClearFilter.setOnClickListener(v -> {
+        //         currentSpecialty = null;
+        //         currentMinRating = 0f;
+        //         dialog.dismiss();
+        //         applyFilters();
+        //     });
+        // }
     }
     
     private void applyFilters() {
@@ -360,10 +386,10 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     @Override
     public void onDoctorClick(DoctorResponse doctor) {
         // Navigate to doctor profile
-        Intent intent = new Intent(this, DoctorProfileActivity.class);
-        intent.putExtra("doctorId", doctor.getId());
-        intent.putExtra("doctorName", doctor.getFullName());
-        startActivity(intent);
+        // Intent intent = new Intent(this, DoctorProfileActivity.class); // TODO: Create DoctorProfileActivity
+        // intent.putExtra("doctorId", doctor.getId());
+        // intent.putExtra("doctorName", doctor.getFullName());
+        // startActivity(intent);
     }
     
     @Override

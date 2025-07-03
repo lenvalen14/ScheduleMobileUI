@@ -90,16 +90,17 @@ public class PaymentActivity extends AppCompatActivity {
     private void initializeViews() {
         ivBack = findViewById(R.id.ivBack);
         tvDoctorName = findViewById(R.id.tvDoctorName);
-        tvAppointmentDate = findViewById(R.id.tvAppointmentDate);
-        tvAppointmentTime = findViewById(R.id.tvAppointmentTime);
+        // tvAppointmentDate = findViewById(R.id.tvAppointmentDate); // Not in layout
+        // tvAppointmentTime = findViewById(R.id.tvAppointmentTime); // Not in layout
         tvConsultationFee = findViewById(R.id.tvConsultationFee);
         tvTotalAmount = findViewById(R.id.tvTotalAmount);
-        cardVnpay = findViewById(R.id.cardVnpay);
-        cardMomo = findViewById(R.id.cardMomo);
-        layoutPaymentMethods = findViewById(R.id.layoutPaymentMethods);
+        
+        // cardVnpay = findViewById(R.id.cardVnpay); // Not in layout
+        // cardMomo = findViewById(R.id.cardMomo); // Not in layout  
+        // layoutPaymentMethods = findViewById(R.id.layoutPaymentMethods); // Not in layout
         btnPay = findViewById(R.id.btnPay);
         webViewPayment = findViewById(R.id.webViewPayment);
-        layoutPaymentDetails = findViewById(R.id.layoutPaymentDetails);
+        // layoutPaymentDetails = findViewById(R.id.layoutPaymentDetails); // Not in layout
     }
     
     private void getIntentData() {
@@ -129,8 +130,8 @@ public class PaymentActivity extends AppCompatActivity {
         ivBack.setOnClickListener(v -> onBackPressed());
         
         // Payment method selection
-        cardVnpay.setOnClickListener(v -> selectPaymentMethod("VNPAY"));
-        cardMomo.setOnClickListener(v -> selectPaymentMethod("MOMO"));
+        // cardVnpay.setOnClickListener(v -> selectPaymentMethod("VNPAY")); // Not in layout
+        // cardMomo.setOnClickListener(v -> selectPaymentMethod("MOMO")); // Not in layout
         
         // Pay button
         btnPay.setOnClickListener(v -> processPayment());
@@ -183,20 +184,20 @@ public class PaymentActivity extends AppCompatActivity {
     
     private void updatePaymentMethodSelection() {
         // Reset all cards
-        cardVnpay.setCardElevation(4);
-        cardMomo.setCardElevation(4);
-        cardVnpay.setStrokeWidth(0);
-        cardMomo.setStrokeWidth(0);
+        // cardVnpay.setCardElevation(4); // Not in layout
+        // cardMomo.setCardElevation(4); // Not in layout
+        // cardVnpay.setStrokeWidth(0); // Not in layout
+        // cardMomo.setStrokeWidth(0); // Not in layout
         
         // Highlight selected card
         if ("VNPAY".equals(selectedPaymentMethod)) {
-            cardVnpay.setCardElevation(8);
-            cardVnpay.setStrokeWidth(3);
-            cardVnpay.setStrokeColor(getResources().getColor(R.color.primary_color));
+            // cardVnpay.setCardElevation(8); // Not in layout
+            // cardVnpay.setStrokeWidth(3); // Not in layout
+            // cardVnpay.setStrokeColor(getResources().getColor(R.color.primary_color)); // Not in layout
         } else if ("MOMO".equals(selectedPaymentMethod)) {
-            cardMomo.setCardElevation(8);
-            cardMomo.setStrokeWidth(3);
-            cardMomo.setStrokeColor(getResources().getColor(R.color.primary_color));
+            // cardMomo.setCardElevation(8); // Not in layout
+            // cardMomo.setStrokeWidth(3); // Not in layout
+            // cardMomo.setStrokeColor(getResources().getColor(R.color.primary_color)); // Not in layout
         }
     }
     
@@ -228,8 +229,9 @@ public class PaymentActivity extends AppCompatActivity {
         VnpayPaymentRequest request = new VnpayPaymentRequest();
         request.setAppointmentId(appointmentId);
         request.setAmount(totalAmount);
-        request.setDescription("Thanh toán phí khám bệnh - " + doctorName);
-        request.setReturnUrl("vnpay://payment/result");
+        request.setOrderInfo("Thanh toán phí khám bệnh - " + doctorName);
+        request.setPaymentMethod("VNPAY");
+        request.setPaymentStatus("PENDING");
         
         paymentApiService.createVnpayPayment(request)
             .enqueue(new Callback<ApiResponse<Object>>() {
@@ -283,7 +285,7 @@ public class PaymentActivity extends AppCompatActivity {
     
     private void showWebViewPayment(String paymentUrl) {
         // Hide payment details and show WebView
-        layoutPaymentDetails.setVisibility(View.GONE);
+        // layoutPaymentDetails.setVisibility(View.GONE); // Not in layout
         webViewPayment.setVisibility(View.VISIBLE);
         
         // Configure WebView
@@ -361,7 +363,7 @@ public class PaymentActivity extends AppCompatActivity {
             
             // Show payment details again
             webViewPayment.setVisibility(View.GONE);
-            layoutPaymentDetails.setVisibility(View.VISIBLE);
+            // layoutPaymentDetails.setVisibility(View.VISIBLE); // Not in layout
             
             isProcessingPayment = false;
         });
@@ -388,7 +390,7 @@ public class PaymentActivity extends AppCompatActivity {
         if (webViewPayment.getVisibility() == View.VISIBLE) {
             // If WebView is visible, go back to payment details
             webViewPayment.setVisibility(View.GONE);
-            layoutPaymentDetails.setVisibility(View.VISIBLE);
+            // layoutPaymentDetails.setVisibility(View.VISIBLE); // Not in layout
             isProcessingPayment = false;
         } else {
             super.onBackPressed();

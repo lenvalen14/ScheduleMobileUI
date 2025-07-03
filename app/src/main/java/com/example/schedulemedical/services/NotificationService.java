@@ -179,7 +179,7 @@ public class NotificationService extends Service {
             Log.e(TAG, "Socket connection error: " + (args.length > 0 ? args[0].toString() : "Unknown"));
         });
         
-        socket.on(Socket.EVENT_RECONNECT, args -> {
+        socket.on("reconnect", args -> {
             Log.d(TAG, "Socket reconnected");
         });
         

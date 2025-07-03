@@ -83,7 +83,7 @@ public class HomeActivity extends BaseActivity {
         ivNotification = findViewById(R.id.ivNotification);
         
         // Search bar
-        searchBar = findViewById(R.id.layoutSearch);
+        // searchBar = findViewById(R.id.layoutSearch); // Not in layout
         
         // Appointment card
         tvDoctorName = findViewById(R.id.tvDoctorName);
@@ -144,13 +144,13 @@ public class HomeActivity extends BaseActivity {
         }
         
         // Appointment card click
-        View appointmentCard = findViewById(R.id.layoutAppointmentCard);
-        if (appointmentCard != null) {
-            appointmentCard.setOnClickListener(view -> {
-                // TODO: Navigate to appointment details or appointment list
-                Toast.makeText(this, "Navigate to appointments", Toast.LENGTH_SHORT).show();
-            });
-        }
+        // View appointmentCard = findViewById(R.id.layoutAppointmentCard); // Not in layout
+        // if (appointmentCard != null) {
+        //     appointmentCard.setOnClickListener(view -> {
+        //         // TODO: Navigate to appointment details or appointment list
+        //         Toast.makeText(this, "Navigate to appointments", Toast.LENGTH_SHORT).show();
+        //     });
+        // }
     }
     
     private void setupProgressDialog() {

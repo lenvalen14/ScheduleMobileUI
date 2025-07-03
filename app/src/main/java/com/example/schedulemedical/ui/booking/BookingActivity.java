@@ -104,10 +104,10 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         tvSpecialty = findViewById(R.id.tvSpecialty);
         tvHospitalName = findViewById(R.id.tvHospitalName);
         tvConsultationFee = findViewById(R.id.tvConsultationFee);
-        cardSelectDate = findViewById(R.id.cardSelectDate);
+        // cardSelectDate = findViewById(R.id.cardSelectDate); // Not exists in layout
         tvSelectedDate = findViewById(R.id.tvSelectedDate);
         rvTimeSlots = findViewById(R.id.rvTimeSlots);
-        tvNoTimeSlots = findViewById(R.id.tvNoTimeSlots);
+        // tvNoTimeSlots = findViewById(R.id.tvNoTimeSlots); // Not exists in layout
         btnBookAppointment = findViewById(R.id.btnBookAppointment);
         
         // Initialize with today's date
@@ -176,7 +176,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         updateSelectedDateDisplay();
         
         // Load available time slots for today
-        loadAvailableTimeSlots();
+        loadTimeSlots();
         
         // Initially disable book button
         updateBookButtonState();
@@ -196,7 +196,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
             (view, year, month, dayOfMonth) -> {
                 selectedDate.set(year, month, dayOfMonth);
                 updateSelectedDateDisplay();
-                loadAvailableTimeSlots();
+                loadTimeSlots();
                 
                 // Clear selected time slot when date changes
                 selectedTimeSlot = null;
@@ -218,56 +218,63 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         datePickerDialog.show();
     }
     
-    private void loadAvailableTimeSlots() {
-        if (doctorId == null || selectedDate == null) {
+    private void loadTimeSlots() {
+        if (selectedDate == null) {
             return;
         }
         
-        showLoading();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String dateString = dateFormat.format(selectedDate.getTime());
         
-        String dateString = apiDateFormat.format(selectedDate.getTime());
+        // TODO: Implement getDoctorSchedule method in DoctorApiService
+        // doctorApiService.getDoctorSchedule(doctorId, dateString)
+        //     .enqueue(new Callback<ApiResponse<List<String>>>() {
+        //         @Override
+        //         public void onResponse(Call<ApiResponse<List<String>>> call, Response<ApiResponse<List<String>>> response) {
+        //             if (response.isSuccessful() && response.body() != null) {
+        //                 List<String> timeSlots = response.body().getData();
+        //                 setupTimeSlots(timeSlots != null ? timeSlots : getDefaultTimeSlots());
+        //             } else {
+        //                 setupTimeSlots(getDefaultTimeSlots());
+        //             }
+        //         }
+        //         
+        //         @Override
+        //         public void onFailure(Call<ApiResponse<List<String>>> call, Throwable t) {
+        //             Log.e(TAG, "Failed to load time slots", t);
+        //             setupTimeSlots(getDefaultTimeSlots());
+        //         }
+        //     });
         
-        doctorApiService.getDoctorSchedule(doctorId, dateString)
-            .enqueue(new Callback<ApiResponse<Object>>() {
-                @Override
-                public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
-                    hideLoading();
-                    
-                    if (response.isSuccessful() && response.body() != null) {
-                        try {
-                            Object data = response.body().getData();
-                            Gson gson = new Gson();
-                            String jsonString = gson.toJson(data);
-                            
-                            Type listType = new TypeToken<List<String>>(){}.getType();
-                            List<String> timeSlots = gson.fromJson(jsonString, listType);
-                            
-                            if (timeSlots != null && !timeSlots.isEmpty()) {
-                                availableTimeSlots.clear();
-                                availableTimeSlots.addAll(timeSlots);
-                                timeSlotAdapter.updateTimeSlots(availableTimeSlots);
-                                showTimeSlots();
-                            } else {
-                                showNoTimeSlots();
-                            }
-                            
-                        } catch (Exception e) {
-                            Log.e(TAG, "Error parsing time slots", e);
-                            showNoTimeSlots();
-                        }
-                    } else {
-                        Log.e(TAG, "Failed to load time slots: " + response.code());
-                        showNoTimeSlots();
-                    }
-                }
-                
-                @Override
-                public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
-                    hideLoading();
-                    Log.e(TAG, "Network error loading time slots", t);
-                    showNoTimeSlots();
-                }
-            });
+        // For now, use default time slots
+        setupTimeSlots(getDefaultTimeSlots());
+    }
+    
+    private void setupTimeSlots(List<String> timeSlots) {
+        if (timeSlots != null && !timeSlots.isEmpty()) {
+            availableTimeSlots.clear();
+            availableTimeSlots.addAll(timeSlots);
+            
+            timeSlotAdapter.notifyDataSetChanged();
+            
+            rvTimeSlots.setVisibility(View.VISIBLE);
+            // tvNoTimeSlots.setVisibility(View.GONE); // View doesn't exist
+        } else {
+            showNoTimeSlots();
+        }
+    }
+    
+    private List<String> getDefaultTimeSlots() {
+        List<String> defaultSlots = new ArrayList<>();
+        defaultSlots.add("08:00");
+        defaultSlots.add("09:00");
+        defaultSlots.add("10:00");
+        defaultSlots.add("11:00");
+        defaultSlots.add("14:00");
+        defaultSlots.add("15:00");
+        defaultSlots.add("16:00");
+        defaultSlots.add("17:00");
+        return defaultSlots;
     }
     
     private void showTimeSlots() {
@@ -280,13 +287,18 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
     }
     
     private void showNoTimeSlots() {
-        if (rvTimeSlots != null) {
-            rvTimeSlots.setVisibility(View.GONE);
-        }
-        if (tvNoTimeSlots != null) {
-            tvNoTimeSlots.setVisibility(View.VISIBLE);
-            tvNoTimeSlots.setText("Không có lịch trống cho ngày này");
-        }
+        availableTimeSlots.clear();
+        timeSlotAdapter.notifyDataSetChanged();
+        
+        rvTimeSlots.setVisibility(View.GONE);
+        // tvNoTimeSlots.setVisibility(View.VISIBLE); // View doesn't exist
+        
+        Toast.makeText(this, "Không có lịch trống cho ngày này", Toast.LENGTH_SHORT).show();
+    }
+    
+    private void showError(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Log.e(TAG, "Error: " + message);
     }
     
     private void bookAppointment() {
@@ -302,13 +314,26 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         
         showLoading();
         
+        // Create appointment request
         CreateAppointmentRequest request = new CreateAppointmentRequest();
         request.setDoctorId(doctorId);
-        request.setPatientId(authManager.getUserId());
-        request.setAppointmentDate(apiDateFormat.format(selectedDate.getTime()));
-        request.setAppointmentTime(selectedTimeSlot);
-        request.setReason("Khám tổng quát"); // Default reason
-        request.setStatus("PENDING");
+        request.setUserId(authManager.getUserId());
+        
+        // Combine date and time into ISO 8601 format for scheduledTime
+        try {
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String dateString = dateFormat.format(selectedDate.getTime());
+            String scheduledTime = dateString + "T" + selectedTimeSlot + ":00"; // ISO format
+            request.setScheduledTime(scheduledTime);
+        } catch (Exception e) {
+            Log.e(TAG, "Error formatting scheduled time", e);
+            hideLoading();
+            showError("Lỗi định dạng thời gian");
+            return;
+        }
+        
+        request.setNote("Khám tổng quát");
+        request.setStatus("SCHEDULED");
         
         appointmentApiService.createAppointment(request)
             .enqueue(new Callback<ApiResponse<Object>>() {
