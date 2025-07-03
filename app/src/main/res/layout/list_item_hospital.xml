@@ -9,8 +9,8 @@
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="#FFFFFF"
-    app:strokeColor="#E0E0E0"
+    app:cardBackgroundColor="@color/white"
+    app:strokeColor="@color/gray_e0"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Bệnh viện Mắt Sài Gòn"
-            android:textColor="#212529"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/ivHospitalLogo"
@@ -59,7 +59,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/ic_map"
-                app:tint="#007BFF" />
+                app:tint="@color/blue_007b" />
 
             <TextView
                 android:id="@+id/tvHospitalAddress"
@@ -68,7 +68,7 @@
                 android:layout_marginStart="8dp"
                 android:maxLines="2"
                 android:text="Quận 3, TP.HCM"
-                android:textColor="#6C757D"
+                android:textColor="@color/text_secondary"
                 android:textSize="14sp" />
         </LinearLayout>
 
@@ -86,14 +86,14 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/ic_star_filled"
-                app:tint="#FFC107" />
+                app:tint="@color/yellow_ffc" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:text="4.7"
-                android:textColor="#212529"
+                android:textColor="@color/text_primary"
                 android:textSize="14sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -104,9 +104,9 @@
             android:layout_width="204dp"
             android:layout_height="49dp"
             android:layout_marginTop="16dp"
-            android:backgroundTint="#447F98"
+            android:backgroundTint="@color/blue_447f"
             android:text="Đặt lịch ngay"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="12sp"
             app:cornerRadius="18dp"
             app:iconPadding="0dp"

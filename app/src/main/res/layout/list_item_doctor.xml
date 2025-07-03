@@ -9,14 +9,14 @@
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="#FFFFFF"
-    app:strokeColor="#E0E0E0"
+    app:cardBackgroundColor="@color/white"
+    app:strokeColor="@color/gray_e0"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="#FFFFFF"
+        android:backgroundTint="@color/white"
         android:paddingHorizontal="20dp"
         android:paddingVertical="16dp">
 
@@ -25,7 +25,7 @@
             android:layout_width="71dp"
             android:layout_height="61dp"
             android:src="@drawable/sample_profile_image"
-            app:civ_border_color="#F1F3F4"
+            app:civ_border_color="@color/gray_f1"
             app:civ_border_width="2dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="Ths. BS. Chae Song Hwa"
-            android:textColor="#212529"
+            android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold"
             android:fontFamily="@font/inter_semibold"
@@ -53,7 +53,7 @@
             android:src="@drawable/ic_specialty"
             app:layout_constraintStart_toStartOf="@id/tvDoctorName"
             app:layout_constraintTop_toBottomOf="@id/tvDoctorName"
-            app:tint="#007BFF" />
+            app:tint="@color/blue_007b" />
 
         <TextView
             android:id="@+id/tvDoctorSpecialty"
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Khoa thần kinh"
-            android:textColor="#6C757D"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:fontFamily="@font/inter_medium"
             app:layout_constraintBottom_toBottomOf="@id/icSpecialty"
@@ -78,7 +78,7 @@
             android:src="@drawable/ic_hospital"
             app:layout_constraintStart_toStartOf="@+id/tvDoctorName"
             app:layout_constraintTop_toBottomOf="@id/icSpecialty"
-            app:tint="#007BFF" />
+            app:tint="@color/blue_007b" />
 
         <TextView
             android:id="@+id/tvHospitalName"
@@ -86,7 +86,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:text="Bệnh viện Yulje"
-            android:textColor="#6C757D"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
             android:fontFamily="@font/inter_medium"
             app:layout_constraintBottom_toBottomOf="@+id/icHospital"
@@ -99,7 +99,7 @@
             android:layout_width="0dp"
             android:layout_height="1dp"
             android:layout_marginTop="16dp"
-            android:background="#EEEEEE"
+            android:background="@color/gray_ee"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivDoctorPhoto" />
@@ -119,14 +119,14 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:src="@drawable/ic_star_filled"
-                app:tint="#FFC107" />
+                app:tint="@color/yellow_ffc" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
                 android:text="4.8 (212 reviews)"
-                android:textColor="#212529"
+                android:textColor="@color/text_primary"
                 android:textSize="14sp"
                 android:fontFamily="@font/inter_medium" />
         </LinearLayout>
@@ -146,8 +146,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginEnd="4dp"
-                android:background="@drawable/bg_icon_circular"
-                android:backgroundTint="#F5F8FB"
+                android:background="@color/gray_f5"
+                android:backgroundTint="@color/gray_f5"
                 android:src="@drawable/ic_call"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
@@ -160,8 +160,8 @@
                 android:layout_height="30dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="4dp"
-                android:background="@drawable/bg_icon_circular"
-                android:backgroundTint="#F5F8FB"
+                android:background="@color/gray_f5"
+                android:backgroundTint="@color/gray_f5"
                 android:src="@drawable/ic_chat"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
@@ -173,8 +173,8 @@
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:layout_marginStart="8dp"
-                android:background="@drawable/bg_icon_circular"
-                android:backgroundTint="#F5F8FB"
+                android:background="@color/gray_f5"
+                android:backgroundTint="@color/gray_f5"
                 android:src="@drawable/ic_profile"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
@@ -189,11 +189,11 @@
             android:layout_height="40dp"
             android:layout_marginTop="16dp"
             android:text="Đặt lịch ngay"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/white"
             android:textSize="12sp"
             android:fontFamily="@font/inter_semibold"
             app:cornerRadius="18dp"
-            android:backgroundTint="#447F98"
+            android:backgroundTint="@color/blue_447f"
             app:iconPadding="0dp"
             app:layout_constraintTop_toBottomOf="@+id/ratingContainer"
             app:layout_constraintStart_toStartOf="parent"

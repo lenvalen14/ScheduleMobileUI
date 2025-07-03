@@ -14,6 +14,7 @@ import com.example.schedulemedical.model.dto.response.doctor.AchievementResponse
 import com.example.schedulemedical.model.dto.response.doctor.DoctorResponseDTO;
 import com.example.schedulemedical.model.dto.response.doctor.DoctorScheduleResponseDTO;
 import com.example.schedulemedical.model.dto.response.doctor.SpecialtyResponseDTO;
+import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -262,6 +263,19 @@ public class DoctorRepository {
 
             @Override
             public void onFailure(@NonNull Call<ResponseWrapper<Void>> call, @NonNull Throwable t) {
+                result.setValue(new ResponseWrapper<>("Network error", null));
+            }
+        });
+    }
+
+    public void getDoctorCertifications(int page, int limit, MutableLiveData<ResponseWrapper<List<CertificationResponseDTO>>> result) {
+        ApiClient.getDoctorApi().getDoctorCertifications(page, limit).enqueue(new Callback<ResponseWrapper<List<CertificationResponseDTO>>>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseWrapper<List<CertificationResponseDTO>>> call, @NonNull Response<ResponseWrapper<List<CertificationResponseDTO>>> response) {
+                result.setValue(response.body());
+            }
+            @Override
+            public void onFailure(@NonNull Call<ResponseWrapper<List<CertificationResponseDTO>>> call, @NonNull Throwable t) {
                 result.setValue(new ResponseWrapper<>("Network error", null));
             }
         });

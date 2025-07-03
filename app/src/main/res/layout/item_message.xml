@@ -21,7 +21,7 @@
             android:paddingHorizontal="12dp"
             android:paddingVertical="4dp"
             android:text="Hôm nay"
-            android:textColor="#6C757D"
+            android:textColor="@color/text_secondary"
             android:textSize="12sp"
             android:visibility="gone" />
 

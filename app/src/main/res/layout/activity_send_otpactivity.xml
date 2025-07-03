@@ -61,7 +61,7 @@
         android:id="@+id/btnSendCode"
         android:layout_width="match_parent"
         android:layout_height="60dp"
-        android:backgroundTint="#447F98"
+        android:backgroundTint="@color/blue_447f"
         android:text="Gửi mã"
         android:textAllCaps="false"
         android:textSize="16sp"
@@ -89,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Log in"
-            android:textColor="#447F98"
+            android:textColor="@color/blue_447f"
             android:textStyle="bold"
             android:textSize="14sp"/>
     </LinearLayout>

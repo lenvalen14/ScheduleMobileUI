@@ -33,7 +33,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Chào bạn! Tôi sẵn sàng lắng nghe và hỗ trợ bạn. Hãy chia sẻ với tôi những thắc mắc của bạn nhé."
-                android:textColor="#212529"
+                android:textColor="@color/text_primary"
                 android:textSize="14sp"
                 android:lineSpacingExtra="2dp" />
 
@@ -57,7 +57,7 @@
             android:layout_marginTop="4dp"
             android:layout_marginStart="8dp"
             android:text="14:28"
-            android:textColor="#6C757D"
+            android:textColor="@color/text_secondary"
             android:textSize="11sp" />
 
     </LinearLayout>

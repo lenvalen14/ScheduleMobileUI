@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Xin chào bác sĩ, tôi có một số câu hỏi về tình trạng sức khỏe"
-                android:textColor="@color/white"
+                android:textColor="@color/text_secondary"
                 android:textSize="14sp"
                 android:lineSpacingExtra="2dp" />
 

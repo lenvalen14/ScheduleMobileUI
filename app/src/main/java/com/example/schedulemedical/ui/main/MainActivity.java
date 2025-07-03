@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.ui.login.LoginActivity;
+import com.google.android.material.color.DynamicColors;
+
 import androidx.core.splashscreen.SplashScreen;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        DynamicColors.applyToActivitiesIfAvailable(this.getApplication());
 
         Log.d("API_LEVEL", "API level: " + Build.VERSION.SDK_INT);
 

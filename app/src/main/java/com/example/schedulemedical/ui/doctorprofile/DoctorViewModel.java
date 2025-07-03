@@ -14,6 +14,7 @@ import com.example.schedulemedical.model.dto.response.doctor.AchievementResponse
 import com.example.schedulemedical.model.dto.response.doctor.DoctorResponseDTO;
 import com.example.schedulemedical.model.dto.response.doctor.DoctorScheduleResponseDTO;
 import com.example.schedulemedical.model.dto.response.doctor.SpecialtyResponseDTO;
+import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 
 import java.util.List;
 
@@ -50,6 +51,9 @@ public class DoctorViewModel extends ViewModel {
     public MutableLiveData<ResponseWrapper<SpecialtyResponseDTO>> specialtyById = new MutableLiveData<>();
     public MutableLiveData<ResponseWrapper<SpecialtyResponseDTO>> updatedSpecialty = new MutableLiveData<>();
     public MutableLiveData<ResponseWrapper<Void>> deletedSpecialty = new MutableLiveData<>();
+
+    // Certification
+    public MutableLiveData<ResponseWrapper<List<CertificationResponseDTO>>> certifications = new MutableLiveData<>();
 
     // ========================
     //        CALLS
@@ -121,5 +125,9 @@ public class DoctorViewModel extends ViewModel {
 
     public void deleteSpecialty(int id) {
         repository.deleteSpecialty(id, deletedSpecialty);
+    }
+
+    public void loadDoctorCertifications(int page, int limit) {
+        repository.getDoctorCertifications(page, limit, certifications);
     }
 }

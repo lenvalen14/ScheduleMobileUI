@@ -1,388 +1,215 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/doctor_profile_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:orientation="vertical"
+    android:background="@color/white"
     tools:context=".ui.doctorprofile.DoctorProfileActivity">
 
+    <!-- Header Section -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="32dp"
+        android:paddingBottom="16dp"
+        android:background="#FFFFFF">
+
+        <ImageView
+            android:id="@+id/btnBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            android:src="@drawable/ic_arrow_back"
+            app:tint="@color/text_primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Doctor Profile"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Content Scroll -->
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation"
-        android:fillViewport="true">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:padding="20dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-            <!-- Header Section -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
+            <!-- Avatar -->
+            <ImageView
+                android:id="@+id/ivDoctorAvatar"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/sample_profile_image"
+                android:scaleType="centerCrop"
+                android:background="@drawable/bg_icon_circular"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Name -->
+            <TextView
+                android:id="@+id/tvDoctorName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingHorizontal="24dp"
-                android:paddingTop="32dp"
-                android:paddingBottom="16dp"
-                android:background="#FFFFFF">
+                android:text="Dr. John Smith"
+                android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+                android:textColor="@color/md_theme_primary" />
+
+            <!-- Specialty -->
+            <TextView
+                android:id="@+id/tvDoctorSpecialty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cardiology"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="@color/md_theme_onBackground"
+                android:layout_marginTop="4dp" />
+
+            <!-- Hospital -->
+            <TextView
+                android:id="@+id/tvDoctorHospital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="City General Hospital"
+                android:textAppearance="@style/TextAppearance.Material3.LabelSmall"
+                android:textColor="@color/md_theme_outline"
+                android:layout_marginTop="2dp" />
+
+            <!-- Rating -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical">
 
                 <ImageView
-                    android:id="@+id/btnBack"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:padding="4dp"
-                    android:src="@drawable/ic_arrow_back"
-                    app:tint="#212529"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_star_filled"
+                    app:tint="@color/md_theme_secondary" />
 
                 <TextView
+                    android:id="@+id/tvDoctorRating"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Doctor Profile"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="#212529"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:text="4.8 (120)"
+                    android:textAppearance="@style/TextAppearance.Material3.LabelMedium"
+                    android:layout_marginStart="6dp" />
+            </LinearLayout>
 
-            <!-- Doctor Info Card -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Action Buttons -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                android:orientation="horizontal"
+                android:layout_marginTop="24dp"
+                android:gravity="center">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnChat"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Chat"
+                    android:layout_marginEnd="8dp" />
 
-                    <!-- Doctor Avatar and Basic Info -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="16dp">
-
-                        <ImageView
-                            android:id="@+id/ivDoctorAvatar"
-                            android:layout_width="80dp"
-                            android:layout_height="80dp"
-                            android:src="@drawable/sample_profile_image"
-                            android:background="@drawable/bg_icon_circular"
-                            android:scaleType="centerCrop" />
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:orientation="vertical"
-                            android:layout_marginStart="16dp">
-
-                            <TextView
-                                android:id="@+id/tvDoctorName"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Dr. John Smith"
-                                android:textSize="18sp"
-                                android:textStyle="bold"
-                                android:textColor="#212529" />
-
-                            <TextView
-                                android:id="@+id/tvDoctorSpecialty"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="Cardiology"
-                                android:textSize="14sp"
-                                android:textColor="#6C757D"
-                                android:layout_marginTop="4dp" />
-
-                            <TextView
-                                android:id="@+id/tvDoctorHospital"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="City General Hospital"
-                                android:textSize="14sp"
-                                android:textColor="#6C757D"
-                                android:layout_marginTop="2dp" />
-
-                            <LinearLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:layout_marginTop="8dp">
-
-                                <ImageView
-                                    android:layout_width="16dp"
-                                    android:layout_height="16dp"
-                                    android:src="@drawable/ic_star_filled"
-                                    app:tint="#FFD700" />
-
-                                <TextView
-                                    android:id="@+id/tvDoctorRating"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="4.8"
-                                    android:textSize="14sp"
-                                    android:textColor="#212529"
-                                    android:layout_marginStart="4dp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="(120 reviews)"
-                                    android:textSize="12sp"
-                                    android:textColor="#6C757D"
-                                    android:layout_marginStart="4dp" />
-                            </LinearLayout>
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <!-- Doctor Experience -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="16dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Experience:"
-                            android:textSize="14sp"
-                            android:textColor="#6C757D" />
-
-                        <TextView
-                            android:id="@+id/tvDoctorExperience"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="15 years"
-                            android:textSize="14sp"
-                            android:textColor="#212529"
-                            android:layout_marginStart="8dp" />
-                    </LinearLayout>
-
-                    <!-- Action Buttons -->
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnChat"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:text="Chat"
-                            android:textColor="#FFFFFF"
-                            app:backgroundTint="#007BFF"
-                            app:cornerRadius="24dp"
-                            android:layout_marginEnd="8dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnSchedule"
-                            android:layout_width="0dp"
-                            android:layout_height="48dp"
-                            android:layout_weight="1"
-                            android:text="Schedule"
-                            android:textColor="#FFFFFF"
-                            app:backgroundTint="#28A745"
-                            app:cornerRadius="24dp"
-                            android:layout_marginStart="8dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSchedule"
+                    style="@style/Widget.Material3.Button"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:layout_weight="1"
+                    android:text="Book"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
 
             <!-- About Doctor -->
-            <com.google.android.material.card.MaterialCardView
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                android:text="About Doctor"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_marginTop="32dp"
+                android:textColor="@color/md_theme_onBackground" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="About Doctor"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#212529"
-                        android:layout_marginBottom="12dp" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Dr. John Smith is a highly experienced cardiologist with over 15 years of practice. He specializes in interventional cardiology and has performed thousands of successful procedures. He is known for his compassionate care and dedication to patient well-being."
-                        android:textSize="14sp"
-                        android:textColor="#6C757D"
-                        android:lineSpacingExtra="4dp" />
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Specializations -->
-            <com.google.android.material.card.MaterialCardView
+            <TextView
+                android:id="@+id/tvDoctorBio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                android:text="Dr. Smith is an experienced cardiologist with over 15 years of service..."
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="@color/md_theme_onSurfaceVariant" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Specializations"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#212529"
-                        android:layout_marginBottom="12dp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="• Interventional Cardiology"
-                            android:textSize="14sp"
-                            android:textColor="#6C757D"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="• Heart Failure Management"
-                            android:textSize="14sp"
-                            android:textColor="#6C757D"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="• Preventive Cardiology"
-                            android:textSize="14sp"
-                            android:textColor="#6C757D"
-                            android:layout_marginBottom="4dp" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="• Cardiac Imaging"
-                            android:textSize="14sp"
-                            android:textColor="#6C757D" />
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
-
-            <!-- Available Time Slots -->
-            <com.google.android.material.card.MaterialCardView
+            <!-- Certifications -->
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp">
+                android:text="Certifications"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_marginTop="24dp"
+                android:textColor="@color/md_theme_onBackground" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+            <LinearLayout
+                android:id="@+id/layoutCertifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Available Time Slots"
-                        android:textSize="16sp"
-                        android:textStyle="bold"
-                        android:textColor="#212529"
-                        android:layout_marginBottom="12dp" />
+            <!-- Time Slots -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Available Time Slots"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_marginTop="24dp"
+                android:textColor="@color/md_theme_onBackground" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Monday - Friday:"
-                            android:textSize="14sp"
-                            android:textColor="#6C757D" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="9:00 AM - 5:00 PM"
-                            android:textSize="14sp"
-                            android:textColor="#212529"
-                            android:layout_marginStart="8dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Saturday:"
-                            android:textSize="14sp"
-                            android:textColor="#6C757D" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="9:00 AM - 2:00 PM"
-                            android:textSize="14sp"
-                            android:textColor="#212529"
-                            android:layout_marginStart="8dp" />
-                    </LinearLayout>
-                </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
+            <TextView
+                android:id="@+id/tvDoctorSchedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Mon - Fri: 9:00 AM - 5:00 PM\nSat: 9:00 AM - 2:00 PM"
+                android:layout_marginTop="8dp"
+                android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
+                android:textColor="@color/md_theme_onSurfaceVariant" />
         </LinearLayout>
     </ScrollView>
 
-    <!-- Bottom Navigation -->
+    <!-- Bottom Nav -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:background="#FFFFFF"
-        android:elevation="8dp"
+        android:layout_gravity="bottom"
+        android:background="?attr/colorSurface"
         app:menu="@menu/bottom_nav_menu"
-        app:labelVisibilityMode="unlabeled"
-        app:itemActiveIndicatorStyle="@style/App.Custom.Indicator" />
+        app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/selector_nav_color"
+        app:itemTextColor="@color/selector_nav_color"
+        android:elevation="8dp" />
 
-</RelativeLayout> 
+</LinearLayout>

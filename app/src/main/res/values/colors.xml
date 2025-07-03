@@ -60,4 +60,26 @@
     <color name="primary">#2196F3</color>
     <color name="bottom_nav_color">#F0F0F0</color>
 
+    <color name="gray_f0">#F0F0F0</color>
+    <color name="gray_f1">#F1F3F4</color>
+    <color name="gray_de">#DEE2E6</color>
+    <color name="gray_f5">#F5F8FB</color>
+    <color name="gray_e0">#E0E0E0</color>
+    <color name="gray_f8">#F8F9FA</color>
+    <color name="blue_03">#03A9F4</color>
+    <color name="yellow_ffc">#FFC107</color>
+    <color name="gray_1d">#1D1D1D</color>
+    <color name="blue_3f">#3F51B5</color>
+    <color name="blue_1d">#1D1D8D</color>
+    <color name="gray_ee">#EEEEEE</color>
+    <color name="blue_007b">#007BFF</color>
+    <color name="blue_447f">#447F98</color>
+    <color name="gray_2121">#212121</color>
+    <color name="gray_6161">#616161</color>
+    <color name="gray_7575">#757575</color>
+    <color name="gray_546e">#546E7A</color>
+
+    <color name="md_theme_outline">#79747E</color>
+    <color name="md_theme_onSurfaceVariant">#49454F</color>
+
 </resources>
