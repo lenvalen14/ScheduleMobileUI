@@ -19,7 +19,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Schedule"
+            app:title="My Appointments"
             app:titleCentered="true"
             app:titleTextColor="@color/text_primary"
             app:navigationIcon="@drawable/ic_arrow_back"
@@ -56,22 +56,32 @@
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipUpcoming"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:text="Upcoming 10" />
+                android:text="Upcoming" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipCompleted"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:text="Completed 25" />
+                android:text="Completed" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/chipCanceled"
                 style="@style/Widget.MaterialComponents.Chip.Choice"
-                android:text="Cancel 2" />
+                android:text="Canceled" />
         </com.google.android.material.chip.ChipGroup>
 
-        <!-- RecyclerView -->
+        <!-- Appointment Count -->
+        <TextView
+            android:id="@+id/tvAppointmentCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0 appointments"
+            android:textSize="14sp"
+            android:textColor="#6C757D"
+            android:layout_marginBottom="8dp" />
+
+        <!-- RecyclerView for Appointments -->
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvSchedules"
+            android:id="@+id/rvAppointments"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"

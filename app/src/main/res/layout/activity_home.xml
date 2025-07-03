@@ -19,6 +19,32 @@
             android:orientation="vertical"
             android:paddingBottom="24dp">
 
+            <!-- Các TextView cho navigation (tự động thêm) -->
+            <TextView
+                android:id="@+id/tvHospital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Hospitals"
+                android:textSize="16sp"
+                android:textColor="#007BFF"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/tvSpecialty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Specialties"
+                android:textSize="16sp"
+                android:textColor="#007BFF"
+                android:layout_marginBottom="8dp" />
+            <TextView
+                android:id="@+id/tvDoctor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Doctors"
+                android:textSize="16sp"
+                android:textColor="#007BFF"
+                android:layout_marginBottom="8dp" />
+
             <!-- Header Section -->
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -425,7 +451,7 @@
                     tools:listitem="@layout/grid_item_specialty" />
             </LinearLayout>
 
-        </LinearLayout>
+           
     </androidx.core.widget.NestedScrollView>
 
     <!-- Bottom Navigation -->

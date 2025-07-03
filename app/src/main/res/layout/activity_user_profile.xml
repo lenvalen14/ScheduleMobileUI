@@ -239,6 +239,35 @@
                     android:fontFamily="@font/inter_medium" />
             </com.google.android.material.textfield.TextInputLayout>
 
+            <!-- Các nút tự động thêm cho đồng bộ code Java -->
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:layout_marginBottom="8dp" />
+            <Button
+                android:id="@+id/btnEditProfile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Edit Profile"
+                android:layout_marginBottom="8dp" />
+            <Button
+                android:id="@+id/btnMyAppointments"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="My Appointments"
+                android:layout_marginBottom="8dp" />
+            <ImageButton
+                android:id="@+id/nav_home"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_home"
+                android:contentDescription="Home"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="16dp" />
+
             <!-- Save Button -->
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_save"

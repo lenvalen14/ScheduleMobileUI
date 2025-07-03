@@ -52,5 +52,9 @@
     <color name="field_stroke_focused">#2196F3</color>
 
     <color name="teal_700">#007B83</color>
+    <color name="orange" />
+    <color name="blue" />
+    <color name="green" />
+    <color name="red" />
 
 </resources>

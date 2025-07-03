@@ -86,6 +86,7 @@
                 android:tint="#03A9F4" />
 
             <TextView
+                android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -104,6 +105,7 @@
                 android:tint="#03A9F4" />
 
             <TextView
+                android:id="@+id/tvTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -122,6 +124,7 @@
                 android:tint="#03A9F4" />
 
             <TextView
+                android:id="@+id/tvConfirmStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
