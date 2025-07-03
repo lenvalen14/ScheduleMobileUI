@@ -14,4 +14,30 @@
     <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
         <item name="android:drawable">@drawable/bottom_nav_indicator</item>
     </style>
+
+    <style name="ModernTextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+        <item name="boxStrokeWidth">2dp</item>
+        <item name="boxStrokeWidthFocused">3dp</item>
+        <item name="boxStrokeColor">@color/field_stroke</item>
+        <item name="boxBackgroundColor">@color/field_background</item>
+        <item name="hintTextColor">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/text_hint</item>
+        <item name="startIconTint">@color/icon_tint_dark</item>
+        <item name="endIconTint">@color/icon_tint_dark</item>
+    </style>
+
+    <!-- Circular Image View -->
+    <style name="CircularImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
+    <style name="GlassmorphismButton">
+        <item name="android:background">@drawable/bg_glassmorphism_button</item>
+        <item name="android:backgroundTint">@color/white_alpha_15</item>
+    </style>
 </resources>

@@ -127,7 +127,7 @@
                         android:id="@+id/ivDoctorAvatar"
                         android:layout_width="56dp"
                         android:layout_height="56dp"
-                        android:src="@drawable/ic_doctor_avatar"
+                        android:src="@drawable/sample_profile_image"
                         android:background="@drawable/bg_icon_circular"
                         android:scaleType="centerCrop"
                         app:layout_constraintStart_toStartOf="parent"

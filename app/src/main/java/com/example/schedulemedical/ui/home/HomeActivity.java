@@ -1,26 +1,63 @@
-package com.example.schedulemedical.ui.home;
-
-import android.os.Bundle;
-
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import com.example.schedulemedical.R;
-
-public class HomeActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_home);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
-    }
-}
+//package com.example.schedulemedical.ui.home;
+//
+//import android.widget.ImageView;
+//import android.widget.TextView;
+//
+//import com.example.schedulemedical.R;
+//import com.example.schedulemedical.ui.base.BaseActivity;
+//import com.example.schedulemedical.utils.NavigationHelper;
+//
+//public class HomeActivity extends BaseActivity {
+//
+//    @Override
+//    protected int getLayoutResourceId() {
+//        return R.layout.activity_home;
+//    }
+//
+//    @Override
+//    protected void setupViews() {
+//        setupNavigation();
+//    }
+//
+//    private void setupNavigation() {
+//        // Navigation đến Hospital
+//        ImageView hospitalIcon = findViewById(R.id.ivHospital);
+//        if (hospitalIcon != null) {
+//            hospitalIcon.setOnClickListener(view -> {
+//                NavigationHelper.navigateToHospital(this);
+//            });
+//        }
+//
+//        // Navigation đến Filter Doctor
+//        ImageView searchIcon = findViewById(R.id.ivSearch);
+//        if (searchIcon != null) {
+//            searchIcon.setOnClickListener(view -> {
+//                NavigationHelper.navigateToFilterDoctor(this);
+//            });
+//        }
+//
+//        // Navigation đến User Profile
+//        ImageView profileIcon = findViewById(R.id.ivProfile);
+//        if (profileIcon != null) {
+//            profileIcon.setOnClickListener(view -> {
+//                NavigationHelper.navigateToUserProfile(this);
+//            });
+//        }
+//
+//        // Navigation đến My Scheduled
+//        TextView myScheduledText = findViewById(R.id.tvMyScheduled);
+//        if (myScheduledText != null) {
+//            myScheduledText.setOnClickListener(view -> {
+//                NavigationHelper.navigateToMyScheduled(this);
+//            });
+//        }
+//
+//        // Navigation đến Chat
+//        ImageView chatIcon = findViewById(R.id.ivChat);
+//        if (chatIcon != null) {
+//            chatIcon.setOnClickListener(view -> {
+//                NavigationHelper.navigateToChat(this);
+//            });
+//        }
+//    }
+//}

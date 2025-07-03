@@ -28,4 +28,29 @@
     <color name="calendar_day_text">#212529</color>
     <color name="calendar_day_selected">#007BFF</color>
     <color name="calendar_day_today">#E3F2FD</color>
+
+    <color name="accent_blue">#2196F3</color>
+    <color name="success_green">#4CAF50</color>
+
+    <!-- Background Colors -->
+    <color name="background_light">#F8F9FA</color>
+
+    <!-- Text Colors -->
+    <color name="text_hint">#999999</color>
+
+    <!-- Icon Colors -->
+    <color name="icon_tint_dark">#666666</color>
+
+    <!-- Alpha Colors -->
+    <color name="white_alpha_15">#26FFFFFF</color>
+    <color name="white_alpha_20">#33FFFFFF</color>
+    <color name="white_alpha_30">#4DFFFFFF</color>
+
+    <!-- Field Colors -->
+    <color name="field_background">#F5F5F5</color>
+    <color name="field_stroke">#E0E0E0</color>
+    <color name="field_stroke_focused">#2196F3</color>
+
+    <color name="teal_700">#007B83</color>
+
 </resources>

@@ -24,7 +24,7 @@
             android:id="@+id/ivDoctorPhoto"
             android:layout_width="71dp"
             android:layout_height="61dp"
-            android:src="@drawable/img_doctor_chae"
+            android:src="@drawable/sample_profile_image"
             app:civ_border_color="#F1F3F4"
             app:civ_border_width="2dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +39,7 @@
             android:textColor="#212529"
             android:textSize="18sp"
             android:textStyle="bold"
+            android:fontFamily="@font/inter_semibold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivDoctorPhoto"
             app:layout_constraintTop_toTopOf="@id/ivDoctorPhoto" />
@@ -62,6 +63,7 @@
             android:text="Khoa thần kinh"
             android:textColor="#6C757D"
             android:textSize="14sp"
+            android:fontFamily="@font/inter_medium"
             app:layout_constraintBottom_toBottomOf="@id/icSpecialty"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/icSpecialty"
@@ -86,6 +88,7 @@
             android:text="Bệnh viện Yulje"
             android:textColor="#6C757D"
             android:textSize="14sp"
+            android:fontFamily="@font/inter_medium"
             app:layout_constraintBottom_toBottomOf="@+id/icHospital"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/icHospital"
@@ -98,17 +101,17 @@
             android:layout_marginTop="16dp"
             android:background="#EEEEEE"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivDoctorPhoto" />
 
+        <!-- Rating + Buttons -->
         <LinearLayout
+            android:id="@+id/ratingContainer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
-            android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:gravity="center_vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider">
 
@@ -122,27 +125,79 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
-                android:text="4.8"
+                android:text="4.8 (212 reviews)"
                 android:textColor="#212529"
                 android:textSize="14sp"
-                android:textStyle="bold" />
+                android:fontFamily="@font/inter_medium" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/actionButtons"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal"
+            android:gravity="end"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/divider">
+
+            <ImageButton
+                android:id="@+id/btnCall"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_icon_circular"
+                android:backgroundTint="#F5F8FB"
+                android:src="@drawable/ic_call"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:padding="6dp"
+                android:contentDescription="@string/call" />
+
+            <ImageButton
+                android:id="@+id/btnChat"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_icon_circular"
+                android:backgroundTint="#F5F8FB"
+                android:src="@drawable/ic_chat"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:padding="6dp"
+                android:contentDescription="@string/chat" />
+
+            <ImageButton
+                android:id="@+id/btnInfo"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_icon_circular"
+                android:backgroundTint="#F5F8FB"
+                android:src="@drawable/ic_profile"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:padding="6dp"
+                android:contentDescription="@string/info" />
+
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBookAppointment"
-            style="@style/Widget.MaterialComponents.Button"
-            android:layout_width="160dp"
+            android:layout_width="0dp"
             android:layout_height="40dp"
-            android:layout_marginEnd="4dp"
-            android:backgroundTint="#447F98"
+            android:layout_marginTop="16dp"
             android:text="Đặt lịch ngay"
             android:textColor="#FFFFFF"
             android:textSize="12sp"
+            android:fontFamily="@font/inter_semibold"
             app:cornerRadius="18dp"
+            android:backgroundTint="#447F98"
             app:iconPadding="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/divider" />
+            app:layout_constraintTop_toBottomOf="@+id/ratingContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

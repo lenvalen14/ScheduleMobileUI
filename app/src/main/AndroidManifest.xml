@@ -14,6 +14,13 @@
         android:theme="@style/Theme.ScheduleMedical"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".ui.schedule.MyScheduledActivity"
+            android:exported="false"
+            android:theme="@style/Theme.ScheduleMedical" />
+        <activity
+            android:name=".ui.userprofile.UserProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.chat.ChatActivity"
             android:exported="false" />
         <activity
