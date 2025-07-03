@@ -24,9 +24,6 @@
             android:name=".ui.chat.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.chat.ChatActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.filterDoctor.FilterDoctorActivity"
             android:exported="false" />
         <activity
@@ -46,6 +43,8 @@
             android:exported="false" />
         <activity
             android:name=".ui.forgotPassword.ForgotPasswordActivity"
+            android:exported="false" />
+        <activity android:name=".ui.register.RegisterActivity"
             android:exported="false" />
         <activity
             android:name=".ui.main.MainActivity"

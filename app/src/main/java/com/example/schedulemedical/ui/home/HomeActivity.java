@@ -1,6 +1,5 @@
 package com.example.schedulemedical.ui.home;
 
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.schedulemedical.R;
@@ -10,6 +9,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class HomeActivity extends BaseActivity {
 
+
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_home;
@@ -17,34 +17,22 @@ public class HomeActivity extends BaseActivity {
 
     @Override
     protected void setupViews() {
-        setupNavigation();
         setupBottomNavigation();
-    }
 
-    private void setupNavigation() {
-        // Navigation đến Hospital
-        TextView hospitals = findViewById(R.id.tvHospital);
-        if (hospitals != null) {
-            hospitals.setOnClickListener(view -> {
+        TextView tvSeeAllDoctor = findViewById(R.id.tvSeeAllDoctor);
+        if (tvSeeAllDoctor != null) {
+            tvSeeAllDoctor.setOnClickListener(v -> {
+                NavigationHelper.navigateToFilterDoctor(this);
+            });
+        }
+
+        TextView tvSeeAllHospital = findViewById(R.id.tvSeeAllHospital);
+        if (tvSeeAllHospital != null) {
+            tvSeeAllHospital.setOnClickListener(v -> {
                 NavigationHelper.navigateToHospital(this);
             });
         }
 
-
-        // Navigation đến User Profile
-        TextView specialties = findViewById(R.id.tvSpecialty);
-        if (specialties != null) {
-            specialties.setOnClickListener(view -> {
-                //To do
-            });
-        }
-
-        TextView doctors = findViewById(R.id.tvDoctor);
-        if (doctors != null) {
-            doctors.setOnClickListener(view -> {
-                NavigationHelper.navigateToFilterDoctor(this);
-            });
-        }
     }
 
     private void setupBottomNavigation() {

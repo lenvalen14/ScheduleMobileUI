@@ -31,7 +31,8 @@ public class LoginActivity extends ComponentActivity {
         loginBtn.setOnClickListener(view -> {
             String email = emailEdt.getText().toString();
             String password = passwordEdt.getText().toString();
-            loginViewModel.login(email, password);
+            NavigationHelper.navigateToHome(this);
+//            loginViewModel.login(email, password);
         });
 
         forgotpass.setOnClickListener(view -> {
@@ -44,13 +45,13 @@ public class LoginActivity extends ComponentActivity {
             });
         }
 
-        loginViewModel.getLoginResult().observe(this, result -> {
-            if (result.getData() != null) {
-                Toast.makeText(this, "Login success!", Toast.LENGTH_SHORT).show();
-                NavigationHelper.navigateToHome(this);
-            } else {
-                Toast.makeText(this, result.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+//        loginViewModel.getLoginResult().observe(this, result -> {
+//            if (result.getData() != null) {
+//                Toast.makeText(this, "Login success!", Toast.LENGTH_SHORT).show();
+//                NavigationHelper.navigateToHome(this);
+//            } else {
+//                Toast.makeText(this, result.getMessage(), Toast.LENGTH_SHORT).show();
+//            }
+//        });
     }
 }
