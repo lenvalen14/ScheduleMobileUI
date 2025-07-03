@@ -55,10 +55,10 @@ dependencies {
     implementation(libs.navigation.ui)
     
     // Glide for image loading
-    implementation("com.github.bumptech.glide:glide:4.16.0")
+    implementation(libs.glide)
     
     // Socket.IO for real-time notifications
-    implementation("io.socket:socket.io-client:2.0.1")
+    implementation(libs.socket.io.client)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

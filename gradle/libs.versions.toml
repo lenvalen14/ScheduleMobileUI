@@ -3,6 +3,7 @@ agp = "8.10.1"
 circleimageview = "3.1.0"
 converterGson = "2.9.0"
 coreSplashscreen = "1.0.1"
+glide = "4.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -14,11 +15,13 @@ constraintlayout = "2.1.4"
 playServicesMaps = "19.2.0"
 navigationFragment = "2.9.0"
 navigationUi = "2.9.0"
+socketIoClient = "2.0.1"
 
 [libraries]
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
 converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "converterGson" }
 core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
+glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -31,6 +34,7 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "converte
 play-services-maps = { group = "com.google.android.gms", name = "play-services-maps", version.ref = "playServicesMaps" }
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
+socket-io-client = { module = "io.socket:socket.io-client", version.ref = "socketIoClient" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

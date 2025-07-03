@@ -19,11 +19,9 @@ import com.example.schedulemedical.ui.home.HomeActivity;
 import com.example.schedulemedical.utils.AuthManager;
 
 import java.net.URISyntaxException;
-import java.util.concurrent.TimeUnit;
 
 import io.socket.client.IO;
 import io.socket.client.Socket;
-import okhttp3.OkHttpClient;
 
 public class NotificationService extends Service {
     private static final String TAG = "NotificationService";
