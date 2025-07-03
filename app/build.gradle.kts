@@ -53,6 +53,12 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    
+    // Glide for image loading
+    implementation(libs.glide)
+    
+    // Socket.IO for real-time notifications
+    implementation(libs.socket.io.client)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

@@ -48,17 +48,27 @@ public class AuthManager {
                 if (response.isSuccessful() && response.body() != null) {
                     LoginResponse loginResponse = response.body();
                     
+                    Log.d(TAG, "Login response received: " + loginResponse.getMessage());
+                    
                     if (loginResponse.getData() != null) {
+                        LoginResponse.LoginData data = loginResponse.getData();
+                        
+                        // Debug logging
+                        Log.d(TAG, "Access token: " + (data.getAccessToken() != null ? "Present" : "NULL"));
+                        Log.d(TAG, "Refresh token: " + (data.getRefreshToken() != null ? "Present" : "NULL"));
+                        Log.d(TAG, "User ID (sub): " + data.getSub());
+                        
                         // Save tokens and user info
                         saveTokens(
-                            loginResponse.getData().getAccessToken(),
-                            loginResponse.getData().getRefreshToken(),
-                            loginResponse.getData().getSub()
+                            data.getAccessToken(),
+                            data.getRefreshToken(),
+                            data.getSub()
                         );
                         
                         // Get user profile after successful login
                         fetchUserProfile(callback);
                     } else {
+                        Log.e(TAG, "Login response data is null");
                         callback.onError("Invalid login response");
                     }
                 } else {
@@ -70,6 +80,7 @@ public class AuthManager {
                             Log.e(TAG, "Error reading error body", e);
                         }
                     }
+                    Log.e(TAG, "Login failed with response code: " + response.code());
                     callback.onError(errorMessage);
                 }
             }
@@ -209,14 +220,83 @@ public class AuthManager {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putString(KEY_ACCESS_TOKEN, accessToken);
         editor.putString(KEY_REFRESH_TOKEN, refreshToken);
-        editor.putInt(KEY_USER_ID, userId);
+        
+        // Handle null userId - try to extract from JWT token if null
+        if (userId != null) {
+            editor.putInt(KEY_USER_ID, userId);
+            Log.d(TAG, "Saved user ID: " + userId);
+        } else {
+            // Try to extract user ID from JWT token
+            Integer extractedUserId = extractUserIdFromJWT(accessToken);
+            if (extractedUserId != null) {
+                editor.putInt(KEY_USER_ID, extractedUserId);
+                Log.d(TAG, "Extracted and saved user ID from JWT: " + extractedUserId);
+            } else {
+                editor.putInt(KEY_USER_ID, -1); // Default value
+                Log.w(TAG, "Could not extract user ID from JWT, using default value -1");
+            }
+        }
+        
         editor.apply();
         
         Log.d(TAG, "Tokens saved successfully");
     }
     
+    // Extract user ID from JWT token
+    private Integer extractUserIdFromJWT(String token) {
+        if (token == null || token.isEmpty()) {
+            return null;
+        }
+        
+        try {
+            // Split JWT token into parts
+            String[] parts = token.split("\\.");
+            if (parts.length != 3) {
+                Log.e(TAG, "Invalid JWT token format");
+                return null;
+            }
+            
+            // Decode payload (base64)
+            String payload = parts[1];
+            // Add padding if needed
+            while (payload.length() % 4 != 0) {
+                payload += "=";
+            }
+            
+            byte[] decodedBytes = android.util.Base64.decode(payload, android.util.Base64.URL_SAFE);
+            String decodedPayload = new String(decodedBytes);
+            
+            Log.d(TAG, "JWT Payload: " + decodedPayload);
+            
+            // Simple JSON parsing to extract "sub" field
+            if (decodedPayload.contains("\"sub\":")) {
+                int subIndex = decodedPayload.indexOf("\"sub\":");
+                int commaIndex = decodedPayload.indexOf(",", subIndex);
+                int braceIndex = decodedPayload.indexOf("}", subIndex);
+                
+                int endIndex = (commaIndex != -1 && commaIndex < braceIndex) ? commaIndex : braceIndex;
+                if (endIndex != -1) {
+                    String subValue = decodedPayload.substring(subIndex + 6, endIndex).trim();
+                    return Integer.parseInt(subValue);
+                }
+            }
+            
+        } catch (Exception e) {
+            Log.e(TAG, "Error extracting user ID from JWT", e);
+        }
+        
+        return null;
+    }
+    
     // Clear all user data
-    private void clearUserData() {
+    public void clearUserData() {
+        // Stop notification service before clearing data
+        try {
+            com.example.schedulemedical.services.NotificationService.stopService(context);
+        } catch (Exception e) {
+            Log.e(TAG, "Error stopping notification service", e);
+        }
+        
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(KEY_ACCESS_TOKEN);
         editor.remove(KEY_REFRESH_TOKEN);
@@ -273,6 +353,17 @@ public class AuthManager {
     
     public boolean isUser() {
         return "USER".equals(getUserRole());
+    }
+    
+    // Update user info
+    public void updateUserInfo(String fullName, String phoneNumber) {
+        SharedPreferences.Editor editor = prefs.edit();
+        if (fullName != null) {
+            editor.putString(KEY_USER_NAME, fullName);
+        }
+        // You can add phone number key if needed
+        editor.apply();
+        Log.d(TAG, "User info updated");
     }
     
     // Callback interface for authentication operations
