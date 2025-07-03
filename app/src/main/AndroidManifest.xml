@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.schedulemedical">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -24,7 +23,16 @@
             android:name=".ui.chat.ChatActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.chat.ChatActivity"
+            android:name=".ui.doctor.DoctorListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.booking.BookingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.payment.PaymentActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.profile.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.filterDoctor.FilterDoctorActivity"
@@ -58,6 +66,12 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.login.LoginActivity" />
+        
+        <!-- Notification Service -->
+        <service 
+            android:name=".services.NotificationService"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -53,6 +53,12 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    
+    // Glide for image loading
+    implementation("com.github.bumptech.glide:glide:4.16.0")
+    
+    // Socket.IO for real-time notifications
+    implementation("io.socket:socket.io-client:2.0.1")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

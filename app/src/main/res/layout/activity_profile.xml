@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F8F9FA">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Header -->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@android:color/white"
+            android:elevation="4dp"
+            android:paddingHorizontal="16dp">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/ic_arrow_back"
+                android:background="?android:attr/selectableItemBackgroundBorderless"
+                android:padding="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Profile"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                app:layout_constraintStart_toEndOf="@id/ivBack"
+                app:layout_constraintEnd_toStartOf="@id/tvLogout"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_marginStart="16dp" />
+
+            <TextView
+                android:id="@+id/tvLogout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Logout"
+                android:textSize="14sp"
+                android:textColor="#DC3545"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <!-- Profile Picture -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="24dp"
+            android:background="@android:color/white">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                app:cardCornerRadius="60dp"
+                app:cardElevation="4dp">
+
+                <ImageView
+                    android:id="@+id/ivProfilePicture"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/sample_profile_image"
+                    android:scaleType="centerCrop" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tvChangePhoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Change Photo"
+                android:textSize="14sp"
+                android:textColor="@color/primary_color"
+                android:background="?android:attr/selectableItemBackground"
+                android:padding="8dp"
+                android:layout_marginTop="12dp" />
+
+        </LinearLayout>
+
+        <!-- Form Fields -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"
+            android:background="@android:color/white"
+            android:layout_marginTop="8dp">
+
+            <!-- Full Name -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Full Name"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/etFullName"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_edittext_rounded"
+                android:hint="Enter your full name"
+                android:textColorHint="@color/text_hint"
+                android:textSize="14sp"
+                android:paddingHorizontal="16dp"
+                android:inputType="textPersonName"
+                android:maxLines="1"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Email (Read Only) -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email Address"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_edittext_rounded"
+                android:hint="email@example.com"
+                android:textColorHint="@color/text_hint"
+                android:textSize="14sp"
+                android:paddingHorizontal="16dp"
+                android:inputType="textEmailAddress"
+                android:maxLines="1"
+                android:enabled="false"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Phone Number -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Phone Number"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="8dp" />
+
+            <EditText
+                android:id="@+id/etPhoneNumber"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/bg_edittext_rounded"
+                android:hint="Enter your phone number"
+                android:textColorHint="@color/text_hint"
+                android:textSize="14sp"
+                android:paddingHorizontal="16dp"
+                android:inputType="phone"
+                android:maxLines="1"
+                android:layout_marginBottom="16dp" />
+
+            <!-- Date of Birth -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date of Birth"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="8dp" />
+
+            <LinearLayout
+                android:id="@+id/layoutDatePicker"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:orientation="horizontal"
+                android:background="@drawable/bg_edittext_rounded"
+                android:gravity="center_vertical"
+                android:paddingHorizontal="16dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                android:layout_marginBottom="16dp">
+
+                <TextView
+                    android:id="@+id/tvDateOfBirth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Select date of birth"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_hint" />
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_calendar" />
+
+            </LinearLayout>
+
+            <!-- Gender -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gender"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="@color/text_primary"
+                android:layout_marginBottom="8dp" />
+
+            <RadioGroup
+                android:id="@+id/rgGender"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="24dp">
+
+                <RadioButton
+                    android:id="@+id/rbMale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Male"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginEnd="24dp" />
+
+                <RadioButton
+                    android:id="@+id/rbFemale"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Female"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary"
+                    android:layout_marginEnd="24dp" />
+
+                <RadioButton
+                    android:id="@+id/rbOther"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Other"
+                    android:textSize="14sp"
+                    android:textColor="@color/text_primary" />
+
+            </RadioGroup>
+
+            <!-- Update Button -->
+            <TextView
+                android:id="@+id/btnUpdateProfile"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:text="Update Profile"
+                android:textSize="16sp"
+                android:textColor="@android:color/white"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/button_primary"
+                android:foreground="?android:attr/selectableItemBackground" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView> 

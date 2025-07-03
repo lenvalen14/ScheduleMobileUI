@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp"
+    android:foreground="?android:attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Doctor Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Doctor Avatar -->
+            <ImageView
+                android:id="@+id/ivDoctorAvatar"
+                android:layout_width="64dp"
+                android:layout_height="64dp"
+                android:src="@drawable/sample_profile_image"
+                android:background="@drawable/bg_icon_circular"
+                android:scaleType="centerCrop"
+                android:layout_marginEnd="16dp" />
+
+            <!-- Doctor Info -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvDoctorName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Dr. John Doe"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#212529"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/tvSpecialty"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cardiology"
+                    android:textSize="14sp"
+                    android:textColor="#007BFF"
+                    android:layout_marginTop="2dp"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <TextView
+                    android:id="@+id/tvHospital"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="City Hospital"
+                    android:textSize="13sp"
+                    android:textColor="#6C757D"
+                    android:layout_marginTop="2dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:drawableStart="@drawable/ic_location"
+                    android:drawablePadding="4dp"
+                    android:gravity="center_vertical" />
+
+            </LinearLayout>
+
+            <!-- Experience Badge -->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/experience_badge_bg"
+                android:padding="8dp"
+                android:layout_marginStart="8dp">
+
+                <TextView
+                    android:id="@+id/tvExperience"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="5 years"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:gravity="center" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Rating and Reviews -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="12dp">
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:rating="4.5"
+                android:stepSize="0.1"
+                android:isIndicator="true"
+                android:progressTint="#FFB800" />
+
+            <TextView
+                android:id="@+id/tvRating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4.5"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#212529"
+                android:layout_marginStart="8dp" />
+
+            <TextView
+                android:id="@+id/tvReviews"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(125 reviews)"
+                android:textSize="12sp"
+                android:textColor="#6C757D"
+                android:layout_marginStart="4dp" />
+
+            <!-- Spacer -->
+            <View
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" />
+
+            <!-- Consultation Fee -->
+            <TextView
+                android:id="@+id/tvConsultationFee"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="500,000 VND"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:textColor="#28A745"
+                android:background="@drawable/fee_badge_bg"
+                android:padding="6dp" />
+
+        </LinearLayout>
+
+        <!-- Divider -->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="#E9ECEF"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="12dp" />
+
+        <!-- Action Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- View Profile Button -->
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="View Profile"
+                android:textSize="14sp"
+                android:textColor="#007BFF"
+                android:gravity="center"
+                android:background="@drawable/button_outline_primary"
+                android:layout_marginEnd="8dp"
+                android:foreground="?android:attr/selectableItemBackground" />
+
+            <!-- Book Appointment Button -->
+            <TextView
+                android:id="@+id/btnBookAppointment"
+                android:layout_width="0dp"
+                android:layout_height="36dp"
+                android:layout_weight="1"
+                android:text="Book Appointment"
+                android:textSize="14sp"
+                android:textColor="#FFFFFF"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:background="@drawable/button_primary"
+                android:layout_marginStart="8dp"
+                android:foreground="?android:attr/selectableItemBackground" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView> 

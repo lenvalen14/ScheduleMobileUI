@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#F8F9FA">
+
+    <!-- Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@android:color/white"
+        android:elevation="4dp"
+        android:paddingHorizontal="16dp">
+
+        <ImageView
+            android:id="@+id/ivBack"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_arrow_back"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Payment"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@color/text_primary"
+            app:layout_constraintStart_toEndOf="@id/ivBack"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="16dp" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Content -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <!-- Payment Form -->
+        <ScrollView
+            android:id="@+id/layoutPaymentForm"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <!-- Amount Card -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Payment Summary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="12dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:layout_marginBottom="8dp">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Consultation Fee:"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_secondary" />
+
+                            <TextView
+                                android:id="@+id/tvConsultationFee"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="500,000 VND"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_primary" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="#E9ECEF"
+                            android:layout_marginVertical="8dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="Total Amount:"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="@color/text_primary" />
+
+                            <TextView
+                                android:id="@+id/tvTotalAmount"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="500,000 VND"
+                                android:textSize="16sp"
+                                android:textStyle="bold"
+                                android:textColor="#28A745" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Payment Method -->
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="24dp"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="2dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Payment Method"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="12dp" />
+
+                        <RadioGroup
+                            android:id="@+id/rgPaymentMethod"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <RadioButton
+                                android:id="@+id/rbVnpay"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="VNPay"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_primary"
+                                android:checked="true"
+                                android:layout_marginBottom="8dp" />
+
+                            <RadioButton
+                                android:id="@+id/rbMomo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="MoMo (Coming Soon)"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_secondary"
+                                android:enabled="false" />
+
+                        </RadioGroup>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <!-- Pay Button -->
+                <TextView
+                    android:id="@+id/btnPay"
+                    android:layout_width="match_parent"
+                    android:layout_height="52dp"
+                    android:text="Pay Now"
+                    android:textSize="16sp"
+                    android:textColor="@android:color/white"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:background="@drawable/button_primary"
+                    android:foreground="?android:attr/selectableItemBackground" />
+
+            </LinearLayout>
+
+        </ScrollView>
+
+        <!-- WebView for Payment -->
+        <WebView
+            android:id="@+id/webViewPayment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!-- Loading -->
+        <LinearLayout
+            android:id="@+id/layoutLoading"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:background="@android:color/white"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Processing payment..."
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout> 

@@ -217,6 +217,13 @@ public class AuthManager {
     
     // Clear all user data
     private void clearUserData() {
+        // Stop notification service before clearing data
+        try {
+            com.example.schedulemedical.services.NotificationService.stopService(context);
+        } catch (Exception e) {
+            Log.e(TAG, "Error stopping notification service", e);
+        }
+        
         SharedPreferences.Editor editor = prefs.edit();
         editor.remove(KEY_ACCESS_TOKEN);
         editor.remove(KEY_REFRESH_TOKEN);
@@ -273,6 +280,17 @@ public class AuthManager {
     
     public boolean isUser() {
         return "USER".equals(getUserRole());
+    }
+    
+    // Update user info
+    public void updateUserInfo(String fullName, String phoneNumber) {
+        SharedPreferences.Editor editor = prefs.edit();
+        if (fullName != null) {
+            editor.putString(KEY_USER_NAME, fullName);
+        }
+        // You can add phone number key if needed
+        editor.apply();
+        Log.d(TAG, "User info updated");
     }
     
     // Callback interface for authentication operations
