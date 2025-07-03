@@ -34,19 +34,9 @@ public class MyScheduledActivity extends BaseActivity implements AppointmentAdap
 
     @Override
     protected void setupViews() {
-        setupToolbar();
         setupChipFilter();
         setupRecyclerView();
         loadAllAppointments();
-    }
-
-    private void setupToolbar() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        if (toolbar != null) {
-            toolbar.setNavigationOnClickListener(view -> {
-                NavigationHelper.goBack(this);
-            });
-        }
     }
 
     private void setupChipFilter() {

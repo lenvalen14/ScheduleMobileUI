@@ -57,4 +57,7 @@
     <color name="green" />
     <color name="red" />
 
+    <color name="primary">#2196F3</color>
+    <color name="bottom_nav_color">#F0F0F0</color>
+
 </resources>

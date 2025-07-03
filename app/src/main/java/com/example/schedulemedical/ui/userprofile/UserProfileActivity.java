@@ -39,29 +39,12 @@ public class UserProfileActivity extends BaseActivity {
             });
         }
 
-        // Logout button
-        Button logoutButton = findViewById(R.id.btnLogout);
-        if (logoutButton != null) {
-            logoutButton.setOnClickListener(view -> {
-                // TODO: Clear user session data
-                NavigationHelper.navigateToLogin(this);
-            });
-        }
-
         // Edit profile button
-        Button editProfileButton = findViewById(R.id.btnEditProfile);
+        Button editProfileButton = findViewById(R.id.btn_save);
         if (editProfileButton != null) {
             editProfileButton.setOnClickListener(view -> {
                 // TODO: Navigate to edit profile screen
                 // NavigationHelper.navigateToEditProfile(this);
-            });
-        }
-
-        // My appointments button
-        Button myAppointmentsButton = findViewById(R.id.btnMyAppointments);
-        if (myAppointmentsButton != null) {
-            myAppointmentsButton.setOnClickListener(view -> {
-                NavigationHelper.navigateToMyScheduled(this);
             });
         }
     }
@@ -70,6 +53,7 @@ public class UserProfileActivity extends BaseActivity {
         // TODO: Load user data from SharedPreferences or API
         TextView userName = findViewById(R.id.et_first_name);
         TextView userEmail = findViewById(R.id.et_email);
+        TextView address = findViewById(R.id.et_address);
 
         if (userName != null) {
             userName.setText("John Doe"); // Placeholder

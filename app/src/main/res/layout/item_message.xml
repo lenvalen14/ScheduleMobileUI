@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="4dp"
+        tools:ignore="MissingConstraints">
+
+        <!-- Date separator -->
+        <TextView
+            android:id="@+id/tvDateSeparator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_date_separator"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="4dp"
+            android:text="Hôm nay"
+            android:textColor="#6C757D"
+            android:textSize="12sp"
+            android:visibility="gone" />
+
+        <!-- Message content container -->
+        <FrameLayout
+            android:id="@+id/messageContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp">
+
+            <!-- Include sent message layout -->
+            <include
+                android:id="@+id/layoutSentMessage"
+                layout="@layout/item_message_sent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <!-- Include received message layout -->
+            <include
+                android:id="@+id/layoutReceivedMessage"
+                layout="@layout/item_message_received"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
