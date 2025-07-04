@@ -16,6 +16,7 @@ playServicesMaps = "19.2.0"
 navigationFragment = "2.9.0"
 navigationUi = "2.9.0"
 socketIoClient = "2.0.1"
+swiperefreshlayout = "1.1.0"
 
 [libraries]
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
@@ -35,6 +36,7 @@ play-services-maps = { group = "com.google.android.gms", name = "play-services-m
 navigation-fragment = { group = "androidx.navigation", name = "navigation-fragment", version.ref = "navigationFragment" }
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 socket-io-client = { module = "io.socket:socket.io-client", version.ref = "socketIoClient" }
+swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
