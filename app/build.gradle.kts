@@ -59,6 +59,7 @@ dependencies {
     
     // Socket.IO for real-time notifications
     implementation(libs.socket.io.client)
+    implementation(libs.swiperefreshlayout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
