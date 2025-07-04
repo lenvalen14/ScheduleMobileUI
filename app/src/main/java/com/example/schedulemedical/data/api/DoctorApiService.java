@@ -86,4 +86,12 @@ public interface DoctorApiService {
         @Query("page") int page,
         @Query("limit") int limit
     );
+
+    // Get doctors by a list of userIds (only doctors) with pagination
+    @GET("doctor/by-userIds")
+    Call<ApiResponse<List<DoctorResponse>>> getDoctorsByUserIds(
+        @Query("userIds") String userIds,
+        @Query("page") int page,
+        @Query("limit") int limit
+    );
 } 

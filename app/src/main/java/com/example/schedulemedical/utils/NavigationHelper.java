@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.schedulemedical.ui.chat.ChatActivity;
+import com.example.schedulemedical.ui.doctorprofile.DoctorEditProfileActivity;
 import com.example.schedulemedical.ui.doctorprofile.DoctorProfileActivity;
 import com.example.schedulemedical.ui.filterDoctor.FilterDoctorActivity;
 import com.example.schedulemedical.ui.forgotPassword.ForgotPasswordActivity;
@@ -120,11 +121,16 @@ public class NavigationHelper {
     }
 
     /**
-     * Điều hướng đến DoctorProfileActivity
+     * Điều hướng đến DoctorProfileActivity cho chính bác sĩ đang đăng nhập
      */
-    public static void navigateToDoctorProfile(Context context, int doctorId) {
+    public static void navigateToDoctorProfile(Context context) {
+        Intent intent = new Intent(context, DoctorEditProfileActivity.class);
+        context.startActivity(intent);
+    }
+
+    public static void navigateToDoctorProfile(Context context, Integer userIdInput) {
         Intent intent = new Intent(context, DoctorProfileActivity.class);
-        intent.putExtra(EXTRA_DOCTOR_ID, doctorId);
+        intent.putExtra(EXTRA_DOCTOR_ID, userIdInput);
         context.startActivity(intent);
     }
 

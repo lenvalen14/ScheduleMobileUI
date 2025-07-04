@@ -7,7 +7,7 @@ public class DoctorResponse {
     private Integer userId;
     private Integer specialtyId;
     private Integer hospitalId;
-    private String rating;
+    private Float rating;
     private String bio;
     private String yearsOfExperience;
     private String education;
@@ -33,8 +33,8 @@ public class DoctorResponse {
     public Integer getHospitalId() { return hospitalId; }
     public void setHospitalId(Integer hospitalId) { this.hospitalId = hospitalId; }
 
-    public String getRating() { return rating; }
-    public void setRating(String rating) { this.rating = rating; }
+    public Float getRating() { return rating; }
+    public void setRating(Float rating) { this.rating = rating; }
 
     public String getBio() { return bio; }
     public void setBio(String bio) { this.bio = bio; }

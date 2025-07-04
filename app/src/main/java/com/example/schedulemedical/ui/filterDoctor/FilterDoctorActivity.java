@@ -23,13 +23,15 @@ import com.example.schedulemedical.model.dto.response.DoctorResponse;
 import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
-import com.example.schedulemedical.ui.doctorprofile.DoctorProfileActivity;
+import com.example.schedulemedical.utils.NavigationHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class FilterDoctorActivity extends BaseActivity {
+
+    private static final String TAG = "FilterDoctorActivity";
 
     private RecyclerView recyclerView;
     private FilterDoctorAdapter adapter;
@@ -60,22 +62,32 @@ public class FilterDoctorActivity extends BaseActivity {
         adapter.setOnDoctorClickListener(new FilterDoctorAdapter.OnDoctorClickListener() {
             @Override
             public void onDoctorClick(DoctorResponse doctor) {
-                Intent intent = new Intent(FilterDoctorActivity.this, DoctorProfileActivity.class);
-                Log.d("Doctor View", "for doctorId: " + doctor.getDoctorId());
-                intent.putExtra("DOCTOR_ID", doctor.getDoctorId());
-                startActivity(intent);
+                if (doctor != null && doctor.getUser() != null) {
+                    String doctorName = doctor.getUser().getFullName() != null
+                            ? doctor.getUser().getFullName() : "Unknown Doctor";
+                    Log.d(TAG, "Doctor clicked: " + doctorName);
+
+                    if (doctor.getDoctorId() != null) {
+                        NavigationHelper.navigateToDoctorProfile(FilterDoctorActivity.this, doctor.getUserId());
+                    } else {
+                        Toast.makeText(FilterDoctorActivity.this, "Không thể xem thông tin bác sĩ", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
 
             @Override
             public void onBookAppointmentClick(DoctorResponse doctor) {
-                Toast.makeText(FilterDoctorActivity.this,
-                        "Đặt lịch với bác sĩ: " + doctor.getUser().getFullName(),
-                        Toast.LENGTH_SHORT).show();
+                if (doctor != null && doctor.getUser() != null) {
+                    String doctorName = doctor.getUser().getFullName() != null
+                            ? doctor.getUser().getFullName() : "Unknown Doctor";
+                    Log.d(TAG, "Book appointment clicked for: " + doctorName);
 
-                // TODO: Nếu có màn đặt lịch, mở ở đây
-                // Intent intent = new Intent(FilterDoctorActivity.this, BookingActivity.class);
-                // intent.putExtra("DOCTOR_ID", doctor.getId());
-                // startActivity(intent);
+                    if (doctor.getDoctorId() != null) {
+                        NavigationHelper.navigateToSchedule(FilterDoctorActivity.this, doctor.getDoctorId());
+                    } else {
+                        Toast.makeText(FilterDoctorActivity.this, "Không thể đặt lịch với bác sĩ này", Toast.LENGTH_SHORT).show();
+                    }
+                }
             }
         });
 
