@@ -133,7 +133,7 @@ public class FilterDoctorActivity extends BaseActivity {
                     NavigationHelper.navigateToHospital(this);
                     return true;
                 } else if (itemId == R.id.nav_calendar) {
-                    NavigationHelper.navigateToMyScheduled(this);
+                    NavigationHelper.navigateToBookingWizard(this);
                     return true;
                 } else if (itemId == R.id.nav_profile) {
                     NavigationHelper.navigateToUserProfile(this);

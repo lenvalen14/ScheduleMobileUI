@@ -69,9 +69,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
             return true;
         } else if (itemId == R.id.nav_calendar) {
-            if (!(BaseActivity.this instanceof com.example.schedulemedical.ui.schedule.MyScheduledActivity)) {
-                NavigationHelper.navigateToMyScheduled(BaseActivity.this);
-            }
+            NavigationHelper.navigateToBookingWizard(BaseActivity.this);
             return true;
         } else if (itemId == R.id.nav_profile) {
             if (!(BaseActivity.this instanceof com.example.schedulemedical.ui.userprofile.UserProfileActivity)) {
@@ -95,8 +93,6 @@ public abstract class BaseActivity extends AppCompatActivity {
             selectedItemId = R.id.nav_home;
         } else if (this instanceof com.example.schedulemedical.ui.hospital.HospitalActivity) {
             selectedItemId = R.id.nav_explore;
-        } else if (this instanceof com.example.schedulemedical.ui.schedule.MyScheduledActivity) {
-            selectedItemId = R.id.nav_calendar;
         } else if (this instanceof com.example.schedulemedical.ui.userprofile.UserProfileActivity) {
             selectedItemId = R.id.nav_profile;
         }

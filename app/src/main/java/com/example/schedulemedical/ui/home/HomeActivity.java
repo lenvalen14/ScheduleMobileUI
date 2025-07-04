@@ -344,8 +344,7 @@ public class HomeActivity extends BaseActivity {
                     NavigationHelper.navigateToHospital(this);
                     return true;
                 } else if (itemId == R.id.nav_calendar) {
-                    // TODO: Navigate to appointments/calendar screen
-                    Toast.makeText(this, "Appointments feature coming soon!", Toast.LENGTH_SHORT).show();
+                    NavigationHelper.navigateToBookingWizard(this);
                     return true;
                 } else if (itemId == R.id.nav_profile) {
                     NavigationHelper.navigateToUserProfile(this);

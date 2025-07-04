@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.schedulemedical.ui.booking.BookingWizardActivity;
 import com.example.schedulemedical.ui.chat.ChatActivity;
 import com.example.schedulemedical.ui.doctorprofile.DoctorProfileActivity;
 import com.example.schedulemedical.ui.filterDoctor.FilterDoctorActivity;
@@ -175,6 +176,14 @@ public class NavigationHelper {
     public static void navigateToChat(Context context, int appointmentId) {
         Intent intent = new Intent(context, ChatActivity.class);
         intent.putExtra(EXTRA_APPOINTMENT_ID, appointmentId);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Điều hướng đến BookingWizardActivity - Booking appointment flow
+     */
+    public static void navigateToBookingWizard(Context context) {
+        Intent intent = new Intent(context, BookingWizardActivity.class);
         context.startActivity(intent);
     }
 

@@ -35,6 +35,9 @@
             android:name=".ui.booking.BookingActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.booking.BookingWizardActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.payment.PaymentActivity"
             android:exported="false" />
         <activity
