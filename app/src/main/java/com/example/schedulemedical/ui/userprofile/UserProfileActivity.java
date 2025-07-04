@@ -20,6 +20,11 @@ public class UserProfileActivity extends BaseActivity {
     }
     
     @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_home; // TODO: Create proper activity_user_profile layout
+    }
+
+    @Override
     protected void setupViews() {
         setupNavigation();
         loadUserData();
@@ -68,10 +73,12 @@ public class UserProfileActivity extends BaseActivity {
 
     private void loadUserData() {
         // TODO: Load dữ liệu người dùng từ API hoặc SharedPreferences
-        TextView userName = findViewById(R.id.et_first_name);
-        TextView userEmail = findViewById(R.id.et_email);
-        TextView address = findViewById(R.id.et_address);
+        // TextView userName = findViewById(R.id.et_first_name);
+        // TextView userEmail = findViewById(R.id.et_email);
+        // TextView address = findViewById(R.id.et_address);
 
+        // TODO: Implement when proper layout exists
+        /*
         if (userName != null) {
             userName.setText("John Doe");
         }
@@ -81,5 +88,6 @@ public class UserProfileActivity extends BaseActivity {
         if (address != null) {
             address.setText("123 Main Street");
         }
+        */
     }
 }

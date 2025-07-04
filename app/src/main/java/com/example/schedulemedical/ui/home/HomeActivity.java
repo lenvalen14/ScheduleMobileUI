@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -42,8 +43,8 @@ public class HomeActivity extends BaseActivity {
     private ImageView ivDoctorAvatar;
     
     // Quick navigation
-    private TextView tvHospital;
     private TextView tvSpecialty;
+    private TextView tvHospital;
     private TextView tvDoctor;
     
     // Notification receiver
@@ -90,10 +91,10 @@ public class HomeActivity extends BaseActivity {
         ivDoctorAvatar = findViewById(R.id.ivDoctorAvatar);
         
         // Quick navigation
-        tvHospital = findViewById(R.id.tvHospital);
+         tvHospital = findViewById(R.id.tvHospital); // Not in layout
         tvSpecialty = findViewById(R.id.tvSpecialty);
-        tvDoctor = findViewById(R.id.tvDoctor);
-        
+         tvDoctor = findViewById(R.id.tvDoctor); // Not in layout
+
         // Set initial user info from cache
         String userName = authManager.getUserName();
         if (userName != null && !userName.isEmpty()) {
@@ -107,24 +108,10 @@ public class HomeActivity extends BaseActivity {
     
     private void setupClickListeners() {
         // Quick navigation clicks
-        if (tvHospital != null) {
-            tvHospital.setOnClickListener(view -> {
-                NavigationHelper.navigateToHospital(this);
-            });
-        }
-
         if (tvSpecialty != null) {
             tvSpecialty.setOnClickListener(view -> {
                 // TODO: Navigate to specialties
                 Toast.makeText(this, "Specialties feature coming soon!", Toast.LENGTH_SHORT).show();
-            });
-        }
-
-        if (tvDoctor != null) {
-            tvDoctor.setOnClickListener(view -> {
-                Log.d(TAG, "See all doctors clicked - navigating to FilterDoctorActivity");
-                // Don't pass empty bundle - let FilterDoctorActivity load all doctors
-                NavigationHelper.navigateToFilterDoctor(this);
             });
         }
 
