@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -138,11 +139,10 @@ public class HomeActivity extends BaseActivity {
             });
         }
         
-        // Notification click
+        // Notification click - Show dropdown menu
         if (ivNotification != null) {
             ivNotification.setOnClickListener(view -> {
-                // TODO: Navigate to notifications
-                Toast.makeText(this, "Notifications feature coming soon!", Toast.LENGTH_SHORT).show();
+                showNotificationDropdown(view);
             });
         }
         
@@ -154,6 +154,74 @@ public class HomeActivity extends BaseActivity {
         //         Toast.makeText(this, "Navigate to appointments", Toast.LENGTH_SHORT).show();
         //     });
         // }
+    }
+    
+    private void showNotificationDropdown(View anchor) {
+        PopupMenu popup = new PopupMenu(this, anchor);
+        
+        // Manually add menu items since we can't create menu XML file
+        popup.getMenu().add(0, R.id.menu_notifications, 0, "📢 Thông báo");
+        popup.getMenu().add(0, R.id.menu_profile, 1, "👤 Hồ sơ");
+        popup.getMenu().add(0, R.id.menu_settings, 2, "⚙️ Cài đặt");
+        popup.getMenu().add(0, R.id.menu_logout, 3, "🚪 Đăng xuất");
+        
+        popup.setOnMenuItemClickListener(item -> {
+            int itemId = item.getItemId();
+            
+            if (itemId == R.id.menu_notifications) {
+                // Navigate to notifications
+                Toast.makeText(this, "Thông báo đang được phát triển!", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (itemId == R.id.menu_profile) {
+                // Navigate to profile
+                NavigationHelper.navigateToUserProfile(this);
+                return true;
+            } else if (itemId == R.id.menu_settings) {
+                // Navigate to settings
+                Toast.makeText(this, "Cài đặt đang được phát triển!", Toast.LENGTH_SHORT).show();
+                return true;
+            } else if (itemId == R.id.menu_logout) {
+                // Logout
+                performLogout();
+                return true;
+            }
+            
+            return false;
+        });
+        
+        popup.show();
+    }
+    
+    private void performLogout() {
+        // Show confirmation dialog first
+        new androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Đăng xuất")
+            .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
+            .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                showLoading();
+                authManager.logout(new AuthManager.AuthCallback() {
+                    @Override
+                    public void onSuccess(String message) {
+                        runOnUiThread(() -> {
+                            hideLoading();
+                            Toast.makeText(HomeActivity.this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+                            redirectToLogin();
+                        });
+                    }
+                    
+                    @Override
+                    public void onError(String error) {
+                        runOnUiThread(() -> {
+                            hideLoading();
+                            Toast.makeText(HomeActivity.this, "Lỗi đăng xuất: " + error, Toast.LENGTH_SHORT).show();
+                            // Still redirect to login even if logout API fails
+                            redirectToLogin();
+                        });
+                    }
+                });
+            })
+            .setNegativeButton("Hủy", null)
+            .show();
     }
     
     private void setupProgressDialog() {

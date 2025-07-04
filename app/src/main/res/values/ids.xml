@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="activity_chat" type="id" />
+    
+    <!-- Notification dropdown menu IDs -->
+    <item name="menu_notifications" type="id" />
+    <item name="menu_profile" type="id" />
+    <item name="menu_settings" type="id" />
+    <item name="menu_logout" type="id" />
 </resources>

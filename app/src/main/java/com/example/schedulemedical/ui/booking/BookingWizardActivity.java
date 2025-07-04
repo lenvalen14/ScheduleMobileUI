@@ -198,11 +198,9 @@ public class BookingWizardActivity extends AppCompatActivity {
         if (currentStep == TOTAL_STEPS - 1) {
             btnNext.setText("Đặt lịch ngay");
             btnNext.setEnabled(stepCompleted);
-            Log.d(TAG, "Final step - button enabled: " + stepCompleted);
         } else {
             btnNext.setText("Tiếp tục");
             btnNext.setEnabled(stepCompleted);
-            Log.d(TAG, "Step " + currentStep + " - button enabled: " + stepCompleted);
         }
     }
     
@@ -219,33 +217,20 @@ public class BookingWizardActivity extends AppCompatActivity {
     }
     
     public void onStepDataChanged() {
-        Log.d(TAG, "onStepDataChanged() called - currentStep: " + currentStep);
-        logBookingDataState();
+        // Reduce logging to prevent main thread overload
         updateStepUI();
         
-        // Auto-advance if step is completed
-        if (currentStep < TOTAL_STEPS - 1 && bookingData.isStepCompleted(currentStep)) {
-            Log.d(TAG, "Step " + currentStep + " completed, auto-advancing");
-            // Small delay for better UX
-            btnNext.postDelayed(() -> {
-                if (bookingData.isStepCompleted(currentStep)) {
-                    btnNext.performClick();
-                }
-            }, 500);
-        } else {
-            Log.d(TAG, "Step " + currentStep + " not completed or is final step");
-        }
+        // Remove auto-advance to prevent UI conflicts and main thread overload
+        // Let user manually navigate with Continue button
     }
     
     private void logBookingDataState() {
-        Log.d(TAG, "=== BookingData State ===");
-        Log.d(TAG, "specialtyId: " + bookingData.specialtyId);
-        Log.d(TAG, "doctorId: " + bookingData.doctorId);
-        Log.d(TAG, "selectedDate: " + bookingData.selectedDate);
-        Log.d(TAG, "selectedTimeSlot: " + bookingData.selectedTimeSlot);
-        Log.d(TAG, "serviceId: " + bookingData.serviceId);
-        Log.d(TAG, "serviceName: " + bookingData.serviceName);
-        Log.d(TAG, "========================");
+        // Simplified logging to reduce main thread work
+        if (Log.isLoggable(TAG, Log.DEBUG)) {
+            Log.d(TAG, "BookingData - specialtyId: " + bookingData.specialtyId + 
+                  ", doctorId: " + bookingData.doctorId + 
+                  ", serviceId: " + bookingData.serviceId);
+        }
     }
     
     private void createAppointment() {
