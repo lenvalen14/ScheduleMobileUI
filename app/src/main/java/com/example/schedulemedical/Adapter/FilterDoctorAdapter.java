@@ -1,6 +1,7 @@
 package com.example.schedulemedical.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import java.util.List;
 
 public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapter.DoctorViewHolder> {
 
+    private static final String TAG = "FilterDoctorAdapter";
     private final Context context;
     private final List<DoctorResponse> doctorList = new ArrayList<>();
     private OnDoctorClickListener listener;
@@ -41,8 +43,14 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
     }
 
     public void updateDoctors(List<DoctorResponse> doctors) {
+        Log.d(TAG, "updateDoctors called with " + (doctors != null ? doctors.size() : 0) + " doctors");
+        
         doctorList.clear();
-        doctorList.addAll(doctors);
+        if (doctors != null) {
+            doctorList.addAll(doctors);
+        }
+        
+        Log.d(TAG, "doctorList size after update: " + doctorList.size());
         notifyDataSetChanged();
     }
 
@@ -55,12 +63,19 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
 
     @Override
     public void onBindViewHolder(@NonNull DoctorViewHolder holder, int position) {
-        holder.bind(doctorList.get(position));
+        Log.d(TAG, "onBindViewHolder called for position: " + position);
+        if (position < doctorList.size()) {
+            holder.bind(doctorList.get(position));
+        } else {
+            Log.e(TAG, "Position " + position + " is out of bounds for list size " + doctorList.size());
+        }
     }
 
     @Override
     public int getItemCount() {
-        return doctorList.size();
+        int count = doctorList.size();
+        Log.d(TAG, "getItemCount: " + count);
+        return count;
     }
 
     class DoctorViewHolder extends RecyclerView.ViewHolder {
@@ -82,6 +97,13 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
         }
 
         void bind(DoctorResponse doctor) {
+            if (doctor == null) {
+                Log.e(TAG, "Doctor is null in bind method");
+                return;
+            }
+            
+            Log.d(TAG, "Binding doctor: " + doctor.getDoctorId());
+            
             UserResponse user = doctor.getUser();
             SpecialtyResponse specialty = doctor.getSpecialty();
             HospitalResponse hospital = doctor.getHospital();
@@ -99,11 +121,18 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
 
             // Avatar
             String avatarUrl = user != null ? user.getAvatar() : null;
-            Glide.with(context)
-                    .load(avatarUrl)
-                    .placeholder(R.drawable.sample_profile_image)
-                    .error(R.drawable.sample_profile_image)
-                    .into(ivDoctorPhoto);
+            Log.d(TAG, "Loading avatar URL: " + avatarUrl);
+            
+            try {
+                Glide.with(context)
+                        .load(avatarUrl)
+                        .placeholder(R.drawable.sample_profile_image)
+                        .error(R.drawable.sample_profile_image)
+                        .into(ivDoctorPhoto);
+            } catch (Exception e) {
+                Log.e(TAG, "Error loading image with Glide", e);
+                ivDoctorPhoto.setImageResource(R.drawable.sample_profile_image);
+            }
 
             // Rating
 //            float rating = hospital != null && hospital.getRating() != null

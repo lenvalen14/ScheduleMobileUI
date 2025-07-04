@@ -79,7 +79,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         initializeViews();
         setupRecyclerView();
         setupClickListeners();
-        setupSearchListener();
+        // setupSearchListener();  // Skip since etSearch doesn't exist
         setupProgressDialog();
 
         // Initialize API service
@@ -91,48 +91,58 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     }
 
     private void initializeViews() {
-        ivBack = findViewById(R.id.ivBack);
-//        etSearch = findViewById(R.id.etSearch);
-//        ivFilter = findViewById(R.id.ivFilter);
-//        rvDoctors = findViewById(R.id.rvDoctors);
-//        tvNoResults = findViewById(R.id.tvNoResults);
-        layoutLoading = findViewById(R.id.layoutLoading);
+        ivBack = findViewById(R.id.btnBack);  // Use btnBack instead of ivBack
+        // etSearch = findViewById(R.id.etSearch);  // View doesn't exist in layout
+        // ivFilter = findViewById(R.id.ivFilter);  // View doesn't exist in layout
+        rvDoctors = findViewById(R.id.recycler_doctors);  // Use correct ID from layout
+        // tvNoResults = findViewById(R.id.tvNoResults);  // View doesn't exist in layout
+        // layoutLoading = findViewById(R.id.layoutLoading);  // View doesn't exist in layout
 
         allDoctors = new ArrayList<>();
     }
 
     private void setupRecyclerView() {
-        doctorAdapter = new DoctorAdapter(this, allDoctors);
-        doctorAdapter.setOnDoctorClickListener(this);
+        if (rvDoctors != null) {
+            doctorAdapter = new DoctorAdapter(this, allDoctors);
+            doctorAdapter.setOnDoctorClickListener(this);
 
-        rvDoctors.setLayoutManager(new LinearLayoutManager(this));
-        rvDoctors.setAdapter(doctorAdapter);
+            rvDoctors.setLayoutManager(new LinearLayoutManager(this));
+            rvDoctors.setAdapter(doctorAdapter);
+        } else {
+            Log.e(TAG, "RecyclerView is null - check layout and view IDs");
+        }
     }
 
     private void setupClickListeners() {
         // Back button
-        ivBack.setOnClickListener(v -> finish());
+        if (ivBack != null) {
+            ivBack.setOnClickListener(v -> finish());
+        }
 
         // Filter button
-        ivFilter.setOnClickListener(v -> showFilterDialog());
+        if (ivFilter != null) {
+            ivFilter.setOnClickListener(v -> showFilterDialog());
+        }
     }
 
     private void setupSearchListener() {
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+        if (etSearch != null) {
+            etSearch.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {}
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
-            @Override
-            public void afterTextChanged(Editable s) {
-                if (doctorAdapter != null) {
-                    doctorAdapter.filter(s.toString());
-                    updateNoResultsVisibility();
+                @Override
+                public void afterTextChanged(Editable s) {
+                    if (doctorAdapter != null) {
+                        doctorAdapter.filter(s.toString());
+                        updateNoResultsVisibility();
+                    }
                 }
-            }
-        });
+            });
+        }
     }
 
     private void setupProgressDialog() {
@@ -322,9 +332,11 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         // Apply local filters first
         if (doctorAdapter != null) {
             if (currentSpecialty != null) {
-                doctorAdapter.filterBySpecialty(currentSpecialty);
+                // doctorAdapter.filterBySpecialty(currentSpecialty);  // Method doesn't exist
+                loadDoctors();  // Reload instead
             } else if (currentMinRating > 0) {
-                doctorAdapter.filterByRating(currentMinRating);
+                // doctorAdapter.filterByRating(currentMinRating);  // Method doesn't exist
+                loadDoctors();  // Reload instead
             } else {
                 // If no local filters, reload from server
                 loadDoctors();
@@ -342,10 +354,14 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         if (tvNoResults != null && doctorAdapter != null) {
             if (doctorAdapter.getItemCount() == 0) {
                 tvNoResults.setVisibility(View.VISIBLE);
-                rvDoctors.setVisibility(View.GONE);
+                if (rvDoctors != null) {
+                    rvDoctors.setVisibility(View.GONE);
+                }
             } else {
                 tvNoResults.setVisibility(View.GONE);
-                rvDoctors.setVisibility(View.VISIBLE);
+                if (rvDoctors != null) {
+                    rvDoctors.setVisibility(View.VISIBLE);
+                }
             }
         }
     }
