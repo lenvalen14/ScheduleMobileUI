@@ -142,7 +142,7 @@ public class ProfileActivity extends BaseActivity {
         etMedicationHistory = findViewById(R.id.etMedicationHistory);
         etNationalId = findViewById(R.id.etNationalId);
         Button btnSaveProfile = findViewById(R.id.btnUpdateProfile);
-        // btnLogout = findViewById(R.id.btnLogout); // Not in layout
+        btnLogout = findViewById(R.id.btnLogout);
         // tvChangePassword = findViewById(R.id.tvChangePassword); // Not in layout
         
         // Disable email editing (usually not changeable)
@@ -158,6 +158,10 @@ public class ProfileActivity extends BaseActivity {
                 saveProfile();
             }
         });
+        
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> logout());
+        }
     }
     
     private void setupImagePickerLauncher() {
@@ -194,9 +198,6 @@ public class ProfileActivity extends BaseActivity {
         
         // Save profile
         // btnSaveProfile.setOnClickListener(v -> saveProfile()); // View commented out
-        
-        // Logout
-        // btnLogout.setOnClickListener(v -> logout()); // View commented out
         
         // Change password
         // tvChangePassword.setOnClickListener(v -> {
