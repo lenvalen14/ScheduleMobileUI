@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.schedulemedical.data.api.ApiClient;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
+import com.example.schedulemedical.model.dto.response.DoctorListResponse;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
 import com.example.schedulemedical.model.dto.response.ResponseWrapper;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
@@ -49,31 +50,31 @@ public class DoctorRepository {
             Integer hospitalId,
             Integer page,
             Integer limit,
-            MutableLiveData<ResponseWrapper<List<DoctorResponse>>> result
+            MutableLiveData<ResponseWrapper<DoctorListResponse>> result
     ) {
-        Log.d(TAG, "Filtering doctors with: specialtyId=" + specialtyId + ", minRating=" + minRating + 
-              ", hospitalId=" + hospitalId + ", page=" + page + ", limit=" + limit);
-        
+        Log.d(TAG, "Filtering doctors with: specialtyId=" + specialtyId + ", minRating=" + minRating +
+                ", hospitalId=" + hospitalId + ", page=" + page + ", limit=" + limit);
+
         ApiClient.getDoctorApiService().filterDoctors(specialtyId, minRating, hospitalId, page, limit)
-                .enqueue(new Callback<ApiResponse<List<DoctorResponse>>>() {
+                .enqueue(new Callback<DoctorListResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Response<ApiResponse<List<DoctorResponse>>> response) {
+                    public void onResponse(@NonNull Call<DoctorListResponse> call, @NonNull Response<DoctorListResponse> response) {
                         Log.d(TAG, "API Response received: " + response.code());
-                        
+
                         if (response.isSuccessful() && response.body() != null) {
-                            ApiResponse<List<DoctorResponse>> apiResponse = response.body();
-                            List<DoctorResponse> doctors = apiResponse.getData();
-                            
-                            Log.d(TAG, "API Response body: " + new Gson().toJson(apiResponse));
-                            Log.d(TAG, "Number of doctors received: " + (doctors != null ? doctors.size() : 0));
-                            
-                            // Debug first doctor data if available
-                            if (doctors != null && !doctors.isEmpty()) {
-                                DoctorResponse firstDoctor = doctors.get(0);
+                            DoctorListResponse doctorListResponse = response.body();
+
+                            List<DoctorResponse> doctorList = doctorListResponse.getData();
+
+                            Log.d(TAG, "API Response body: " + new Gson().toJson(doctorListResponse));
+                            Log.d(TAG, "Number of doctors received: " + (doctorList != null ? doctorList.size() : 0));
+
+                            if (doctorList != null && !doctorList.isEmpty()) {
+                                DoctorResponse firstDoctor = doctorList.get(0);
                                 Log.d(TAG, "First doctor data: " + new Gson().toJson(firstDoctor));
                             }
-                            
-                            result.postValue(new ResponseWrapper<>("Success", doctors));
+
+                            result.postValue(new ResponseWrapper<>("Success", doctorListResponse));
                         } else {
                             Log.e(TAG, "API Error: " + response.code() + " - " + response.message());
                             try {
@@ -88,10 +89,11 @@ public class DoctorRepository {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<DoctorListResponse> call, @NonNull Throwable t) {
                         Log.e(TAG, "Network error: " + t.getMessage(), t);
                         result.postValue(new ResponseWrapper<>("Lỗi kết nối: " + t.getMessage(), null));
                     }
                 });
     }
+
 }

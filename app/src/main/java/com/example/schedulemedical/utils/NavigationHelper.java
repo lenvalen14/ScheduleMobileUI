@@ -16,7 +16,7 @@ import com.example.schedulemedical.ui.login.LoginActivity;
 import com.example.schedulemedical.ui.register.RegisterActivity;
 import com.example.schedulemedical.ui.schedule.MyScheduledActivity;
 import com.example.schedulemedical.ui.schedule.ScheduleActivity;
-import com.example.schedulemedical.ui.userprofile.UserProfileActivity;
+import com.example.schedulemedical.ui.profile.ProfileActivity;
 
 /**
  * Helper class để quản lý tất cả các Intent điều hướng trong ứng dụng
@@ -157,7 +157,7 @@ public class NavigationHelper {
      * Điều hướng đến UserProfileActivity
      */
     public static void navigateToUserProfile(Context context) {
-        Intent intent = new Intent(context, UserProfileActivity.class);
+        Intent intent = new Intent(context, ProfileActivity.class);
         context.startActivity(intent);
     }
 

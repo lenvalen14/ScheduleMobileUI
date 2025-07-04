@@ -1,13 +1,13 @@
 package com.example.schedulemedical.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,14 +24,14 @@ import java.util.List;
 
 public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapter.DoctorViewHolder> {
 
-    private static final String TAG = "FilterDoctorAdapter";
     private final Context context;
     private final List<DoctorResponse> doctorList = new ArrayList<>();
     private OnDoctorClickListener listener;
 
+    // Listener interface cho các hành động từ view
     public interface OnDoctorClickListener {
-        void onDoctorClick(DoctorResponse doctor);
-        void onBookAppointmentClick(DoctorResponse doctor);
+        void onDoctorClick(DoctorResponse doctor); // Xem chi tiết
+        void onBookAppointmentClick(DoctorResponse doctor); // Đặt lịch
     }
 
     public void setOnDoctorClickListener(OnDoctorClickListener listener) {
@@ -43,14 +43,10 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
     }
 
     public void updateDoctors(List<DoctorResponse> doctors) {
-        Log.d(TAG, "updateDoctors called with " + (doctors != null ? doctors.size() : 0) + " doctors");
-        
         doctorList.clear();
         if (doctors != null) {
             doctorList.addAll(doctors);
         }
-        
-        Log.d(TAG, "doctorList size after update: " + doctorList.size());
         notifyDataSetChanged();
     }
 
@@ -63,26 +59,18 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
 
     @Override
     public void onBindViewHolder(@NonNull DoctorViewHolder holder, int position) {
-        Log.d(TAG, "onBindViewHolder called for position: " + position);
-        if (position < doctorList.size()) {
-            holder.bind(doctorList.get(position));
-        } else {
-            Log.e(TAG, "Position " + position + " is out of bounds for list size " + doctorList.size());
-        }
+        holder.bind(doctorList.get(position));
     }
 
     @Override
     public int getItemCount() {
-        int count = doctorList.size();
-        Log.d(TAG, "getItemCount: " + count);
-        return count;
+        return doctorList.size();
     }
 
     class DoctorViewHolder extends RecyclerView.ViewHolder {
         TextView tvDoctorName, tvDoctorSpecialty, tvHospitalName;
-        TextView tvRating;
         ImageView ivDoctorPhoto;
-        ImageButton btnInfo;
+        ImageButton btnCall, btnChat, btnInfo;
         View btnBookAppointment;
 
         DoctorViewHolder(@NonNull View itemView) {
@@ -91,65 +79,55 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
             tvDoctorSpecialty = itemView.findViewById(R.id.tvDoctorSpecialty);
             tvHospitalName = itemView.findViewById(R.id.tvHospitalName);
             ivDoctorPhoto = itemView.findViewById(R.id.ivDoctorPhoto);
-//            tvRating = itemView.findViewById(R.id.ratingContainer).findViewById(R.id.tvRating);
+            btnCall = itemView.findViewById(R.id.btnCall);
+            btnChat = itemView.findViewById(R.id.btnChat);
             btnInfo = itemView.findViewById(R.id.btnInfo);
             btnBookAppointment = itemView.findViewById(R.id.btnBookAppointment);
         }
 
         void bind(DoctorResponse doctor) {
-            if (doctor == null) {
-                Log.e(TAG, "Doctor is null in bind method");
-                return;
-            }
-            
-            Log.d(TAG, "Binding doctor: " + doctor.getDoctorId());
-            
+            if (doctor == null) return;
+
             UserResponse user = doctor.getUser();
             SpecialtyResponse specialty = doctor.getSpecialty();
             HospitalResponse hospital = doctor.getHospital();
 
-            // Doctor name
-            tvDoctorName.setText(user != null && user.getFullName() != null ? user.getFullName() : "N/A");
+            // Set texts
+            tvDoctorName.setText(user != null ? user.getFullName() : "Không rõ tên");
+            tvDoctorSpecialty.setText(specialty != null ? specialty.getName() : "Chưa rõ chuyên khoa");
+            tvHospitalName.setText(hospital != null ? hospital.getName() : "Chưa rõ bệnh viện");
 
-            // Specialty
-            tvDoctorSpecialty.setText(specialty != null && specialty.getName() != null
-                    ? specialty.getName() : "Chưa rõ chuyên khoa");
-
-            // Hospital
-            tvHospitalName.setText(hospital != null && hospital.getName() != null
-                    ? hospital.getName() : "Không rõ bệnh viện");
-
-            // Avatar
+            // Load avatar
             String avatarUrl = user != null ? user.getAvatar() : null;
-            Log.d(TAG, "Loading avatar URL: " + avatarUrl);
-            
-            try {
-                Glide.with(context)
-                        .load(avatarUrl)
-                        .placeholder(R.drawable.sample_profile_image)
-                        .error(R.drawable.sample_profile_image)
-                        .into(ivDoctorPhoto);
-            } catch (Exception e) {
-                Log.e(TAG, "Error loading image with Glide", e);
-                ivDoctorPhoto.setImageResource(R.drawable.sample_profile_image);
-            }
+            Glide.with(context)
+                    .load(avatarUrl)
+                    .placeholder(R.drawable.sample_profile_image)
+                    .error(R.drawable.sample_profile_image)
+                    .into(ivDoctorPhoto);
 
-            // Rating
-//            float rating = hospital != null && hospital.getRating() != null
-//                    ? hospital.getRating().floatValue() : 0f;
-//            int reviews = hospital != null && hospital.getReviews() != null ? hospital.getReviews() : 0;
-//            tvRating.setText(String.format("%.1f (%d reviews)", rating, reviews));
-
-            // Click events
+            // Click vào cả item xem chi tiết
             itemView.setOnClickListener(v -> {
                 if (listener != null) listener.onDoctorClick(doctor);
             });
 
-            if (btnBookAppointment != null) {
-                btnBookAppointment.setOnClickListener(v -> {
-                    if (listener != null) listener.onBookAppointmentClick(doctor);
-                });
-            }
+            // Info button => cũng xem chi tiết
+            btnInfo.setOnClickListener(v -> {
+                if (listener != null) listener.onDoctorClick(doctor);
+            });
+
+            // Book appointment
+            btnBookAppointment.setOnClickListener(v -> {
+                if (listener != null) listener.onBookAppointmentClick(doctor);
+            });
+
+            // Call & Chat demo
+            btnCall.setOnClickListener(v -> {
+                Toast.makeText(context, "Gọi cho bác sĩ: " + (user != null ? user.getFullName() : ""), Toast.LENGTH_SHORT).show();
+            });
+
+            btnChat.setOnClickListener(v -> {
+                Toast.makeText(context, "Nhắn tin với bác sĩ: " + (user != null ? user.getFullName() : ""), Toast.LENGTH_SHORT).show();
+            });
         }
     }
 }

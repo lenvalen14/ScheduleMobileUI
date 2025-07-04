@@ -1,6 +1,8 @@
 package com.example.schedulemedical.data.api;
 
+import com.example.schedulemedical.model.dto.response.DoctorListResponse;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
+import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.ResponseWrapper;
@@ -35,7 +37,7 @@ public interface DoctorApiService {
     Call<ApiResponse<Object>> getDoctorByUserId(@Path("id") int userId);
 
     @GET("doctor/filter/doctor")
-    Call<ApiResponse<List<DoctorResponse>>> filterDoctors(
+    Call<DoctorListResponse> filterDoctors(
             @Query("specialty") Integer specialtyId,
             @Query("minRating") Float minRating,
             @Query("hospital") Integer hospitalId,
@@ -46,9 +48,9 @@ public interface DoctorApiService {
     
     // Get all specialties
     @GET("doctor/specialty/get-all")
-    Call<ApiResponse<Object>> getAllSpecialties(
-        @Query("page") int page,
-        @Query("limit") int limit
+    Call<ApiResponse<List<SpecialtyResponse>>> getAllSpecialties(
+            @Query("page") int page,
+            @Query("limit") int limit
     );
     
     // Get specialties by hospital

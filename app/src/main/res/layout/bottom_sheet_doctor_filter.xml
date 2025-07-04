@@ -53,6 +53,24 @@
         android:padding="12dp"
         android:layout_marginBottom="16dp" />
 
+    <!-- Hospital Filter -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hospital"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@color/text_primary"
+        android:layout_marginBottom="8dp" />
+
+    <Spinner
+        android:id="@+id/spinnerHospital"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/field_stroke_state_list"
+        android:padding="12dp"
+        android:layout_marginBottom="16dp" />
+
     <!-- Rating Filter -->
     <TextView
         android:layout_width="wrap_content"

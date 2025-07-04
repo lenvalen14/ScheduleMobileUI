@@ -1,9 +1,14 @@
 package com.example.schedulemedical.ui.filterDoctor;
 
-import android.os.Bundle;
+import android.content.Intent;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.lifecycle.ViewModelProvider;
@@ -12,19 +17,31 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.schedulemedical.Adapter.FilterDoctorAdapter;
 import com.example.schedulemedical.R;
+import com.example.schedulemedical.data.api.ApiClient;
+import com.example.schedulemedical.data.repository.DoctorFilterRepository;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
+import com.example.schedulemedical.model.dto.response.HospitalResponse;
+import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
-import com.example.schedulemedical.utils.NavigationHelper;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.schedulemedical.ui.doctorprofile.DoctorProfileActivity;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FilterDoctorActivity extends BaseActivity {
 
-    private static final String TAG = "FilterDoctorActivity";
-    private FilterDoctorViewModel viewModel;
-    private FilterDoctorAdapter doctorAdapter;
     private RecyclerView recyclerView;
+    private FilterDoctorAdapter adapter;
+    private FilterDoctorViewModel viewModel;
+    private DoctorFilterOptionsViewModel doctorFilterOptionsViewModel;
+
+    private List<SpecialtyResponse> specialtyList = new ArrayList<>();
+    private List<HospitalResponse> hospitalList = new ArrayList<>();
+
+    private Integer selectedSpecialtyId = null;
+    private Integer selectedHospitalId = null;
+    private Float selectedRating = null;
 
     @Override
     protected int getLayoutResourceId() {
@@ -33,199 +50,149 @@ public class FilterDoctorActivity extends BaseActivity {
 
     @Override
     protected void setupViews() {
-        Log.d(TAG, "FilterDoctorActivity started - setupViews()");
-
-        // Setup UI components
         setupNavigation();
-        setupRecyclerView();
-        setupBottomNavigation();
-        
-        // Setup ViewModel
-        viewModel = new ViewModelProvider(this).get(FilterDoctorViewModel.class);
-        observeViewModel();
-        
-        // Load data after everything is setup
-        handleIntentExtras();
-    }
 
-    private void setupRecyclerView() {
-        recyclerView = findViewById(R.id.recycler_doctors);
-        
-        if (recyclerView == null) {
-            Log.e(TAG, "RecyclerView not found! Check layout ID.");
-            return;
-        }
-        
-        // Set layout manager first
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        
-        // Create adapter
-        doctorAdapter = new FilterDoctorAdapter(this);
-        
-        // Set adapter after layout manager
-        recyclerView.setAdapter(doctorAdapter);
-        
-        Log.d(TAG, "RecyclerView setup complete - adapter attached");
+        recyclerView = findViewById(R.id.rvDoctors);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new FilterDoctorAdapter(this);
+        recyclerView.setAdapter(adapter);
 
-        doctorAdapter.setOnDoctorClickListener(new FilterDoctorAdapter.OnDoctorClickListener() {
+        adapter.setOnDoctorClickListener(new FilterDoctorAdapter.OnDoctorClickListener() {
             @Override
             public void onDoctorClick(DoctorResponse doctor) {
-                if (doctor != null && doctor.getUser() != null) {
-                    String doctorName = doctor.getUser().getFullName() != null 
-                            ? doctor.getUser().getFullName() : "Unknown Doctor";
-                    Log.d(TAG, "Doctor clicked: " + doctorName);
-                    
-                    // Navigate to doctor profile
-                    if (doctor.getDoctorId() != null) {
-                        NavigationHelper.navigateToDoctorProfile(FilterDoctorActivity.this, doctor.getDoctorId());
-                    } else {
-                        Toast.makeText(FilterDoctorActivity.this, "Không thể xem thông tin bác sĩ", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                Intent intent = new Intent(FilterDoctorActivity.this, DoctorProfileActivity.class);
+                Log.d("Doctor View", "for doctorId: " + doctor.getDoctorId());
+                intent.putExtra("DOCTOR_ID", doctor.getDoctorId());
+                startActivity(intent);
             }
 
             @Override
             public void onBookAppointmentClick(DoctorResponse doctor) {
-                if (doctor != null && doctor.getUser() != null) {
-                    String doctorName = doctor.getUser().getFullName() != null 
-                            ? doctor.getUser().getFullName() : "Unknown Doctor";
-                    Log.d(TAG, "Book appointment clicked for: " + doctorName);
-                    
-                    // Navigate to booking/schedule
-                    if (doctor.getDoctorId() != null) {
-                        NavigationHelper.navigateToSchedule(FilterDoctorActivity.this, doctor.getDoctorId());
-                    } else {
-                        Toast.makeText(FilterDoctorActivity.this, "Không thể đặt lịch với bác sĩ này", Toast.LENGTH_SHORT).show();
-                    }
-                }
+                Toast.makeText(FilterDoctorActivity.this,
+                        "Đặt lịch với bác sĩ: " + doctor.getUser().getFullName(),
+                        Toast.LENGTH_SHORT).show();
+
+                // TODO: Nếu có màn đặt lịch, mở ở đây
+                // Intent intent = new Intent(FilterDoctorActivity.this, BookingActivity.class);
+                // intent.putExtra("DOCTOR_ID", doctor.getId());
+                // startActivity(intent);
             }
         });
+
+        viewModel = new ViewModelProvider(this).get(FilterDoctorViewModel.class);
+
+        DoctorFilterRepository repository = new DoctorFilterRepository(
+                ApiClient.getDoctorApiService(),
+                ApiClient.getHospitalApiService()
+        );
+        DoctorFilterOptionsViewModelFactory factory = new DoctorFilterOptionsViewModelFactory(repository);
+        doctorFilterOptionsViewModel = new ViewModelProvider(this, factory).get(DoctorFilterOptionsViewModel.class);
+
+        doctorFilterOptionsViewModel.specialties.observe(this, specialties -> {
+            if (specialties != null) {
+                specialtyList.clear();
+                specialtyList.addAll(specialties);
+            }
+        });
+
+        doctorFilterOptionsViewModel.hospitals.observe(this, hospitals -> {
+            if (hospitals != null) {
+                hospitalList.clear();
+                hospitalList.addAll(hospitals);
+            }
+        });
+
+        observeData();
+
+        viewModel.filterDoctors(null, null, null, 1, 20); // Load initial
+
+        ImageView filterButton = findViewById(R.id.btnFilter);
+        filterButton.setOnClickListener(v -> showFilterBottomSheet());
     }
 
     private void setupNavigation() {
         ImageView backButton = findViewById(R.id.btnBack);
-        ImageView notificationButton = findViewById(R.id.ivNotification);
-        
         if (backButton != null) {
-            backButton.setOnClickListener(view -> {
-                Log.d(TAG, "Back button clicked");
-                NavigationHelper.goBack(this);
-            });
-        }
-
-        if (notificationButton != null) {
-            notificationButton.setOnClickListener(view -> {
-                Toast.makeText(this, "Notifications feature coming soon!", Toast.LENGTH_SHORT).show();
-            });
+            backButton.setOnClickListener(view -> onBackPressed());
         }
     }
 
-    private void setupBottomNavigation() {
-        BottomNavigationView bottomNavigation = findViewById(R.id.bottom_navigation);
-        if (bottomNavigation != null) {
-            bottomNavigation.setOnItemSelectedListener(item -> {
-                int itemId = item.getItemId();
-                if (itemId == R.id.nav_home) {
-                    NavigationHelper.navigateToHome(this);
-                    return true;
-                } else if (itemId == R.id.nav_explore) {
-                    NavigationHelper.navigateToHospital(this);
-                    return true;
-                } else if (itemId == R.id.nav_calendar) {
-                    NavigationHelper.navigateToMyScheduled(this);
-                    return true;
-                } else if (itemId == R.id.nav_profile) {
-                    NavigationHelper.navigateToUserProfile(this);
-                    return true;
-                }
-                return false;
-            });
-        }
-    }
-
-    private void observeViewModel() {
+    private void observeData() {
         viewModel.filteredDoctors.observe(this, response -> {
-            Log.d(TAG, "ViewModel response received: " + (response != null ? "success" : "null"));
-            
-            if (response != null) {
-                Log.d(TAG, "Response message: " + response.getMessage());
-                Log.d(TAG, "Response data is null: " + (response.getData() == null));
-                
-                if (response.getData() != null) {
-                    Log.d(TAG, "Updating adapter with " + response.getData().size() + " doctors");
-                    
-                    // Debug first doctor if available
-                    if (!response.getData().isEmpty()) {
-                        DoctorResponse firstDoctor = response.getData().get(0);
-                        Log.d(TAG, "First doctor ID: " + firstDoctor.getDoctorId());
-                        if (firstDoctor.getUser() != null) {
-                            Log.d(TAG, "First doctor name: " + firstDoctor.getUser().getFullName());
-                        }
-                    }
-                    
-                    hideLoadingState();
-                    if (doctorAdapter != null) {
-                        doctorAdapter.updateDoctors(response.getData());
-                    } else {
-                        Log.e(TAG, "Adapter is null, cannot update doctors");
-                    }
-                } else {
-                    Log.e(TAG, "Response data is null");
-                    hideLoadingState();
-                    Toast.makeText(this, "Không có dữ liệu bác sĩ", Toast.LENGTH_SHORT).show();
-                }
+            if (response != null && response.getData() != null) {
+                adapter.updateDoctors(response.getData().getData());
             } else {
-                Log.e(TAG, "Response is null");
-                hideLoadingState();
-                Toast.makeText(this, "Không thể tải danh sách bác sĩ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Không lấy được danh sách bác sĩ", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-    private void handleIntentExtras() {
-        Bundle filterData = getIntent().getBundleExtra(NavigationHelper.EXTRA_FILTER_DATA);
-        if (filterData != null && !filterData.isEmpty()) {
-            Log.d(TAG, "Filter data found, applying filters");
-            Integer specialtyId = filterData.getInt("specialtyId", -1);
-            Float minRating = filterData.getFloat("minRating", 0f);
-            Integer hospitalId = filterData.getInt("hospitalId", -1);
+    private void showFilterBottomSheet() {
+        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
+        View view = LayoutInflater.from(this).inflate(R.layout.bottom_sheet_doctor_filter, null);
+        bottomSheetDialog.setContentView(view);
 
-            // Check if any actual filter values are present
-            boolean hasFilters = (specialtyId != -1) || (minRating > 0f) || (hospitalId != -1);
-            
-            if (hasFilters) {
-                showLoadingState();
-                viewModel.filterDoctors(
-                        specialtyId != -1 ? specialtyId : null,
-                        minRating > 0f ? minRating : null,
-                        hospitalId != -1 ? hospitalId : null,
-                        1,
-                        20
-                );
-            } else {
-                Log.d(TAG, "Filter data present but empty, loading all doctors");
-                loadAllDoctors();
-            }
-        } else {
-            Log.d(TAG, "No filter data, loading all doctors");
-            loadAllDoctors();
+        Spinner spinnerSpecialty = view.findViewById(R.id.spinnerSpecialty);
+        Spinner spinnerHospital = view.findViewById(R.id.spinnerHospital);
+        SeekBar seekBarRating = view.findViewById(R.id.seekBarRating);
+        TextView tvRatingValue = view.findViewById(R.id.tvRatingValue);
+        TextView btnApply = view.findViewById(R.id.btnApplyFilter);
+        TextView btnCancel = view.findViewById(R.id.btnCancel);
+        TextView tvClear = view.findViewById(R.id.tvClearFilters);
+
+        List<String> specialtyNames = new ArrayList<>();
+        specialtyNames.add("Tất cả");
+        for (SpecialtyResponse s : specialtyList) {
+            specialtyNames.add(s.getName());
         }
-    }
+        ArrayAdapter<String> specialtyAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, specialtyNames);
+        specialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerSpecialty.setAdapter(specialtyAdapter);
 
-    private void loadAllDoctors() {
-        Log.d(TAG, "Loading all doctors...");
-        showLoadingState();
-        viewModel.filterDoctors(null, null, null, 1, 50);
-    }
+        List<String> hospitalNames = new ArrayList<>();
+        hospitalNames.add("Tất cả");
+        for (HospitalResponse h : hospitalList) {
+            hospitalNames.add(h.getName());
+        }
+        ArrayAdapter<String> hospitalAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, hospitalNames);
+        hospitalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerHospital.setAdapter(hospitalAdapter);
 
-    private void showLoadingState() {
-        Log.d(TAG, "Showing loading state");
-        // You can add a ProgressBar or loading indicator here
-    }
+        seekBarRating.setMax(50);
+        seekBarRating.setProgress(selectedRating != null ? (int) (selectedRating * 10) : 0);
+        tvRatingValue.setText(selectedRating != null ? "Từ " + selectedRating + " sao" : "Tất cả đánh giá");
 
-    private void hideLoadingState() {
-        Log.d(TAG, "Hiding loading state");
-        // Hide any loading indicators here
+        seekBarRating.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                float rating = progress / 10.0f;
+                tvRatingValue.setText(progress > 0 ? "Từ " + rating + " sao" : "Tất cả đánh giá");
+            }
+            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+        });
+
+        tvClear.setOnClickListener(v -> {
+            spinnerSpecialty.setSelection(0);
+            spinnerHospital.setSelection(0);
+            seekBarRating.setProgress(0);
+        });
+
+        btnApply.setOnClickListener(v -> {
+            int specialtyIndex = spinnerSpecialty.getSelectedItemPosition();
+            selectedSpecialtyId = specialtyIndex == 0 ? null : specialtyList.get(specialtyIndex - 1).getSpecialtyId();
+
+            int hospitalIndex = spinnerHospital.getSelectedItemPosition();
+            selectedHospitalId = hospitalIndex == 0 ? null : hospitalList.get(hospitalIndex - 1).getHospitalId();
+
+            int ratingProgress = seekBarRating.getProgress();
+            selectedRating = ratingProgress > 0 ? ratingProgress / 10.0f : null;
+
+            viewModel.filterDoctors(selectedHospitalId, selectedRating, selectedSpecialtyId, 1, 20);
+            bottomSheetDialog.dismiss();
+        });
+
+        btnCancel.setOnClickListener(v -> bottomSheetDialog.dismiss());
+
+        bottomSheetDialog.show();
     }
 }
