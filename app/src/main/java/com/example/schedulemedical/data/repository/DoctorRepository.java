@@ -1,5 +1,6 @@
 package com.example.schedulemedical.data.repository;
 
+import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 
@@ -20,6 +21,8 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class DoctorRepository {
+
+    private static final String TAG = "DoctorRepository";
 
     public void getDoctorCertifications(int doctorId, int page, int limit, MutableLiveData<ResponseWrapper<List<CertificationResponseDTO>>> result) {
         ApiClient.getDoctorApiService().getDoctorCertifications(doctorId, page, limit)
@@ -48,20 +51,45 @@ public class DoctorRepository {
             Integer limit,
             MutableLiveData<ResponseWrapper<List<DoctorResponse>>> result
     ) {
+        Log.d(TAG, "Filtering doctors with: specialtyId=" + specialtyId + ", minRating=" + minRating + 
+              ", hospitalId=" + hospitalId + ", page=" + page + ", limit=" + limit);
+        
         ApiClient.getDoctorApiService().filterDoctors(specialtyId, minRating, hospitalId, page, limit)
                 .enqueue(new Callback<ApiResponse<List<DoctorResponse>>>() {
                     @Override
                     public void onResponse(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Response<ApiResponse<List<DoctorResponse>>> response) {
+                        Log.d(TAG, "API Response received: " + response.code());
+                        
                         if (response.isSuccessful() && response.body() != null) {
-                            List<DoctorResponse> doctors = response.body().getData();
+                            ApiResponse<List<DoctorResponse>> apiResponse = response.body();
+                            List<DoctorResponse> doctors = apiResponse.getData();
+                            
+                            Log.d(TAG, "API Response body: " + new Gson().toJson(apiResponse));
+                            Log.d(TAG, "Number of doctors received: " + (doctors != null ? doctors.size() : 0));
+                            
+                            // Debug first doctor data if available
+                            if (doctors != null && !doctors.isEmpty()) {
+                                DoctorResponse firstDoctor = doctors.get(0);
+                                Log.d(TAG, "First doctor data: " + new Gson().toJson(firstDoctor));
+                            }
+                            
                             result.postValue(new ResponseWrapper<>("Success", doctors));
                         } else {
-                            result.postValue(new ResponseWrapper<>("Lỗi không xác định", null));
+                            Log.e(TAG, "API Error: " + response.code() + " - " + response.message());
+                            try {
+                                if (response.errorBody() != null) {
+                                    Log.e(TAG, "Error body: " + response.errorBody().string());
+                                }
+                            } catch (Exception e) {
+                                Log.e(TAG, "Could not read error body", e);
+                            }
+                            result.postValue(new ResponseWrapper<>("Lỗi không xác định: " + response.code(), null));
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Throwable t) {
+                        Log.e(TAG, "Network error: " + t.getMessage(), t);
                         result.postValue(new ResponseWrapper<>("Lỗi kết nối: " + t.getMessage(), null));
                     }
                 });

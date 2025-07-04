@@ -123,10 +123,9 @@ public class HomeActivity extends BaseActivity {
 
         if (tvDoctor != null) {
             tvDoctor.setOnClickListener(view -> {
-
-                Bundle bundle = new Bundle();
-
-                NavigationHelper.navigateToFilterDoctor(this, bundle);
+                Log.d(TAG, "See all doctors clicked - navigating to FilterDoctorActivity");
+                // Don't pass empty bundle - let FilterDoctorActivity load all doctors
+                NavigationHelper.navigateToFilterDoctor(this);
             });
         }
 
