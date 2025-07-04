@@ -123,9 +123,13 @@ public class HomeActivity extends BaseActivity {
 
         if (tvDoctor != null) {
             tvDoctor.setOnClickListener(view -> {
-                NavigationHelper.navigateToFilterDoctor(this);
+
+                Bundle bundle = new Bundle();
+
+                NavigationHelper.navigateToFilterDoctor(this, bundle);
             });
         }
+
         
         // Search bar click
         if (searchBar != null) {

@@ -1,7 +1,6 @@
 package com.example.schedulemedical.Adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +15,9 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
-// import com.example.schedulemedical.ui.doctor.DoctorProfileActivity; // Commented out - activity not created yet
+import com.example.schedulemedical.model.dto.response.HospitalResponse;
+import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
+import com.example.schedulemedical.model.dto.response.UserResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,40 +27,40 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
     private List<DoctorResponse> doctorList;
     private List<DoctorResponse> filteredList;
     private OnDoctorClickListener onDoctorClickListener;
-    
+
     public interface OnDoctorClickListener {
         void onDoctorClick(DoctorResponse doctor);
         void onBookAppointmentClick(DoctorResponse doctor);
     }
-    
+
     public DoctorAdapter(Context context, List<DoctorResponse> doctorList) {
         this.context = context;
         this.doctorList = doctorList != null ? doctorList : new ArrayList<>();
         this.filteredList = new ArrayList<>(this.doctorList);
     }
-    
+
     public void setOnDoctorClickListener(OnDoctorClickListener listener) {
         this.onDoctorClickListener = listener;
     }
-    
+
     @NonNull
     @Override
     public DoctorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_doctor, parent, false);
         return new DoctorViewHolder(view);
     }
-    
+
     @Override
     public void onBindViewHolder(@NonNull DoctorViewHolder holder, int position) {
         DoctorResponse doctor = filteredList.get(position);
         holder.bind(doctor);
     }
-    
+
     @Override
     public int getItemCount() {
         return filteredList.size();
     }
-    
+
     public void updateDoctors(List<DoctorResponse> newDoctors) {
         this.doctorList.clear();
         if (newDoctors != null) {
@@ -69,88 +70,85 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         this.filteredList.addAll(this.doctorList);
         notifyDataSetChanged();
     }
-    
+
     public void filter(String query) {
         filteredList.clear();
-        
+
         if (query == null || query.trim().isEmpty()) {
             filteredList.addAll(doctorList);
         } else {
             String lowerCaseQuery = query.toLowerCase().trim();
-            
+
             for (DoctorResponse doctor : doctorList) {
                 boolean matches = false;
-                
-                // Search in doctor name
-                if (doctor.getFullName() != null && 
-                    doctor.getFullName().toLowerCase().contains(lowerCaseQuery)) {
+
+                UserResponse user = doctor.getUser();
+                SpecialtyResponse specialty = doctor.getSpecialty();
+                HospitalResponse hospital = doctor.getHospital();
+
+                if (user != null && user.getFullName() != null &&
+                        user.getFullName().toLowerCase().contains(lowerCaseQuery)) {
                     matches = true;
                 }
-                
-                // Search in specialty
-                if (!matches && doctor.getSpecialtyName() != null && 
-                    doctor.getSpecialtyName().toLowerCase().contains(lowerCaseQuery)) {
+
+                if (!matches && specialty != null && specialty.getName() != null &&
+                        specialty.getName().toLowerCase().contains(lowerCaseQuery)) {
                     matches = true;
                 }
-                
-                // Search in hospital name
-                if (!matches && doctor.getHospitalName() != null && 
-                    doctor.getHospitalName().toLowerCase().contains(lowerCaseQuery)) {
+
+                if (!matches && hospital != null && hospital.getName() != null &&
+                        hospital.getName().toLowerCase().contains(lowerCaseQuery)) {
                     matches = true;
                 }
-                
-                // Search in department
-                if (!matches && doctor.getDepartmentName() != null && 
-                    doctor.getDepartmentName().toLowerCase().contains(lowerCaseQuery)) {
-                    matches = true;
-                }
-                
+
                 if (matches) {
                     filteredList.add(doctor);
                 }
             }
         }
-        
+
         notifyDataSetChanged();
     }
-    
-    public void filterBySpecialty(String specialty) {
+
+    public void filterBySpecialty(String specialtyName) {
         filteredList.clear();
-        
-        if (specialty == null || specialty.trim().isEmpty()) {
+
+        if (specialtyName == null || specialtyName.trim().isEmpty()) {
             filteredList.addAll(doctorList);
         } else {
             for (DoctorResponse doctor : doctorList) {
-                if (doctor.getSpecialtyName() != null && 
-                    doctor.getSpecialtyName().equalsIgnoreCase(specialty)) {
+                SpecialtyResponse specialty = doctor.getSpecialty();
+                if (specialty != null && specialty.getName() != null &&
+                        specialty.getName().equalsIgnoreCase(specialtyName)) {
                     filteredList.add(doctor);
                 }
             }
         }
-        
+
         notifyDataSetChanged();
     }
-    
+
     public void filterByRating(float minRating) {
         filteredList.clear();
-        
+
         for (DoctorResponse doctor : doctorList) {
+            HospitalResponse hospital = doctor.getHospital();
             try {
-                float rating = Float.parseFloat(doctor.getRating() != null ? doctor.getRating() : "0");
+                float rating = hospital != null && hospital.getRating() != null
+                        ? hospital.getRating().floatValue() : 0f;
                 if (rating >= minRating) {
                     filteredList.add(doctor);
                 }
-            } catch (NumberFormatException e) {
-                // If rating is not a valid number, include doctor if minRating is 0
+            } catch (Exception e) {
                 if (minRating == 0) {
                     filteredList.add(doctor);
                 }
             }
         }
-        
+
         notifyDataSetChanged();
     }
-    
+
     class DoctorViewHolder extends RecyclerView.ViewHolder {
         private ImageView ivDoctorAvatar;
         private TextView tvDoctorName;
@@ -162,10 +160,10 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         private TextView tvReviews;
         private TextView tvConsultationFee;
         private View btnBookAppointment;
-        
+
         public DoctorViewHolder(@NonNull View itemView) {
             super(itemView);
-            
+
             ivDoctorAvatar = itemView.findViewById(R.id.ivDoctorAvatar);
             tvDoctorName = itemView.findViewById(R.id.tvDoctorName);
             tvSpecialty = itemView.findViewById(R.id.tvSpecialty);
@@ -176,15 +174,14 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
             tvReviews = itemView.findViewById(R.id.tvReviews);
             tvConsultationFee = itemView.findViewById(R.id.tvConsultationFee);
             btnBookAppointment = itemView.findViewById(R.id.btnBookAppointment);
-            
-            // Set click listeners
+
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
                 if (position != RecyclerView.NO_POSITION && onDoctorClickListener != null) {
                     onDoctorClickListener.onDoctorClick(filteredList.get(position));
                 }
             });
-            
+
             if (btnBookAppointment != null) {
                 btnBookAppointment.setOnClickListener(v -> {
                     int position = getAdapterPosition();
@@ -194,67 +191,49 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
                 });
             }
         }
-        
+
         public void bind(DoctorResponse doctor) {
-            // Doctor name
-            if (tvDoctorName != null) {
-                tvDoctorName.setText(doctor.getFullName() != null ? doctor.getFullName() : "N/A");
-            }
-            
+            UserResponse user = doctor.getUser();
+            SpecialtyResponse specialty = doctor.getSpecialty();
+            HospitalResponse hospital = doctor.getHospital();
+
+            // Name
+            tvDoctorName.setText(user != null && user.getFullName() != null ? user.getFullName() : "N/A");
+
             // Specialty
-            if (tvSpecialty != null) {
-                tvSpecialty.setText(doctor.getSpecialtyName() != null ? doctor.getSpecialtyName() : "General");
-            }
-            
+            tvSpecialty.setText(specialty != null && specialty.getName() != null ? specialty.getName() : "General");
+
             // Hospital
-            if (tvHospital != null) {
-                tvHospital.setText(doctor.getHospitalName() != null ? doctor.getHospitalName() : "Hospital");
-            }
-            
+            tvHospital.setText(hospital != null && hospital.getName() != null ? hospital.getName() : "Hospital");
+
             // Experience
-            if (tvExperience != null) {
-                String experience = doctor.getExperience() != null ? doctor.getExperience() + " years" : "N/A";
-                tvExperience.setText(experience);
-            }
-            
+            String exp = doctor.getYearsOfExperience() != null ? doctor.getYearsOfExperience() + " năm" : "N/A";
+            tvExperience.setText(exp);
+
             // Rating
-            if (ratingBar != null && tvRating != null) {
-                try {
-                    float rating = Float.parseFloat(doctor.getRating() != null ? doctor.getRating() : "0");
-                    ratingBar.setRating(rating);
-                    tvRating.setText(String.format("%.1f", rating));
-                } catch (NumberFormatException e) {
-                    ratingBar.setRating(0);
-                    tvRating.setText("0.0");
-                }
-            }
-            
-            // Reviews count
-            if (tvReviews != null) {
-                int reviewCount = doctor.getTotalReviews() != null ? doctor.getTotalReviews() : 0;
-                tvReviews.setText("(" + reviewCount + " reviews)");
-            }
-            
-            // Consultation fee
-            if (tvConsultationFee != null) {
-                String fee = doctor.getConsultationFee() != null ? 
-                           doctor.getConsultationFee() + " VND" : "Consultation fee";
-                tvConsultationFee.setText(fee);
-            }
-            
-            // Doctor avatar
-            if (ivDoctorAvatar != null) {
-                if (doctor.getAvatarUrl() != null && !doctor.getAvatarUrl().isEmpty()) {
-                    Glide.with(context)
-                            .load(doctor.getAvatarUrl())
-                            .transform(new CircleCrop())
-                            .placeholder(R.drawable.sample_profile_image)
-                            .error(R.drawable.sample_profile_image)
-                            .into(ivDoctorAvatar);
-                } else {
-                    ivDoctorAvatar.setImageResource(R.drawable.sample_profile_image);
-                }
+            float rating = hospital != null && hospital.getRating() != null ? hospital.getRating().floatValue() : 0f;
+            ratingBar.setRating(rating);
+            tvRating.setText(String.format("%.1f", rating));
+
+            // Reviews
+            int reviewCount = hospital != null && hospital.getReviews() != null ? hospital.getReviews() : 0;
+            tvReviews.setText("(" + reviewCount + " reviews)");
+
+            // Fee
+//            String fee = doctor.getConsultationFee() != null ? doctor.getConsultationFee() + " VND" : "Chưa có giá";
+//            tvConsultationFee.setText(fee);
+
+            // Avatar
+            if (user != null && user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+                Glide.with(context)
+                        .load(user.getAvatar())
+                        .transform(new CircleCrop())
+                        .placeholder(R.drawable.sample_profile_image)
+                        .error(R.drawable.sample_profile_image)
+                        .into(ivDoctorAvatar);
+            } else {
+                ivDoctorAvatar.setImageResource(R.drawable.sample_profile_image);
             }
         }
     }
-} 
+}

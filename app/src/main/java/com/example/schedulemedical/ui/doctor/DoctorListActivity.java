@@ -40,7 +40,7 @@ import retrofit2.Response;
 
 public class DoctorListActivity extends AppCompatActivity implements DoctorAdapter.OnDoctorClickListener {
     private static final String TAG = "DoctorListActivity";
-    
+
     // UI Components
     private ImageView ivBack;
     private EditText etSearch;
@@ -48,26 +48,26 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     private RecyclerView rvDoctors;
     private TextView tvNoResults;
     private LinearLayout layoutLoading;
-    
+
     // Data and Adapters
     private DoctorAdapter doctorAdapter;
     private List<DoctorResponse> allDoctors;
     private DoctorApiService doctorApiService;
     private ProgressDialog progressDialog;
-    
+
     // Filter states
     private String currentSpecialty = null;
     private float currentMinRating = 0f;
     private String currentSortBy = "rating";
     private String currentSortOrder = "desc";
-    
+
     // Predefined specialties
     private String[] specialties = {
-        "Cardiology", "Dermatology", "Neurology", "Orthopedics", 
+        "Cardiology", "Dermatology", "Neurology", "Orthopedics",
         "Pediatrics", "Psychiatry", "General Medicine", "Surgery",
         "Gynecology", "Ophthalmology", "ENT", "Radiology"
     };
-    
+
     private String[] ratingOptions = {"All Ratings", "4+ Stars", "3+ Stars", "2+ Stars"};
     private float[] ratingValues = {0f, 4f, 3f, 2f};
 
@@ -75,21 +75,21 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter_doctor);
-        
+
         initializeViews();
         setupRecyclerView();
         setupClickListeners();
         setupSearchListener();
         setupProgressDialog();
-        
+
         // Initialize API service
         ApiClient.init(this);
         doctorApiService = ApiClient.getDoctorApiService();
-        
+
         // Load doctors
         loadDoctors();
     }
-    
+
     private void initializeViews() {
         ivBack = findViewById(R.id.ivBack);
 //        etSearch = findViewById(R.id.etSearch);
@@ -97,34 +97,34 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
 //        rvDoctors = findViewById(R.id.rvDoctors);
 //        tvNoResults = findViewById(R.id.tvNoResults);
         layoutLoading = findViewById(R.id.layoutLoading);
-        
+
         allDoctors = new ArrayList<>();
     }
-    
+
     private void setupRecyclerView() {
         doctorAdapter = new DoctorAdapter(this, allDoctors);
         doctorAdapter.setOnDoctorClickListener(this);
-        
+
         rvDoctors.setLayoutManager(new LinearLayoutManager(this));
         rvDoctors.setAdapter(doctorAdapter);
     }
-    
+
     private void setupClickListeners() {
         // Back button
         ivBack.setOnClickListener(v -> finish());
-        
+
         // Filter button
         ivFilter.setOnClickListener(v -> showFilterDialog());
     }
-    
+
     private void setupSearchListener() {
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
-            
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {}
-            
+
             @Override
             public void afterTextChanged(Editable s) {
                 if (doctorAdapter != null) {
@@ -134,16 +134,16 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
             }
         });
     }
-    
+
     private void setupProgressDialog() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang tải danh sách bác sĩ...");
         progressDialog.setCancelable(false);
     }
-    
+
     private void loadDoctors() {
         showLoading();
-        
+
         // TODO: Call API to get all doctors with current filters
         // doctorApiService.getAllDoctors(
         //     1, // page
@@ -155,7 +155,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         //     currentSortBy,
         //     currentSortOrder
         // ).enqueue(new Callback<ApiResponse<Object>>() {
-        
+
         // Mock for now - create empty list for testing
         List<DoctorResponse> mockDoctors = new ArrayList<>();
         allDoctors.clear();
@@ -163,7 +163,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         doctorAdapter.updateDoctors(allDoctors);
         updateNoResultsVisibility();
         hideLoading();
-        
+
         /*
         // Original API call - commented out until getAllDoctors method is implemented
         doctorApiService.getAllDoctors(parameters).enqueue(new Callback<ApiResponse<Object>>() {
@@ -202,38 +202,38 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         });
         */
     }
-    
+
     private void showFilterDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
         View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_doctor_filter, null);
         bottomSheetDialog.setContentView(bottomSheetView);
-        
+
         // Setup filter options
         setupSpecialtyFilter(bottomSheetView);
         setupRatingFilter(bottomSheetView);
         setupFilterActions(bottomSheetView, bottomSheetDialog);
-        
+
         bottomSheetDialog.show();
     }
-    
+
     private void setupSpecialtyFilter(View bottomSheetView) {
         // ChipGroup chipGroupSpecialty = bottomSheetView.findViewById(R.id.chipGroupSpecialty); // Not in layout
-        
+
         // TODO: Use the actual Spinner instead
         // Spinner spinnerSpecialty = bottomSheetView.findViewById(R.id.spinnerSpecialty);
-        
+
         // For now, comment out the chip group logic
         /*
         if (chipGroupSpecialty != null) {
             chipGroupSpecialty.removeAllViews();
-            
+
             // Add "All Specialties" chip
             Chip allChip = new Chip(this);
             allChip.setText("All Specialties");
             allChip.setCheckable(true);
             allChip.setChecked(currentSpecialty == null);
             chipGroupSpecialty.addView(allChip);
-            
+
             // Add specialty chips
             for (String specialty : specialties) {
                 Chip chip = new Chip(this);
@@ -242,7 +242,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
                 chip.setChecked(specialty.equals(currentSpecialty));
                 chipGroupSpecialty.addView(chip);
             }
-            
+
             // Set selection listener
             chipGroupSpecialty.setOnCheckedStateChangeListener((group, checkedIds) -> {
                 if (!checkedIds.isEmpty()) {
@@ -256,18 +256,18 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         }
         */
     }
-    
+
     private void setupRatingFilter(View bottomSheetView) {
         // ChipGroup chipGroupRating = bottomSheetView.findViewById(R.id.chipGroupRating); // Not in layout
-        
+
         // TODO: Use the actual SeekBar instead
         // SeekBar seekBarRating = bottomSheetView.findViewById(R.id.seekBarRating);
-        
+
         // For now, comment out the chip group logic
         /*
         if (chipGroupRating != null) {
             chipGroupRating.removeAllViews();
-            
+
             for (int i = 0; i < ratingOptions.length; i++) {
                 Chip chip = new Chip(this);
                 chip.setText(ratingOptions[i]);
@@ -276,7 +276,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
                 chip.setTag(ratingValues[i]);
                 chipGroupRating.addView(chip);
             }
-            
+
             // Set selection listener
             chipGroupRating.setOnCheckedStateChangeListener((group, checkedIds) -> {
                 if (!checkedIds.isEmpty()) {
@@ -289,25 +289,25 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         }
         */
     }
-    
+
     private void setupFilterActions(View bottomSheetView, BottomSheetDialog dialog) {
         View btnApplyFilter = bottomSheetView.findViewById(R.id.btnApplyFilter);
         // View btnClearFilter = bottomSheetView.findViewById(R.id.btnClearFilter); // Not in layout
         View btnCancel = bottomSheetView.findViewById(R.id.btnCancel);
-        
+
         if (btnApplyFilter != null) {
             btnApplyFilter.setOnClickListener(v -> {
                 dialog.dismiss();
                 applyFilters();
             });
         }
-        
+
         if (btnCancel != null) {
             btnCancel.setOnClickListener(v -> {
                 dialog.dismiss();
             });
         }
-        
+
         // if (btnClearFilter != null) {
         //     btnClearFilter.setOnClickListener(v -> {
         //         currentSpecialty = null;
@@ -317,7 +317,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         //     });
         // }
     }
-    
+
     private void applyFilters() {
         // Apply local filters first
         if (doctorAdapter != null) {
@@ -331,13 +331,13 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
                 return;
             }
         }
-        
+
         updateNoResultsVisibility();
-        
+
         // Optionally reload from server for more accurate results
         // loadDoctors();
     }
-    
+
     private void updateNoResultsVisibility() {
         if (tvNoResults != null && doctorAdapter != null) {
             if (doctorAdapter.getItemCount() == 0) {
@@ -349,7 +349,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
             }
         }
     }
-    
+
     private void showLoading() {
         if (layoutLoading != null) {
             layoutLoading.setVisibility(View.VISIBLE);
@@ -361,7 +361,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
             tvNoResults.setVisibility(View.GONE);
         }
     }
-    
+
     private void hideLoading() {
         if (layoutLoading != null) {
             layoutLoading.setVisibility(View.GONE);
@@ -370,7 +370,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
             rvDoctors.setVisibility(View.VISIBLE);
         }
     }
-    
+
     private void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         if (tvNoResults != null) {
@@ -381,7 +381,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
             rvDoctors.setVisibility(View.GONE);
         }
     }
-    
+
     // DoctorAdapter.OnDoctorClickListener implementation
     @Override
     public void onDoctorClick(DoctorResponse doctor) {
@@ -391,19 +391,19 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
         // intent.putExtra("doctorName", doctor.getFullName());
         // startActivity(intent);
     }
-    
+
     @Override
     public void onBookAppointmentClick(DoctorResponse doctor) {
         // Navigate to booking activity
         Intent intent = new Intent(this, BookingActivity.class);
-        intent.putExtra("doctorId", doctor.getId());
-        intent.putExtra("doctorName", doctor.getFullName());
-        intent.putExtra("specialty", doctor.getSpecialtyName());
-        intent.putExtra("hospitalName", doctor.getHospitalName());
-        intent.putExtra("consultationFee", doctor.getConsultationFee());
+        intent.putExtra("doctorId", doctor.getDoctorId());
+        intent.putExtra("doctorName", doctor.getUser().getFullName());
+        intent.putExtra("specialty", doctor.getSpecialty().getName());
+        intent.putExtra("hospitalName", doctor.getHospital().getName());
+//        intent.putExtra("consultationFee", doctor.getConsultationFee());
         startActivity(intent);
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -411,4 +411,4 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
             progressDialog.dismiss();
         }
     }
-} 
+}

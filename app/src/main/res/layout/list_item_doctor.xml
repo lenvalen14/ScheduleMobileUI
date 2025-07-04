@@ -22,8 +22,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/ivDoctorPhoto"
-            android:layout_width="71dp"
-            android:layout_height="61dp"
+            android:layout_width="77dp"
+            android:layout_height="66dp"
             android:src="@drawable/sample_profile_image"
             app:civ_border_color="@color/gray_f1"
             app:civ_border_width="2dp"
@@ -104,7 +104,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/ivDoctorPhoto" />
 
-        <!-- Rating + Buttons -->
+        <!-- Rating -->
         <LinearLayout
             android:id="@+id/ratingContainer"
             android:layout_width="wrap_content"
@@ -122,15 +122,17 @@
                 app:tint="@color/yellow_ffc" />
 
             <TextView
+                android:id="@+id/tvRating"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
+                android:fontFamily="@font/inter_medium"
                 android:text="4.8 (212 reviews)"
                 android:textColor="@color/text_primary"
-                android:textSize="14sp"
-                android:fontFamily="@font/inter_medium" />
+                android:textSize="14sp" />
         </LinearLayout>
 
+        <!-- Action Buttons -->
         <LinearLayout
             android:id="@+id/actionButtons"
             android:layout_width="wrap_content"
@@ -143,62 +145,59 @@
 
             <ImageButton
                 android:id="@+id/btnCall"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginEnd="4dp"
-                android:background="@color/gray_f5"
-                android:backgroundTint="@color/gray_f5"
-                android:src="@drawable/ic_call"
-                android:scaleType="centerInside"
                 android:adjustViewBounds="true"
-                android:padding="6dp"
-                android:contentDescription="@string/call" />
+                android:background="@drawable/bg_button_gray_circle"
+                android:contentDescription="@string/call"
+                android:padding="10dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_call" />
 
             <ImageButton
                 android:id="@+id/btnChat"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="4dp"
-                android:background="@color/gray_f5"
-                android:backgroundTint="@color/gray_f5"
+                android:background="@drawable/bg_button_gray_circle"
                 android:src="@drawable/ic_chat"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
-                android:padding="6dp"
+                android:padding="10dp"
                 android:contentDescription="@string/chat" />
 
             <ImageButton
                 android:id="@+id/btnInfo"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
                 android:layout_marginStart="8dp"
-                android:background="@color/gray_f5"
-                android:backgroundTint="@color/gray_f5"
+                android:background="@drawable/bg_button_gray_circle"
                 android:src="@drawable/ic_profile"
                 android:scaleType="centerInside"
                 android:adjustViewBounds="true"
-                android:padding="6dp"
+                android:padding="10dp"
                 android:contentDescription="@string/info" />
-
         </LinearLayout>
 
+        <!-- Book Button -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btnBookAppointment"
             android:layout_width="0dp"
-            android:layout_height="40dp"
-            android:layout_marginTop="16dp"
+            android:layout_height="48dp"
+            android:layout_marginTop="28dp"
+            android:backgroundTint="@color/blue_447f"
+            android:fontFamily="@font/inter_semibold"
             android:text="Đặt lịch ngay"
             android:textColor="@color/white"
             android:textSize="12sp"
-            android:fontFamily="@font/inter_semibold"
             app:cornerRadius="18dp"
-            android:backgroundTint="@color/blue_447f"
             app:iconPadding="0dp"
-            app:layout_constraintTop_toBottomOf="@+id/ratingContainer"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/ratingContainer" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </com.google.android.material.card.MaterialCardView>
