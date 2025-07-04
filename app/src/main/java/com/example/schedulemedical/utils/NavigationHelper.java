@@ -64,7 +64,7 @@ public class NavigationHelper {
      * Điều hướng đến ForgotPasswordActivity
      */
     public static void navigateToForgotPassword(Context context) {
-        Intent intent = new Intent(context, ForgotPasswordActivity.class);
+        Intent intent = new Intent(context, SendOTPActivity.class);
         context.startActivity(intent);
     }
 
