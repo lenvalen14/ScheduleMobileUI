@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,11 @@ import com.example.schedulemedical.data.api.AuthApiService;
 import com.example.schedulemedical.data.api.UserApiService;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.ProfileResponse;
+import com.example.schedulemedical.model.dto.response.PatientProfileResponse;
+import com.example.schedulemedical.model.dto.request.UpdateUserRequest;
+import com.example.schedulemedical.model.dto.request.UpdatePatientProfileRequest;
+import com.example.schedulemedical.model.dto.response.UserResponse;
+import com.example.schedulemedical.ui.base.BaseActivity;
 import com.example.schedulemedical.ui.login.LoginActivity;
 import com.example.schedulemedical.utils.AuthManager;
 import com.google.android.material.card.MaterialCardView;
@@ -40,7 +46,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ProfileActivity extends AppCompatActivity {
+public class ProfileActivity extends BaseActivity {
     private static final String TAG = "ProfileActivity";
     
     // UI Components
@@ -57,14 +63,17 @@ public class ProfileActivity extends AppCompatActivity {
     private RadioButton rbOther;
     private EditText etAddress;
     private EditText etEmergencyContact;
-    private Button btnSaveProfile;
     private Button btnLogout;
     private TextView tvChangePassword;
+    private Spinner spinnerEthnicity;
+    private EditText etInsurance, etAllergies, etChronicDiseases, etObstetricHistory, etSurgicalHistory, etFamilyHistory, etSocialHistory, etMedicationHistory;
+    private EditText etNationalId;
     
     // Data
     private ProfileResponse currentProfile;
     private Uri selectedImageUri;
     private Calendar selectedDateOfBirth;
+    private PatientProfileResponse currentPatientProfile;
     
     // Services
     private AuthApiService authApiService;
@@ -82,16 +91,25 @@ public class ProfileActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_profile);
-        
+        // Không cần setContentView, không cần gọi lại các hàm setup ở đây
+    }
+
+    @Override
+    protected int getLayoutResourceId() {
+        return R.layout.activity_profile;
+    }
+
+    @Override
+    protected void setupViews() {
         initializeServices();
         initializeViews();
         setupImagePickerLauncher();
         setupClickListeners();
         setupProgressDialog();
         loadUserProfile();
+        loadPatientProfile();
     }
-    
+
     private void initializeServices() {
         ApiClient.init(this);
         authApiService = ApiClient.getAuthApiService();
@@ -112,16 +130,37 @@ public class ProfileActivity extends AppCompatActivity {
         rbMale = findViewById(R.id.rbMale);
         rbFemale = findViewById(R.id.rbFemale);
         rbOther = findViewById(R.id.rbOther);
-        // etAddress = findViewById(R.id.etAddress); // Not in layout
-        // etEmergencyContact = findViewById(R.id.etEmergencyContact); // Not in layout
-        // btnSaveProfile = findViewById(R.id.btnSaveProfile); // Not in layout
-        // btnLogout = findViewById(R.id.btnLogout); // Not in layout
+        etAddress = findViewById(R.id.etAddress);
+        spinnerEthnicity = findViewById(R.id.spinnerEthnicity);
+        etInsurance = findViewById(R.id.etInsurance);
+        etAllergies = findViewById(R.id.etAllergies);
+        etChronicDiseases = findViewById(R.id.etChronicDiseases);
+        etObstetricHistory = findViewById(R.id.etObstetricHistory);
+        etSurgicalHistory = findViewById(R.id.etSurgicalHistory);
+        etFamilyHistory = findViewById(R.id.etFamilyHistory);
+        etSocialHistory = findViewById(R.id.etSocialHistory);
+        etMedicationHistory = findViewById(R.id.etMedicationHistory);
+        etNationalId = findViewById(R.id.etNationalId);
+        Button btnSaveProfile = findViewById(R.id.btnUpdateProfile);
+        btnLogout = findViewById(R.id.btnLogout);
         // tvChangePassword = findViewById(R.id.tvChangePassword); // Not in layout
         
         // Disable email editing (usually not changeable)
         if (etEmail != null) {
             etEmail.setEnabled(false);
             etEmail.setFocusable(false);
+        }
+        spinnerEthnicity.setAdapter(android.widget.ArrayAdapter.createFromResource(this, R.array.ethnicities, android.R.layout.simple_spinner_item));
+        
+        btnSaveProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveProfile();
+            }
+        });
+        
+        if (btnLogout != null) {
+            btnLogout.setOnClickListener(v -> logout());
         }
     }
     
@@ -160,9 +199,6 @@ public class ProfileActivity extends AppCompatActivity {
         // Save profile
         // btnSaveProfile.setOnClickListener(v -> saveProfile()); // View commented out
         
-        // Logout
-        // btnLogout.setOnClickListener(v -> logout()); // View commented out
-        
         // Change password
         // tvChangePassword.setOnClickListener(v -> {
         //     // TODO: Navigate to change password screen
@@ -181,24 +217,20 @@ public class ProfileActivity extends AppCompatActivity {
             redirectToLogin();
             return;
         }
-        
         showLoading();
-        
-        authApiService.getProfile().enqueue(new Callback<ProfileResponse>() {
+        authApiService.getProfile().enqueue(new Callback<ApiResponse<ProfileResponse>>() {
             @Override
-            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
+            public void onResponse(Call<ApiResponse<ProfileResponse>> call, Response<ApiResponse<ProfileResponse>> response) {
                 hideLoading();
-                
-                if (response.isSuccessful() && response.body() != null) {
-                    currentProfile = response.body();
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    currentProfile = response.body().getData();
                     updateUIWithProfile(currentProfile);
                 } else {
                     Toast.makeText(ProfileActivity.this, "Không thể tải thông tin hồ sơ", Toast.LENGTH_LONG).show();
                 }
             }
-            
             @Override
-            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<ProfileResponse>> call, Throwable t) {
                 hideLoading();
                 Log.e(TAG, "Failed to load profile", t);
                 Toast.makeText(ProfileActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_LONG).show();
@@ -206,7 +238,34 @@ public class ProfileActivity extends AppCompatActivity {
         });
     }
     
+    private void loadPatientProfile() {
+        int userId = authManager.getUserId();
+        userApiService.getPatientProfile(userId).enqueue(new Callback<ApiResponse<PatientProfileResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<PatientProfileResponse>> call, Response<ApiResponse<PatientProfileResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    currentPatientProfile = response.body().getData();
+                    updateUIWithPatientProfile(currentPatientProfile);
+                }
+            }
+            @Override
+            public void onFailure(Call<ApiResponse<PatientProfileResponse>> call, Throwable t) { }
+        });
+    }
+    
     private void updateUIWithProfile(ProfileResponse profile) {
+        Log.d("Profile", "fullName: " + profile.getFullName());
+        Log.d("Profile", "email: " + profile.getEmail());
+        Log.d("Profile", "phone: " + profile.getPhone());
+        Log.d("Profile", "address: " + profile.getAddress());
+        Log.d("Profile", "dateOfBirth: " + profile.getDateOfBirth());
+        Log.d("Profile", "nationalId: " + profile.getNationalId());
+        Log.d("Profile", "ethnicity: " + profile.getEthnicity());
+        Log.d("Profile", "role: " + profile.getRole());
+        Log.d("Profile", "gender: " + profile.getGender());
+        Log.d("Profile", "createdAt: " + profile.getCreatedAt());
+        Log.d("Profile", "avatar: " + profile.getAvatar());
+        
         // Profile image
         if (ivProfileImage != null && profile.getAvatar() != null && !profile.getAvatar().isEmpty()) {
             Glide.with(this)
@@ -268,6 +327,57 @@ public class ProfileActivity extends AppCompatActivity {
         // }
     }
     
+    private void updateUIWithPatientProfile(PatientProfileResponse profile) {
+        UserResponse user = profile.getUser();
+        if (user != null) {
+            if (etFullName != null) etFullName.setText(user.getFullName() != null ? user.getFullName() : "");
+            if (etEmail != null) etEmail.setText(user.getEmail() != null ? user.getEmail() : "");
+            if (etPhoneNumber != null) etPhoneNumber.setText(user.getPhone() != null ? user.getPhone() : "");
+            if (etAddress != null) etAddress.setText(user.getAddress() != null ? user.getAddress() : "");
+            if (etNationalId != null) etNationalId.setText(user.getNationalId() != null ? user.getNationalId() : "");
+            if (spinnerEthnicity != null && user.getEthnicity() != null) {
+                String[] ethnicities = getResources().getStringArray(R.array.ethnicities);
+                for (int i = 0; i < ethnicities.length; i++) {
+                    if (ethnicities[i].equalsIgnoreCase(user.getEthnicity())) {
+                        spinnerEthnicity.setSelection(i);
+                        break;
+                    }
+                }
+            }
+            if (rgGender != null && user.getGender() != null) {
+                switch (user.getGender().toLowerCase()) {
+                    case "male":
+                        rbMale.setChecked(true);
+                        break;
+                    case "female":
+                        rbFemale.setChecked(true);
+                        break;
+                    default:
+                        rbOther.setChecked(true);
+                        break;
+                }
+            }
+            // Avatar nếu có
+            if (ivProfileImage != null && user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+                Glide.with(this)
+                    .load(user.getAvatar())
+                    .transform(new CircleCrop())
+                    .placeholder(R.drawable.sample_profile_image)
+                    .error(R.drawable.sample_profile_image)
+                    .into(ivProfileImage);
+            }
+        }
+        // Các trường patient profile
+        if (etInsurance != null) etInsurance.setText(profile.getInsurance());
+        if (etAllergies != null) etAllergies.setText(profile.getAllergies());
+        if (etChronicDiseases != null) etChronicDiseases.setText(profile.getChronicDiseases());
+        if (etObstetricHistory != null) etObstetricHistory.setText(profile.getObstetricHistory());
+        if (etSurgicalHistory != null) etSurgicalHistory.setText(profile.getSurgicalHistory());
+        if (etFamilyHistory != null) etFamilyHistory.setText(profile.getFamilyHistory());
+        if (etSocialHistory != null) etSocialHistory.setText(profile.getSocialHistory());
+        if (etMedicationHistory != null) etMedicationHistory.setText(profile.getMedicationHistory());
+    }
+    
     private void selectImage() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent.setType("image/*");
@@ -298,46 +408,77 @@ public class ProfileActivity extends AppCompatActivity {
     }
     
     private void saveProfile() {
-        if (!validateInputs()) {
-            return;
-        }
-        
+        if (!validateInputs()) return;
         showLoading();
-        
-        // Create update request
-        ProfileResponse updateRequest = new ProfileResponse();
-        updateRequest.setFullName(etFullName.getText().toString().trim());
-        updateRequest.setPhone(etPhoneNumber.getText().toString().trim());
-        updateRequest.setDateOfBirth(apiDateFormatter.format(selectedDateOfBirth.getTime()));
-        updateRequest.setGender(getSelectedGender());
-        updateRequest.setAddress(etAddress.getText().toString().trim());
-        
-        // TODO: If image was selected, upload it first then update profile
-        if (selectedImageUri != null) {
-            // For now, just update other fields
-            // Later implement image upload: uploadImageAndUpdateProfile(updateRequest);
-            updateProfile(updateRequest);
-        } else {
-            updateProfile(updateRequest);
-        }
-    }
-    
-    private void updateProfile(ProfileResponse updateRequest) {
-        // For now, use a simplified update approach
-        // In a real implementation, you would call userApiService.updateProfile()
-        
-        // Mock success for demonstration
-        hideLoading();
-        Toast.makeText(this, "Cập nhật hồ sơ thành công!", Toast.LENGTH_SHORT).show();
-        
-        // Update local auth manager data
-        authManager.updateUserInfo(
-            updateRequest.getFullName(),
-            updateRequest.getPhone()
-        );
-        
-        // TODO: Implement actual API call
-        // userApiService.updateProfile(userId, updateRequest).enqueue(...)
+        // Update user
+        UpdateUserRequest updateUserRequest = new UpdateUserRequest();
+        updateUserRequest.setFullName(etFullName.getText().toString().trim());
+        updateUserRequest.setPhone(etPhoneNumber.getText().toString().trim());
+        updateUserRequest.setDateOfBirth(apiDateFormatter.format(selectedDateOfBirth.getTime()));
+        updateUserRequest.setGender(getSelectedGender());
+        updateUserRequest.setAddress(etAddress.getText().toString().trim());
+        updateUserRequest.setNationalId(etNationalId.getText().toString().trim());
+        updateUserRequest.setEthnicity(spinnerEthnicity.getSelectedItem().toString());
+        updateUserRequest.setEmail(etEmail.getText().toString().trim());
+        // Update patient profile
+        UpdatePatientProfileRequest patientRequest = new UpdatePatientProfileRequest();
+        patientRequest.setInsurance(etInsurance.getText().toString().trim());
+        patientRequest.setAllergies(etAllergies.getText().toString().trim());
+        patientRequest.setChronicDiseases(etChronicDiseases.getText().toString().trim());
+        patientRequest.setObstetricHistory(etObstetricHistory.getText().toString().trim());
+        patientRequest.setSurgicalHistory(etSurgicalHistory.getText().toString().trim());
+        patientRequest.setFamilyHistory(etFamilyHistory.getText().toString().trim());
+        patientRequest.setSocialHistory(etSocialHistory.getText().toString().trim());
+        patientRequest.setMedicationHistory(etMedicationHistory.getText().toString().trim());
+        int userId = authManager.getUserId();
+        userApiService.updateUser(userId, updateUserRequest).enqueue(new Callback<ApiResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                hideLoading();
+                if (response.isSuccessful()) {
+                    Toast.makeText(ProfileActivity.this, "Cập nhật thông tin cá nhân thành công!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Log error body
+                    try {
+                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "null";
+                        Log.e(TAG, "updateUser error: " + errorBody);
+                        Toast.makeText(ProfileActivity.this, "Lỗi cập nhật: " + errorBody, Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Log.e(TAG, "Exception reading error body", e);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                hideLoading();
+                Log.e(TAG, "updateUser failed", t);
+                Toast.makeText(ProfileActivity.this, "Lỗi cập nhật thông tin cá nhân", Toast.LENGTH_SHORT).show();
+            }
+        });
+        userApiService.updatePatientProfile(userId, patientRequest).enqueue(new Callback<ApiResponse<PatientProfileResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<PatientProfileResponse>> call, Response<ApiResponse<PatientProfileResponse>> response) {
+                hideLoading();
+                if (response.isSuccessful()) {
+                    Toast.makeText(ProfileActivity.this, "Cập nhật hồ sơ bệnh nhân thành công!", Toast.LENGTH_SHORT).show();
+                } else {
+                    // Log error body
+                    try {
+                        String errorBody = response.errorBody() != null ? response.errorBody().string() : "null";
+                        Log.e(TAG, "updatePatientProfile error: " + errorBody);
+                        Toast.makeText(ProfileActivity.this, "Lỗi cập nhật: " + errorBody, Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Log.e(TAG, "Exception reading error body", e);
+                    }
+                }
+            }
+            @Override
+            public void onFailure(Call<ApiResponse<PatientProfileResponse>> call, Throwable t) {
+                hideLoading();
+                Log.e(TAG, "updatePatientProfile failed", t);
+                Toast.makeText(ProfileActivity.this, "Lỗi cập nhật hồ sơ bệnh nhân", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
     
     private boolean validateInputs() {
@@ -367,11 +508,11 @@ public class ProfileActivity extends AppCompatActivity {
         int selectedId = rgGender.getCheckedRadioButtonId();
         
         if (selectedId == R.id.rbMale) {
-            return "MALE";
+            return "Male";
         } else if (selectedId == R.id.rbFemale) {
-            return "FEMALE";
+            return "Female";
         } else {
-            return "OTHER";
+            return "Other";
         }
     }
     

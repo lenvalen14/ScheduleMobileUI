@@ -5,9 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
@@ -415,7 +413,12 @@ public class HomeActivity extends BaseActivity {
                     NavigationHelper.navigateToBookingWizard(this);
                     return true;
                 } else if (itemId == R.id.nav_profile) {
-                    NavigationHelper.navigateToUserProfile(this);
+                    String role = authManager.getUserRole();
+                    if ("DOCTOR".equalsIgnoreCase(role)) {
+                        NavigationHelper.navigateToDoctorProfile(this);
+                    } else {
+                        NavigationHelper.navigateToUserProfile(this);
+                    }
                     return true;
                 }
 

@@ -23,13 +23,19 @@
             android:exported="false"
             android:theme="@style/Theme.ScheduleMedical" />
         <activity
-            android:name=".ui.userprofile.UserProfileActivity"
+            android:name=".ui.profile.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.chat.ChatActivity"
             android:exported="false" />
         <activity
             android:name=".ui.doctor.DoctorListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.doctorprofile.DoctorProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.doctorprofile.DoctorEditProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.booking.BookingActivity"
@@ -39,9 +45,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.payment.PaymentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.profile.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.filterDoctor.FilterDoctorActivity"

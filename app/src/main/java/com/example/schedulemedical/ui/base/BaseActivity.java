@@ -3,7 +3,6 @@ package com.example.schedulemedical.ui.base;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.schedulemedical.R;
@@ -72,8 +71,8 @@ public abstract class BaseActivity extends AppCompatActivity {
             NavigationHelper.navigateToBookingWizard(BaseActivity.this);
             return true;
         } else if (itemId == R.id.nav_profile) {
-            if (!(BaseActivity.this instanceof com.example.schedulemedical.ui.userprofile.UserProfileActivity)) {
-                NavigationHelper.navigateToUserProfile(BaseActivity.this);
+            if (!(this instanceof com.example.schedulemedical.ui.profile.ProfileActivity)) {
+                NavigationHelper.navigateToUserProfile(this);
             }
             return true;
         }
@@ -93,7 +92,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             selectedItemId = R.id.nav_home;
         } else if (this instanceof com.example.schedulemedical.ui.hospital.HospitalActivity) {
             selectedItemId = R.id.nav_explore;
-        } else if (this instanceof com.example.schedulemedical.ui.userprofile.UserProfileActivity) {
+        } else if (this instanceof com.example.schedulemedical.ui.schedule.MyScheduledActivity) {
+            selectedItemId = R.id.nav_calendar;
+        } else if (this instanceof com.example.schedulemedical.ui.profile.ProfileActivity) {
             selectedItemId = R.id.nav_profile;
         }
         

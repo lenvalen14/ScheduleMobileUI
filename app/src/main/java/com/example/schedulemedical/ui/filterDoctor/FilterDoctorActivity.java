@@ -78,7 +78,7 @@ public class FilterDoctorActivity extends BaseActivity {
                     
                     // Navigate to doctor profile
                     if (doctor.getDoctorId() != null) {
-                        NavigationHelper.navigateToDoctorProfile(FilterDoctorActivity.this, doctor.getDoctorId());
+                        NavigationHelper.navigateToDoctorProfile(FilterDoctorActivity.this);
                     } else {
                         Toast.makeText(FilterDoctorActivity.this, "Không thể xem thông tin bác sĩ", Toast.LENGTH_SHORT).show();
                     }

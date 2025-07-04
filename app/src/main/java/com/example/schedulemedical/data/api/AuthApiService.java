@@ -31,7 +31,7 @@ public interface AuthApiService {
     Call<RefreshTokenResponse> refreshToken(@Body RefreshTokenRequest refreshTokenRequest);
     
     @GET("auth/profile")
-    Call<ProfileResponse> getProfile();
+    Call<ApiResponse<ProfileResponse>> getProfile();
     
     @GET("auth/verify-email")
     Call<ApiResponse<String>> verifyEmail(@Query("token") String token);
