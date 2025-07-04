@@ -121,15 +121,15 @@
                 android:src="@drawable/ic_star_filled"
                 app:tint="@color/yellow_ffc" />
 
-            <TextView
-                android:id="@+id/tvRating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:fontFamily="@font/inter_medium"
-                android:text="4.8 (212 reviews)"
-                android:textColor="@color/text_primary"
-                android:textSize="14sp" />
+<!--            <TextView-->
+<!--                android:id="@+id/tvRating"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginStart="4dp"-->
+<!--                android:fontFamily="@font/inter_medium"-->
+<!--                android:text="4.8 (212 reviews)"-->
+<!--                android:textColor="@color/text_primary"-->
+<!--                android:textSize="14sp" />-->
         </LinearLayout>
 
         <!-- Action Buttons -->

@@ -49,18 +49,11 @@ public class DoctorRepository {
             MutableLiveData<ResponseWrapper<List<DoctorResponse>>> result
     ) {
         ApiClient.getDoctorApiService().filterDoctors(specialtyId, minRating, hospitalId, page, limit)
-                .enqueue(new Callback<ApiResponse<Object>>() {
+                .enqueue(new Callback<ApiResponse<List<DoctorResponse>>>() {
                     @Override
-                    public void onResponse(@NonNull Call<ApiResponse<Object>> call, @NonNull Response<ApiResponse<Object>> response) {
+                    public void onResponse(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Response<ApiResponse<List<DoctorResponse>>> response) {
                         if (response.isSuccessful() && response.body() != null) {
-                            Object data = response.body().getData();
-
-                            // Sử dụng Gson để parse Object -> List<DoctorResponseDTO>
-                            Gson gson = new Gson();
-                            String json = gson.toJson(data); // convert Object -> JSON String
-                            Type listType = new TypeToken<List<DoctorResponseDTO>>(){}.getType();
-                            List<DoctorResponse> doctors = gson.fromJson(json, listType);
-
+                            List<DoctorResponse> doctors = response.body().getData();
                             result.postValue(new ResponseWrapper<>("Success", doctors));
                         } else {
                             result.postValue(new ResponseWrapper<>("Lỗi không xác định", null));
@@ -68,7 +61,7 @@ public class DoctorRepository {
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<ApiResponse<Object>> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Throwable t) {
                         result.postValue(new ResponseWrapper<>("Lỗi kết nối: " + t.getMessage(), null));
                     }
                 });

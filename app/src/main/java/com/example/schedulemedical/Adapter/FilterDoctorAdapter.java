@@ -76,7 +76,7 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
             tvDoctorSpecialty = itemView.findViewById(R.id.tvDoctorSpecialty);
             tvHospitalName = itemView.findViewById(R.id.tvHospitalName);
             ivDoctorPhoto = itemView.findViewById(R.id.ivDoctorPhoto);
-            tvRating = itemView.findViewById(R.id.ratingContainer).findViewById(R.id.tvRating);
+//            tvRating = itemView.findViewById(R.id.ratingContainer).findViewById(R.id.tvRating);
             btnInfo = itemView.findViewById(R.id.btnInfo);
             btnBookAppointment = itemView.findViewById(R.id.btnBookAppointment);
         }
@@ -106,10 +106,10 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
                     .into(ivDoctorPhoto);
 
             // Rating
-            float rating = hospital != null && hospital.getRating() != null
-                    ? hospital.getRating().floatValue() : 0f;
-            int reviews = hospital != null && hospital.getReviews() != null ? hospital.getReviews() : 0;
-            tvRating.setText(String.format("%.1f (%d reviews)", rating, reviews));
+//            float rating = hospital != null && hospital.getRating() != null
+//                    ? hospital.getRating().floatValue() : 0f;
+//            int reviews = hospital != null && hospital.getReviews() != null ? hospital.getReviews() : 0;
+//            tvRating.setText(String.format("%.1f (%d reviews)", rating, reviews));
 
             // Click events
             itemView.setOnClickListener(v -> {
