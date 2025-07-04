@@ -9,12 +9,16 @@ import com.example.schedulemedical.data.api.AuthApiService;
 import com.example.schedulemedical.data.api.DoctorApiService;
 import com.example.schedulemedical.data.api.HospitalApiService;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
+import com.example.schedulemedical.model.dto.response.HospitalListResponse;
 import com.example.schedulemedical.model.dto.response.ProfileResponse;
+import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.example.schedulemedical.utils.AuthManager;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.List;
 
 public class HomeRepository {
     private static final String TAG = "HomeRepository";
@@ -127,9 +131,9 @@ public class HomeRepository {
                                         dashboardData.setTopDoctors(doctors);
                                         
                                         // Load nearby hospitals - final call
-                                        loadNearbyHospitals(new DataCallback<Object>() {
+                                        loadNearbyHospitals(new DataCallback<List<HospitalResponse>>() {
                                             @Override
-                                            public void onSuccess(Object hospitals) {
+                                            public void onSuccess(List<HospitalResponse> hospitals) {
                                                 dashboardData.setNearbyHospitals(hospitals);
                                                 callback.onDashboardDataLoaded(dashboardData);
                                             }
@@ -267,20 +271,19 @@ public class HomeRepository {
     }
     
     // Load nearby hospitals (mock data for now since we don't have location)
-    public void loadNearbyHospitals(DataCallback<Object> callback) {
+    public void loadNearbyHospitals(DataCallback<List<HospitalResponse>> callback) {
         hospitalApi.getAllHospitals(1, 5, null, null, null, null, null, null, null)
-                .enqueue(new Callback<ApiResponse<Object>>() {
+                .enqueue(new Callback<HospitalListResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+            public void onResponse(Call<HospitalListResponse> call, Response<HospitalListResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body().getData());
                 } else {
                     callback.onError("Failed to load hospitals");
                 }
             }
-            
             @Override
-            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+            public void onFailure(Call<HospitalListResponse> call, Throwable t) {
                 Log.e(TAG, "Hospitals API call failed", t);
                 callback.onError("Network error: " + t.getMessage());
             }

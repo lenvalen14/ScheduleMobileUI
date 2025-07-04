@@ -1,6 +1,8 @@
 package com.example.schedulemedical.data.api;
 
 import com.example.schedulemedical.model.dto.response.ApiResponse;
+import com.example.schedulemedical.model.dto.response.HospitalResponse;
+import com.example.schedulemedical.model.dto.response.HospitalListResponse;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -11,7 +13,7 @@ public interface HospitalApiService {
     
     // Get all hospitals with filters and pagination
     @GET("hospital/hospitals")
-    Call<ApiResponse<Object>> getAllHospitals(
+    Call<HospitalListResponse> getAllHospitals(
         @Query("page") int page,
         @Query("limit") int limit,
         @Query("search") String search,
@@ -25,11 +27,11 @@ public interface HospitalApiService {
     
     // Get hospital by ID
     @GET("hospital/{id}")
-    Call<ApiResponse<Object>> getHospitalById(@Path("id") int hospitalId);
+    Call<ApiResponse<HospitalResponse>> getHospitalById(@Path("id") int hospitalId);
     
     // Search hospitals by string
     @GET("hospital/search/{searchString}")
-    Call<ApiResponse<Object>> searchHospitals(
+    Call<HospitalListResponse> searchHospitals(
         @Path("searchString") String searchString,
         @Query("skip") int skip,
         @Query("take") int take
@@ -37,7 +39,7 @@ public interface HospitalApiService {
     
     // Filter hospitals
     @GET("hospital/filter")
-    Call<ApiResponse<Object>> filterHospitals(
+    Call<HospitalListResponse> filterHospitals(
         @Query("name") String name,
         @Query("type") String type,
         @Query("location") String location,
@@ -50,7 +52,7 @@ public interface HospitalApiService {
     
     // Search hospitals by location
     @GET("hospital/search-by-location")
-    Call<ApiResponse<Object>> searchHospitalsByLocation(
+    Call<HospitalListResponse> searchHospitalsByLocation(
         @Query("latitude") double latitude,
         @Query("longitude") double longitude,
         @Query("radius") double radius,
@@ -59,7 +61,7 @@ public interface HospitalApiService {
     
     // Get hospitals by specialty
     @GET("hospital/by-specialty/{specialtyId}")
-    Call<ApiResponse<Object>> getHospitalsBySpecialty(
+    Call<HospitalListResponse> getHospitalsBySpecialty(
         @Path("specialtyId") int specialtyId,
         @Query("page") int page,
         @Query("limit") int limit
@@ -67,7 +69,7 @@ public interface HospitalApiService {
     
     // Get nearby hospitals
     @GET("hospital/nearby")
-    Call<ApiResponse<Object>> getNearbyHospitals(
+    Call<HospitalListResponse> getNearbyHospitals(
         @Query("latitude") double latitude,
         @Query("longitude") double longitude,
         @Query("limit") int limit
@@ -75,7 +77,7 @@ public interface HospitalApiService {
     
     // Get featured hospitals
     @GET("hospital/featured")
-    Call<ApiResponse<Object>> getFeaturedHospitals(@Query("limit") int limit);
+    Call<HospitalListResponse> getFeaturedHospitals(@Query("limit") int limit);
     
     // Get hospital statistics
     @GET("hospital/statistics")
