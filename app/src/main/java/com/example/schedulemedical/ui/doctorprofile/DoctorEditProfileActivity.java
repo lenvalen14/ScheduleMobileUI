@@ -1,4 +1,4 @@
-package com.example.schedulemedical.ui.userprofile;
+package com.example.schedulemedical.ui.doctorprofile;
 
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -9,11 +9,11 @@ import com.example.schedulemedical.R;
 import com.example.schedulemedical.ui.base.BaseActivity;
 import com.example.schedulemedical.utils.NavigationHelper;
 
-public class UserProfileActivity extends BaseActivity {
+public class DoctorEditProfileActivity extends BaseActivity {
 
     @Override
     protected int getLayoutResourceId() {
-        return R.layout.activity_user_profile;
+        return R.layout.activity_edit_doctor_profile;
     }
 
     @Override
@@ -52,14 +52,9 @@ public class UserProfileActivity extends BaseActivity {
     private void loadUserData() {
         // TODO: Load user data from SharedPreferences or API
         TextView userName = findViewById(R.id.et_first_name);
-        TextView userEmail = findViewById(R.id.et_email);
-        TextView address = findViewById(R.id.et_address);
 
         if (userName != null) {
             userName.setText("John Doe"); // Placeholder
-        }
-        if (userEmail != null) {
-            userEmail.setText("john.doe@example.com"); // Placeholder
         }
     }
 }
