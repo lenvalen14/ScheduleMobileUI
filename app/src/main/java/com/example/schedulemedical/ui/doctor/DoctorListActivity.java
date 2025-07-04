@@ -74,7 +74,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_doctor_list);
+        setContentView(R.layout.activity_filter_doctor);
         
         initializeViews();
         setupRecyclerView();
@@ -92,10 +92,10 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     
     private void initializeViews() {
         ivBack = findViewById(R.id.ivBack);
-        etSearch = findViewById(R.id.etSearch);
-        ivFilter = findViewById(R.id.ivFilter);
-        rvDoctors = findViewById(R.id.rvDoctors);
-        tvNoResults = findViewById(R.id.tvNoResults);
+//        etSearch = findViewById(R.id.etSearch);
+//        ivFilter = findViewById(R.id.ivFilter);
+//        rvDoctors = findViewById(R.id.rvDoctors);
+//        tvNoResults = findViewById(R.id.tvNoResults);
         layoutLoading = findViewById(R.id.layoutLoading);
         
         allDoctors = new ArrayList<>();
