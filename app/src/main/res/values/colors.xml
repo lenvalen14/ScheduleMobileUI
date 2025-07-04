@@ -79,6 +79,7 @@
     <color name="gray_6161">#616161</color>
     <color name="gray_7575">#757575</color>
     <color name="gray_546e">#546E7A</color>
+    <color name="gray_cccccc">#A6A5A5</color>
 
     <color name="md_theme_outline">#79747E</color>
     <color name="md_theme_onSurfaceVariant">#49454F</color>

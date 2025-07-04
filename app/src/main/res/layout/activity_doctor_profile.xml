@@ -155,7 +155,7 @@
                 android:textColor="@color/md_theme_onBackground" />
 
             <TextView
-                android:id="@+id/tvDoctorBio"
+                android:id="@+id/tvDoctorExperience"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Dr. Smith is an experienced cardiologist with over 15 years of service..."
@@ -205,7 +205,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="?attr/colorSurface"
+        android:background="#FFFFFF"
         app:menu="@menu/bottom_nav_menu"
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/selector_nav_color"

@@ -1,6 +1,10 @@
 package com.example.schedulemedical.data.api;
 
+import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
+import com.example.schedulemedical.model.dto.response.ResponseWrapper;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -67,7 +71,8 @@ public interface DoctorApiService {
     
     // Get doctor certifications
     @GET("doctor/certification")
-    Call<ApiResponse<Object>> getDoctorCertifications(
+    Call<ResponseWrapper<List<CertificationResponseDTO>>> getDoctorCertifications(
+        @Query("doctorId") int doctorId,
         @Query("page") int page,
         @Query("limit") int limit
     );
