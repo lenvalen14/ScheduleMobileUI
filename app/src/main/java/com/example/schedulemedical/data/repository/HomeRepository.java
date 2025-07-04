@@ -180,18 +180,17 @@ public class HomeRepository {
     
     // Load user profile
     public void loadUserProfile(DataCallback<ProfileResponse> callback) {
-        authApi.getProfile().enqueue(new Callback<ProfileResponse>() {
+        authApi.getProfile().enqueue(new Callback<ApiResponse<ProfileResponse>>() {
             @Override
-            public void onResponse(Call<ProfileResponse> call, Response<ProfileResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    callback.onSuccess(response.body());
+            public void onResponse(Call<ApiResponse<ProfileResponse>> call, Response<ApiResponse<ProfileResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    callback.onSuccess(response.body().getData());
                 } else {
                     callback.onError("Failed to load profile");
                 }
             }
-            
             @Override
-            public void onFailure(Call<ProfileResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<ProfileResponse>> call, Throwable t) {
                 Log.e(TAG, "Profile API call failed", t);
                 callback.onError("Network error: " + t.getMessage());
             }
@@ -200,7 +199,7 @@ public class HomeRepository {
     
     // Load appointment counts for current user
     public void loadAppointmentCounts(DataCallback<Object> callback) {
-        Integer userId = authManager.getUserId();
+        Integer userId = Integer.valueOf(authManager.getUserId());
         if (userId == null) {
             callback.onError("User not logged in");
             return;
@@ -226,7 +225,7 @@ public class HomeRepository {
     
     // Load upcoming appointments for current user
     public void loadUpcomingAppointments(DataCallback<Object> callback) {
-        Integer userId = authManager.getUserId();
+        Integer userId = Integer.valueOf(authManager.getUserId());
         if (userId == null) {
             callback.onError("User not logged in");
             return;

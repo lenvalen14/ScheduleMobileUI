@@ -23,7 +23,7 @@
             android:exported="false"
             android:theme="@style/Theme.ScheduleMedical" />
         <activity
-            android:name=".ui.userprofile.UserProfileActivity"
+            android:name=".ui.profile.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.chat.ChatActivity"
@@ -36,9 +36,6 @@
             android:exported="false" />
         <activity
             android:name=".ui.payment.PaymentActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.profile.ProfileActivity"
             android:exported="false" />
         <activity
             android:name=".ui.filterDoctor.FilterDoctorActivity"
