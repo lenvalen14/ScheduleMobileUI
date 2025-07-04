@@ -45,17 +45,20 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     public void onBindViewHolder(@NonNull GalleryViewHolder holder, int position) {
         String imageUrl = imageUrls.get(position);
         
-        // Load image with Glide
+        // Debug logging
+        android.util.Log.d("GalleryAdapter", "Loading image at position " + position + ": " + imageUrl);
+        
+        // Load image with Glide - simplified for debugging
         Glide.with(context)
                 .load(imageUrl)
-                .apply(new RequestOptions()
-                        .transform(new RoundedCorners(16))
-                        .placeholder(R.drawable.logo_benh_vien_mat)
-                        .error(R.drawable.logo_benh_vien_mat))
+                .placeholder(R.drawable.logo_benh_vien_mat)
+                .error(R.drawable.logo_benh_vien_mat)
+                .centerCrop()
                 .into(holder.ivGalleryImage);
 
         // Set click listener
         holder.itemView.setOnClickListener(v -> {
+            android.util.Log.d("GalleryAdapter", "Image clicked: " + imageUrl);
             if (onImageClickListener != null) {
                 onImageClickListener.onImageClick(position, imageUrl);
             }

@@ -176,9 +176,16 @@ public class HospitalDetailActivity extends AppCompatActivity {
         
         // Setup gallery images
         setupGallery(h.getGallery());
+        
+        // For testing - add sample images if no gallery data
+        if (h.getGallery() == null || h.getGallery().isEmpty()) {
+            setupTestGallery();
+        }
     }
 
     private void setupGallery(String galleryString) {
+        android.util.Log.d("HospitalDetail", "setupGallery called with: " + galleryString);
+        
         if (galleryString != null && !galleryString.isEmpty()) {
             // Parse gallery string (assuming it's comma-separated URLs)
             List<String> imageUrls = new ArrayList<>();
@@ -195,12 +202,17 @@ public class HospitalDetailActivity extends AppCompatActivity {
                 imageUrls.add(galleryString.trim());
             }
             
+            android.util.Log.d("HospitalDetail", "Parsed " + imageUrls.size() + " image URLs: " + imageUrls.toString());
+            
             if (!imageUrls.isEmpty()) {
                 // Update gallery text to show count and make it expandable
                 tvGallery.setText("Xem " + imageUrls.size() + " hình ảnh");
                 
                 // Setup RecyclerView
                 setupGalleryRecyclerView(imageUrls);
+                
+                // Show gallery by default for testing
+                recyclerGallery.setVisibility(View.VISIBLE);
                 
                 // Set up gallery click to toggle visibility
                 tvGallery.setOnClickListener(new View.OnClickListener() {
@@ -214,12 +226,15 @@ public class HospitalDetailActivity extends AppCompatActivity {
                 recyclerGallery.setVisibility(View.GONE);
             }
         } else {
+            android.util.Log.d("HospitalDetail", "Gallery string is null or empty");
             tvGallery.setText("Chưa có hình ảnh");
             recyclerGallery.setVisibility(View.GONE);
         }
     }
 
     private void setupGalleryRecyclerView(List<String> imageUrls) {
+        android.util.Log.d("HospitalDetail", "Setting up RecyclerView with " + imageUrls.size() + " images");
+        
         galleryAdapter = new GalleryAdapter(this, imageUrls);
         
         // Setup grid layout with 3 columns
@@ -227,10 +242,13 @@ public class HospitalDetailActivity extends AppCompatActivity {
         recyclerGallery.setLayoutManager(layoutManager);
         recyclerGallery.setAdapter(galleryAdapter);
         
+        android.util.Log.d("HospitalDetail", "RecyclerView adapter set, item count: " + galleryAdapter.getItemCount());
+        
         // Set item click listener
         galleryAdapter.setOnImageClickListener(new GalleryAdapter.OnImageClickListener() {
             @Override
             public void onImageClick(int position, String imageUrl) {
+                android.util.Log.d("HospitalDetail", "Image clicked at position: " + position);
                 showImageFullscreen(position, imageUrls);
             }
         });
@@ -250,5 +268,35 @@ public class HospitalDetailActivity extends AppCompatActivity {
         // For now, just show a toast with image info
         Toast.makeText(this, "Xem ảnh " + (position + 1) + "/" + imageUrls.size(), Toast.LENGTH_SHORT).show();
         // TODO: Implement fullscreen image viewer with ViewPager
+    }
+
+    private void setupTestGallery() {
+        android.util.Log.d("HospitalDetail", "Setting up test gallery");
+        
+        // Create test image URLs
+        List<String> testUrls = new ArrayList<>();
+        testUrls.add("https://picsum.photos/300/200?random=1");
+        testUrls.add("https://picsum.photos/300/200?random=2");
+        testUrls.add("https://picsum.photos/300/200?random=3");
+        testUrls.add("https://picsum.photos/300/200?random=4");
+        testUrls.add("https://picsum.photos/300/200?random=5");
+        testUrls.add("https://picsum.photos/300/200?random=6");
+        
+        // Update gallery text
+        tvGallery.setText("Xem " + testUrls.size() + " hình ảnh (test)");
+        
+        // Setup RecyclerView with test data
+        setupGalleryRecyclerView(testUrls);
+        
+        // Show gallery
+        recyclerGallery.setVisibility(View.VISIBLE);
+        
+        // Set up gallery click to toggle visibility
+        tvGallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleGalleryVisibility();
+            }
+        });
     }
 } 
