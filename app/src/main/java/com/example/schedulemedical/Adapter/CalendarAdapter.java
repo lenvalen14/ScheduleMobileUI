@@ -1,6 +1,7 @@
 package com.example.schedulemedical.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,10 +17,12 @@ import com.example.schedulemedical.model.CalendarDay;
 import java.util.List;
 
 public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.CalendarViewHolder> {
+    private static final String TAG = "CalendarAdapter";
     private Context context;
     private List<CalendarDay> calendarDays;
     private OnDateClickListener listener;
     private OnDateSelectedListener selectedListener;
+    private int selectedPosition = -1;
     
     public interface OnDateClickListener {
         void onDateClick(CalendarDay day, int position);
@@ -45,6 +48,7 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     @NonNull
     @Override
     public CalendarViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        Log.d(TAG, "onCreateViewHolder called");
         View view = LayoutInflater.from(context).inflate(R.layout.item_calendar_day, parent, false);
         return new CalendarViewHolder(view);
     }
@@ -52,6 +56,8 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     @Override
     public void onBindViewHolder(@NonNull CalendarViewHolder holder, int position) {
         CalendarDay day = calendarDays.get(position);
+        
+        Log.d(TAG, "onBindViewHolder - position: " + position + ", isEmpty: " + day.isEmpty() + ", day: " + day.getDay());
         
         if (day.isEmpty()) {
             holder.tvDay.setText("");
@@ -61,15 +67,32 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             holder.tvDay.setText(String.valueOf(day.getDay()));
             holder.itemView.setClickable(day.isEnabled());
             
+            // Set selected state based on position
+            day.setSelected(position == selectedPosition);
+            
             // Update appearance based on day state
             updateDayAppearance(holder, day);
             
             holder.itemView.setOnClickListener(v -> {
-                if (listener != null) {
-                    listener.onDateClick(day, position);
-                }
-                if (selectedListener != null) {
-                    selectedListener.onDateSelected(day, position);
+                if (day.isEnabled()) {
+                    Log.d(TAG, "Day clicked: " + day.getDay());
+                    // Update selection
+                    int previousPosition = selectedPosition;
+                    selectedPosition = holder.getAdapterPosition();
+                    
+                    // Notify changes
+                    if (previousPosition != -1) {
+                        notifyItemChanged(previousPosition);
+                    }
+                    notifyItemChanged(selectedPosition);
+                    
+                    // Call listeners
+                    if (listener != null) {
+                        listener.onDateClick(day, position);
+                    }
+                    if (selectedListener != null) {
+                        selectedListener.onDateSelected(day, selectedPosition);
+                    }
                 }
             });
         }
@@ -77,7 +100,9 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
     
     @Override
     public int getItemCount() {
-        return calendarDays != null ? calendarDays.size() : 0;
+        int count = calendarDays != null ? calendarDays.size() : 0;
+        Log.d(TAG, "getItemCount: " + count);
+        return count;
     }
     
     private void updateDayAppearance(CalendarViewHolder holder, CalendarDay day) {
@@ -97,6 +122,22 @@ public class CalendarAdapter extends RecyclerView.Adapter<CalendarAdapter.Calend
             // Normal available day
             holder.tvDay.setTextColor(ContextCompat.getColor(context, R.color.text_primary));
             holder.itemView.setBackground(ContextCompat.getDrawable(context, R.drawable.calendar_day_normal_bg));
+        }
+    }
+    
+    public void updateCalendarDays(List<CalendarDay> newCalendarDays) {
+        Log.d(TAG, "updateCalendarDays called with " + (newCalendarDays != null ? newCalendarDays.size() : 0) + " days");
+        this.calendarDays = newCalendarDays;
+        this.selectedPosition = -1; // Reset selection
+        notifyDataSetChanged();
+        Log.d(TAG, "notifyDataSetChanged called");
+    }
+    
+    public void clearSelection() {
+        int oldPosition = selectedPosition;
+        selectedPosition = -1;
+        if (oldPosition != -1) {
+            notifyItemChanged(oldPosition);
         }
     }
     
