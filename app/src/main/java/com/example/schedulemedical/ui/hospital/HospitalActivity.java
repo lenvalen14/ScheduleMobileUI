@@ -1,7 +1,10 @@
 package com.example.schedulemedical.ui.hospital;
 
+import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -35,6 +38,7 @@ public class HospitalActivity extends BaseActivity implements HospitalAdapter.On
     private SwipeRefreshLayout swipeRefreshLayout;
     private MaterialCardView searchCard;
     private ImageView btnBack;
+    private EditText etSearch;
     
     // Data
     private HospitalAdapter hospitalAdapter;
@@ -57,7 +61,6 @@ public class HospitalActivity extends BaseActivity implements HospitalAdapter.On
         initializeViews();
         setupRecyclerView();
         setupNavigation();
-        setupSearch();
         handleIntentExtras();
         
         // Initialize API service and load data
@@ -69,8 +72,18 @@ public class HospitalActivity extends BaseActivity implements HospitalAdapter.On
         rvHospitals = findViewById(R.id.rvHospitals);
         btnBack = findViewById(R.id.btnBack);
         searchCard = findViewById(R.id.search_card);
-
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
+        etSearch = findViewById(R.id.etSearch);
+
+        etSearch.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                String keyword = etSearch.getText().toString().trim();
+                searchHospitals(keyword);
+                return true;
+            }
+            return false;
+        });
+
         // Gán sự kiện kéo để làm mới
         swipeRefreshLayout.setOnRefreshListener(() -> {
             loadHospitals(true); // Tải lại từ đầu
@@ -110,15 +123,6 @@ public class HospitalActivity extends BaseActivity implements HospitalAdapter.On
         if (btnBack != null) {
             btnBack.setOnClickListener(view -> {
                 NavigationHelper.goBack(this);
-            });
-        }
-    }
-    
-    private void setupSearch() {
-        if (searchCard != null) {
-            searchCard.setOnClickListener(v -> {
-                // TODO: Implement search functionality
-                Toast.makeText(this, "Search functionality will be implemented", Toast.LENGTH_SHORT).show();
             });
         }
     }
@@ -192,17 +196,64 @@ public class HospitalActivity extends BaseActivity implements HospitalAdapter.On
     public void onHospitalClick(HospitalResponse hospital) {
         // Navigate to hospital detail
         if (hospital.getHospitalId() != null) {
-            // TODO: Navigate to hospital detail activity
-            Toast.makeText(this, "Xem chi tiết: " + hospital.getName(), Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(this, HospitalDetailActivity.class);
+            intent.putExtra("hospitalId", hospital.getHospitalId());
+            startActivity(intent);
         }
     }
-    
+
     @Override
     public void onBookNowClick(HospitalResponse hospital) {
-        // Navigate to booking
-        if (hospital.getHospitalId() != null) {
-            // TODO: Navigate to booking activity with hospital info
-            Toast.makeText(this, "Đặt lịch tại: " + hospital.getName(), Toast.LENGTH_SHORT).show();
-        }
+
+    }
+
+    private void searchHospitals(String keyword) {
+        isLoading = true;
+        swipeRefreshLayout.setRefreshing(true);
+        currentPage = 1;
+        hasMoreData = true;
+
+        Call<HospitalListResponse> call = hospitalApiService.getAllHospitals(
+            currentPage,
+            PAGE_SIZE,
+            keyword, // truyền từ khóa search vào đây
+            null, // type
+            null, // location
+            null, // specialty
+            null, // latitude
+            null, // longitude
+            null  // radius
+        );
+        call.enqueue(new Callback<HospitalListResponse>() {
+            @Override
+            public void onResponse(Call<HospitalListResponse> call, Response<HospitalListResponse> response) {
+                isLoading = false;
+                swipeRefreshLayout.setRefreshing(false);
+                if (response.isSuccessful() && response.body() != null) {
+                    List<HospitalResponse> hospitals = response.body().getData();
+                    if (hospitals != null) {
+                        hospitalAdapter.updateHospitals(hospitals);
+                        // Cập nhật lại phân trang nếu cần
+                        if (response.body().getMeta() != null) {
+                            hasMoreData = response.body().getMeta().getHasNext() != null &&
+                                    response.body().getMeta().getHasNext();
+                        }
+                    }
+                } else {
+                    showError("Lỗi mạng: " + response.code());
+                }
+            }
+            @Override
+            public void onFailure(Call<HospitalListResponse> call, Throwable t) {
+                isLoading = false;
+                swipeRefreshLayout.setRefreshing(false);
+                showError("Không thể kết nối đến máy chủ");
+            }
+        });
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
     }
 }

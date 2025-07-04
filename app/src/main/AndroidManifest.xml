@@ -72,6 +72,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.login.LoginActivity" />
+        <activity android:name=".ui.hospital.HospitalDetailActivity" />
         
         <!-- Notification Service -->
         <service

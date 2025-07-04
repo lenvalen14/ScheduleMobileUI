@@ -157,6 +157,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
         private TextView tvHospitalAddress;
         private TextView tvRating;
         private TextView tvDistance;
+        private TextView tvHospitalType;
         private MaterialButton btnBookNow;
         
         public HospitalViewHolder(@NonNull View itemView) {
@@ -167,6 +168,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
             tvHospitalAddress = itemView.findViewById(R.id.tvHospitalAddress);
             tvRating = itemView.findViewById(R.id.tvRating);
             tvDistance = itemView.findViewById(R.id.tvDistance);
+            tvHospitalType = itemView.findViewById(R.id.tvHospitalType);
             btnBookNow = itemView.findViewById(R.id.btnBookNow);
             
             // Set click listeners
@@ -213,6 +215,11 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
                 } else {
                     tvDistance.setVisibility(View.GONE);
                 }
+            }
+            
+            // Hospital type
+            if (tvHospitalType != null) {
+                tvHospitalType.setText(hospital.getType() != null ? hospital.getType() : "");
             }
             
             // Hospital logo

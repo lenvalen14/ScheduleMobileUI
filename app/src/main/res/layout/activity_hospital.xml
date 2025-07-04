@@ -86,13 +86,21 @@
                     android:src="@drawable/ic_search"
                     app:tint="#9E9E9E" />
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <EditText
+                    android:id="@+id/etSearch"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:text="Tìm kiếm bệnh viện"
-                    android:textColor="#9E9E9E"
-                    android:textSize="14sp" />
+                    android:background="@android:color/transparent"
+                    android:hint="Tìm kiếm bệnh viện"
+                    android:textColor="#212529"
+                    android:textColorHint="#9E9E9E"
+                    android:textSize="14sp"
+                    android:singleLine="true"
+                    android:imeOptions="actionSearch"
+                    android:inputType="text"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
