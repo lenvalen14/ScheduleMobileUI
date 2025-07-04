@@ -11,12 +11,20 @@ public interface ServiceApiService {
     
     // Get all services with pagination
     @GET("services")
-    Call<ApiResponse<Object>> getAllServices(
-        @Query("page") int page,
-        @Query("limit") int limit
+    Call<ApiResponse<Object>> getServices(
+        @Query("page") Integer page,
+        @Query("limit") Integer limit,
+        @Query("search") String search
     );
     
     // Get service by ID
     @GET("services/{id}")
-    Call<ApiResponse<Object>> getServiceById(@Path("id") int serviceId);
+    Call<ApiResponse<Object>> getServiceById(@Path("id") Integer serviceId);
+    
+    // Get all services - convenience method
+    @GET("services")
+    Call<ApiResponse<Object>> getAllServices(
+        @Query("page") Integer page,
+        @Query("limit") Integer limit
+    );
 } 

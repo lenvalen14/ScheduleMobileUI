@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
+    app:strokeWidth="2dp"
+    app:strokeColor="@color/gray_e0"
+    app:cardBackgroundColor="@color/white">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="20dp"
+        android:gravity="top">
+
+        <!-- Doctor Avatar -->
+        <ImageView
+            android:id="@+id/imgDoctor"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_doctor_placeholder"
+            android:background="@drawable/bg_doctor_avatar"
+            android:scaleType="centerCrop" />
+
+        <!-- Doctor Info -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- Name and Rating Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <TextView
+                    android:id="@+id/tvDoctorName"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="BS. Nguyễn Văn A"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvRating"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="4.8 ⭐"
+                    android:textColor="@color/orange_500"
+                    android:textSize="12sp"
+                    android:background="@drawable/rating_badge_bg"
+                    android:paddingHorizontal="8dp"
+                    android:paddingVertical="4dp" />
+            </LinearLayout>
+
+            <!-- Specialty -->
+            <TextView
+                android:id="@+id/tvSpecialty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Khoa Tim mạch"
+                android:textColor="@color/blue_007b"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Hospital -->
+            <TextView
+                android:id="@+id/tvHospital"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Bệnh viện Chợ Rẫy"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:drawableStart="@drawable/ic_web"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical" />
+
+            <!-- Experience -->
+            <TextView
+                android:id="@+id/tvExperience"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="10 năm kinh nghiệm"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp"
+                android:drawableStart="@drawable/ic_experience"
+                android:drawablePadding="4dp"
+                android:gravity="center_vertical" />
+
+            <!-- Bio -->
+            <TextView
+                android:id="@+id/tvBio"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="Chuyên điều trị các bệnh về tim mạch, có nhiều năm kinh nghiệm trong lĩnh vực."
+                android:textColor="@color/text_secondary"
+                android:textSize="13sp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:lineSpacingExtra="2dp" />
+        </LinearLayout>
+
+        <!-- Selection Indicator -->
+        <ImageView
+            android:id="@+id/iconSelected"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_check_circle"
+            app:tint="@color/blue_007b"
+            android:visibility="gone" />
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView> 

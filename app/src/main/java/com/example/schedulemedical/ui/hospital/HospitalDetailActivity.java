@@ -114,7 +114,7 @@ public class HospitalDetailActivity extends AppCompatActivity {
                     NavigationHelper.navigateToHospital(this);
                     return true;
                 } else if (itemId == R.id.nav_calendar) {
-                    NavigationHelper.navigateToMyScheduled(this);
+                    NavigationHelper.navigateToBookingWizard(this);
                     return true;
                 } else if (itemId == R.id.nav_profile) {
                     NavigationHelper.navigateToUserProfile(this);

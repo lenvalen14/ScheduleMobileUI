@@ -21,60 +21,19 @@
         android:background="@color/white"
         android:elevation="4dp"
         android:paddingHorizontal="20dp"
-        android:paddingTop="40dp"
+        android:paddingTop="48dp"
         android:paddingBottom="16dp">
-
-        <!-- Status Bar Info -->
-<!--        <TextView-->
-<!--            android:id="@+id/tvTime"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="9:41"-->
-<!--            android:textColor="#212529"-->
-<!--            android:textSize="16sp"-->
-<!--            android:textStyle="bold"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-<!--        <LinearLayout-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:orientation="horizontal"-->
-<!--            android:gravity="center_vertical"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent">-->
-
-<!--            <ImageView-->
-<!--                android:layout_width="16dp"-->
-<!--                android:layout_height="16dp"-->
-<!--                android:src="@drawable/ic_signal"-->
-<!--                app:tint="#212529"-->
-<!--                android:layout_marginEnd="4dp" />-->
-
-<!--            <ImageView-->
-<!--                android:layout_width="16dp"-->
-<!--                android:layout_height="16dp"-->
-<!--                android:src="@drawable/ic_wifi"-->
-<!--                app:tint="#212529"-->
-<!--                android:layout_marginEnd="4dp" />-->
-
-<!--            <ImageView-->
-<!--                android:layout_width="20dp"-->
-<!--                android:layout_height="12dp"-->
-<!--                android:src="@drawable/ic_battery"-->
-<!--                app:tint="#212529" />-->
-<!--        </LinearLayout>-->
 
         <!-- Navigation Bar -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
                 android:id="@+id/btnBack"
@@ -91,7 +50,7 @@
                 android:layout_marginHorizontal="16dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="Đặt lịch với bác sĩ"
+                android:text="Đặt lịch khám"
                 android:textColor="@color/text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -123,6 +82,129 @@
             android:paddingHorizontal="20dp"
             android:paddingBottom="24dp">
 
+            <!-- Doctor Info Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/doctorInfoCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:padding="16dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/ivDoctorAvatar"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_marginEnd="16dp"
+                        android:src="@drawable/ic_doctor_placeholder"
+                        app:civ_border_color="@color/blue_007b"
+                        app:civ_border_width="2dp" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvDoctorName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="BS. Nguyễn Văn A"
+                            android:textColor="@color/text_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSpecialty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="Khoa Tim mạch"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tvHospitalName"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="2dp"
+                            android:text="Bệnh viện ABC"
+                            android:textColor="@color/text_secondary"
+                            android:textSize="12sp" />
+
+                        <TextView
+                            android:id="@+id/tvConsultationFee"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:background="@drawable/price_badge_bg"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="4dp"
+                            android:text="500,000 VND"
+                            android:textColor="@color/blue_007b"
+                            android:textSize="12sp"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Service Selection Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/serviceSelectionCard"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="4dp"
+                app:cardBackgroundColor="@color/white">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chọn dịch vụ khám"
+                        android:textSize="16sp"
+                        android:textColor="@color/text_primary"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvServices"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false" />
+
+                    <ProgressBar
+                        android:id="@+id/progressServices"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tvNoServices"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Không có dịch vụ khả dụng"
+                        android:textColor="@color/text_secondary"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
             <!-- Calendar Section -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
@@ -141,7 +223,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Chọn ngày"
+                        android:text="Chọn ngày khám"
                         android:textSize="16sp"
                         android:textColor="@color/text_primary"
                         android:textStyle="bold"
@@ -155,30 +237,21 @@
                         android:gravity="center_vertical"
                         android:layout_marginBottom="16dp">
 
-<!--                        <ImageView-->
-<!--                            android:id="@+id/btnPrevMonth"-->
-<!--                            android:layout_width="32dp"-->
-<!--                            android:layout_height="32dp"-->
-<!--                            android:src="@drawable/ic_chevron_left"-->
-<!--                            app:tint="#007BFF"-->
-<!--                            android:background="@drawable/bg_ripple_circle"-->
-<!--                            android:padding="8dp" />-->
-
                         <ImageView
                             android:id="@+id/btnPrevMonth"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="?android:attr/selectableItemBackgroundBorderless"
-                            android:padding="4dp"
-                            android:src="@drawable/ic_arrow_back"
-                            app:tint="@color/text_primary" />
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_ripple_circle"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_chevron_left"
+                            app:tint="@color/blue_007b" />
 
                         <TextView
                             android:id="@+id/tvMonthYear"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="January 2022"
+                            android:text="Tháng 1, 2024"
                             android:textSize="16sp"
                             android:textColor="@color/text_primary"
                             android:textStyle="bold"
@@ -186,13 +259,12 @@
 
                         <ImageView
                             android:id="@+id/btnNextMonth"
-                            android:layout_width="24dp"
-                            android:layout_height="24dp"
-                            android:background="?android:attr/selectableItemBackgroundBorderless"
-                            android:padding="4dp"
-                            android:src="@drawable/ic_arrow_back"
-                            android:rotation="180"
-                            app:tint="@color/text_primary" />
+                            android:layout_width="32dp"
+                            android:layout_height="32dp"
+                            android:background="@drawable/bg_ripple_circle"
+                            android:padding="8dp"
+                            android:src="@drawable/ic_chevron_right"
+                            app:tint="@color/blue_007b" />
                     </LinearLayout>
 
                     <!-- Days of Week -->
@@ -206,7 +278,7 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
-                            android:text="Sun"
+                            android:text="CN"
                             android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:gravity="center"
@@ -216,7 +288,7 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
-                            android:text="Mon"
+                            android:text="T2"
                             android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:gravity="center"
@@ -226,7 +298,7 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
-                            android:text="Tue"
+                            android:text="T3"
                             android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:gravity="center"
@@ -236,7 +308,7 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
-                            android:text="Wed"
+                            android:text="T4"
                             android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:gravity="center"
@@ -246,7 +318,7 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
-                            android:text="Thu"
+                            android:text="T5"
                             android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:gravity="center"
@@ -256,7 +328,7 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
-                            android:text="Fri"
+                            android:text="T6"
                             android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:gravity="center"
@@ -266,7 +338,7 @@
                             android:layout_width="0dp"
                             android:layout_height="32dp"
                             android:layout_weight="1"
-                            android:text="Sat"
+                            android:text="T7"
                             android:textSize="12sp"
                             android:textColor="@color/text_secondary"
                             android:gravity="center"
@@ -309,204 +381,28 @@
                         android:textStyle="bold"
                         android:layout_marginBottom="16dp" />
 
-                    <!-- Morning Session -->
-                    <TextView
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvTimeSlots"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:nestedScrollingEnabled="false" />
+
+                    <ProgressBar
+                        android:id="@+id/progressTimeSlots"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Buổi sáng"
-                        android:textSize="14sp"
-                        android:textColor="@color/text_secondary"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="12dp" />
+                        android:layout_gravity="center"
+                        android:visibility="gone" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime0800"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:text="08:00 AM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime0830"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:text="08:30 AM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime0900"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:text="09:00 AM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="16dp">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime0930"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:text="09:30 AM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime1000"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:text="10:00 AM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime1030"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:text="10:30 AM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-                    </LinearLayout>
-
-                    <!-- Afternoon Session -->
                     <TextView
+                        android:id="@+id/tvNoTimeSlots"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Buổi chiều"
-                        android:textSize="14sp"
+                        android:layout_gravity="center"
+                        android:text="Chọn ngày để xem các khung giờ khả dụng"
                         android:textColor="@color/text_secondary"
-                        android:textStyle="bold"
-                        android:layout_marginBottom="12dp" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:layout_marginBottom="8dp">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime1400"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:text="02:00 PM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime1430"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:text="02:30 PM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime1500"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:text="03:00 PM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime1530"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:text="03:30 PM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime1600"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:layout_marginEnd="8dp"
-                            android:text="04:00 PM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-
-                        <com.google.android.material.button.MaterialButton
-                            android:id="@+id/btnTime1630"
-                            style="@style/Widget.Material3.Button.OutlinedButton"
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:text="04:30 PM"
-                            android:textSize="12sp"
-                            android:textColor="@color/blue_007b"
-                            app:strokeColor="@color/blue_007b"
-                            app:cornerRadius="20dp" />
-                    </LinearLayout>
+                        android:gravity="center"
+                        android:visibility="visible" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
@@ -536,7 +432,8 @@
             android:textColor="@color/white"
             android:backgroundTint="@color/blue_007b"
             app:cornerRadius="28dp"
-            app:elevation="0dp" />
+            app:elevation="0dp"
+            android:enabled="false" />
 
         <!-- Bottom Navigation -->
         <com.google.android.material.bottomnavigation.BottomNavigationView

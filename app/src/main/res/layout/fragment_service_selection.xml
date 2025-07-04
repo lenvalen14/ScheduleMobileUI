@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Booking Summary -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/card_bg"
+        android:padding="16dp"
+        android:layout_marginBottom="24dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thông tin đặt lịch"
+            android:textColor="@color/text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvBookingSummary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Bác sĩ: BS. Nguyễn Văn A\nNgày khám: 15/12/2024 - 09:00 - 09:30"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            android:lineSpacingExtra="4dp" />
+    </LinearLayout>
+
+    <!-- Header Text -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn dịch vụ khám bệnh"
+        android:textColor="@color/text_secondary"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp" />
+
+    <!-- Services List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvServices"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+
+    <!-- Loading -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:visibility="gone" />
+
+    <!-- No Data -->
+    <TextView
+        android:id="@+id/tvNoServices"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="Không có dịch vụ khả dụng"
+        android:textColor="@color/text_secondary"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</LinearLayout> 

@@ -68,9 +68,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             }
             return true;
         } else if (itemId == R.id.nav_calendar) {
-            if (!(BaseActivity.this instanceof com.example.schedulemedical.ui.schedule.MyScheduledActivity)) {
-                NavigationHelper.navigateToMyScheduled(BaseActivity.this);
-            }
+            NavigationHelper.navigateToBookingWizard(BaseActivity.this);
             return true;
         } else if (itemId == R.id.nav_profile) {
             if (!(this instanceof com.example.schedulemedical.ui.profile.ProfileActivity)) {

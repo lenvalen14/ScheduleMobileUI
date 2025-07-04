@@ -52,10 +52,11 @@
     <color name="field_stroke_focused">#2196F3</color>
 
     <color name="teal_700">#007B83</color>
-    <color name="orange" />
-    <color name="blue" />
-    <color name="green" />
-    <color name="red" />
+    <color name="orange">#FF9800</color>
+    <color name="blue">#2196F3</color>
+    <color name="green">#4CAF50</color>
+    <color name="red">#F44336</color>
+    <color name="orange_500">#FF9800</color>
 
     <color name="primary">#2196F3</color>
     <color name="primary_color">#007BFF</color>
@@ -83,5 +84,8 @@
 
     <color name="md_theme_outline">#79747E</color>
     <color name="md_theme_onSurfaceVariant">#49454F</color>
+
+    <!-- Status Bar -->
+    <color name="status_bar_color">#005cbf</color>
 
 </resources>

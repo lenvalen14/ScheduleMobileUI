@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <!-- Header Text -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Chọn chuyên khoa phù hợp với tình trạng sức khỏe của bạn"
+        android:textColor="@color/text_secondary"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"
+        android:gravity="center"
+        android:lineSpacingExtra="4dp" />
+
+    <!-- Specialties List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvSpecialties"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:scrollbars="vertical" />
+
+    <!-- Loading -->
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:visibility="gone" />
+
+    <!-- No Data -->
+    <TextView
+        android:id="@+id/tvNoSpecialties"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="50dp"
+        android:text="Không có chuyên khoa khả dụng"
+        android:textColor="@color/text_secondary"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+</LinearLayout> 

@@ -78,7 +78,7 @@ public class TimeSlotAdapter extends RecyclerView.Adapter<TimeSlotAdapter.TimeSl
         
         public TimeSlotViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvTimeSlot = itemView.findViewById(R.id.tvTimeSlot);
+            tvTimeSlot = itemView.findViewById(R.id.btnTimeSlot);
             
             itemView.setOnClickListener(v -> {
                 int position = getAdapterPosition();
