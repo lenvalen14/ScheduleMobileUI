@@ -49,4 +49,61 @@
         libero vel nunc consequat, quis tincidunt nisl eleifend. Cras bibendum enim a justo luctus
         vestibulum. Fusce dictum libero quis erat maximus, vitae volutpat diam dignissim.
     </string>
+
+    <string-array name="ethnicities">
+        <item>Kinh</item>
+        <item>Tày</item>
+        <item>Thái</item>
+        <item>Mường</item>
+        <item>H\'Mông</item>
+        <item>Dao</item>
+        <item>Khmer</item>
+        <item>Nùng</item>
+        <item>Hoa</item>
+        <item>Gia Rai</item>
+        <item>Ê Đê</item>
+        <item>Ba Na</item>
+        <item>Sán Chay</item>
+        <item>Chăm</item>
+        <item>Xê Đăng</item>
+        <item>Sán Dìu</item>
+        <item>Hrê</item>
+        <item>Ra Glai</item>
+        <item>Mnông</item>
+        <item>Thổ</item>
+        <item>Stiêng</item>
+        <item>Khơ Mú</item>
+        <item>Bru-Vân Kiều</item>
+        <item>Cơ Tu</item>
+        <item>Giáy</item>
+        <item>Tà Ôi</item>
+        <item>Mạ</item>
+        <item>Co</item>
+        <item>Chơ Ro</item>
+        <item>Xinh Mun</item>
+        <item>Hà Nhì</item>
+        <item>Chu Ru</item>
+        <item>Lào</item>
+        <item>La Chí</item>
+        <item>Phù Lá</item>
+        <item>La Hủ</item>
+        <item>Lự</item>
+        <item>Lô Lô</item>
+        <item>Chứt</item>
+        <item>Mảng</item>
+        <item>Cờ Lao</item>
+        <item>Ngái</item>
+        <item>Sơ La</item>
+        <item>Pu Péo</item>
+        <item>Brâu</item>
+        <item>Ơ Đu</item>
+        <item>Rơ Măm</item>
+        <item>Si La</item>
+        <item>Cống</item>
+        <item>Bố Y</item>
+        <item>Cơ Lao</item>
+        <item>Cống</item>
+        <item>Si La</item>
+        <item>Pu Péo</item>
+    </string-array>
 </resources>

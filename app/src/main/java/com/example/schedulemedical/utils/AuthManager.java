@@ -95,13 +95,12 @@ public class AuthManager {
     
     // Fetch user profile after login
     private void fetchUserProfile(AuthCallback callback) {
-        authApiService.getProfile().enqueue(new Callback<com.example.schedulemedical.model.dto.response.ProfileResponse>() {
+        authApiService.getProfile().enqueue(new Callback<com.example.schedulemedical.model.dto.response.ApiResponse<com.example.schedulemedical.model.dto.response.ProfileResponse>>() {
             @Override
-            public void onResponse(Call<com.example.schedulemedical.model.dto.response.ProfileResponse> call, 
-                                 Response<com.example.schedulemedical.model.dto.response.ProfileResponse> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    com.example.schedulemedical.model.dto.response.ProfileResponse profile = response.body();
-                    
+            public void onResponse(Call<com.example.schedulemedical.model.dto.response.ApiResponse<com.example.schedulemedical.model.dto.response.ProfileResponse>> call,
+                                   Response<com.example.schedulemedical.model.dto.response.ApiResponse<com.example.schedulemedical.model.dto.response.ProfileResponse>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                    com.example.schedulemedical.model.dto.response.ProfileResponse profile = response.body().getData();
                     // Save user info
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString(KEY_USER_EMAIL, profile.getEmail());
@@ -109,26 +108,22 @@ public class AuthManager {
                     editor.putString(KEY_USER_NAME, profile.getFullName());
                     editor.putBoolean(KEY_IS_LOGGED_IN, true);
                     editor.apply();
-                    
                     callback.onSuccess("Login successful");
                 } else {
                     // Even if profile fetch fails, consider login successful
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putBoolean(KEY_IS_LOGGED_IN, true);
                     editor.apply();
-                    
                     callback.onSuccess("Login successful");
                 }
             }
-            
             @Override
-            public void onFailure(Call<com.example.schedulemedical.model.dto.response.ProfileResponse> call, Throwable t) {
+            public void onFailure(Call<com.example.schedulemedical.model.dto.response.ApiResponse<com.example.schedulemedical.model.dto.response.ProfileResponse>> call, Throwable t) {
                 Log.e(TAG, "Profile fetch failed", t);
                 // Even if profile fetch fails, consider login successful
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putBoolean(KEY_IS_LOGGED_IN, true);
                 editor.apply();
-                
                 callback.onSuccess("Login successful");
             }
         });
@@ -166,7 +161,7 @@ public class AuthManager {
     // Refresh token method
     public void refreshToken(AuthCallback callback) {
         String refreshToken = getRefreshToken();
-        Integer userId = getUserId();
+        Integer userId = Integer.valueOf(getUserId());
         
         if (refreshToken != null && userId != null) {
             RefreshTokenRequest request = new RefreshTokenRequest(refreshToken, userId);

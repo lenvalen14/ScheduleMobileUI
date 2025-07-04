@@ -1,6 +1,8 @@
 package com.example.schedulemedical.data.api;
 
 import com.example.schedulemedical.model.dto.response.ApiResponse;
+import com.example.schedulemedical.model.dto.response.PatientProfileResponse;
+import com.example.schedulemedical.model.dto.request.UpdatePatientProfileRequest;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -49,4 +51,10 @@ public interface UserApiService {
         @Path("userId") int userId,
         @Part MultipartBody.Part file
     );
+
+    @GET("patient-profile/by-user/{userId}")
+    Call<ApiResponse<PatientProfileResponse>> getPatientProfile(@Path("userId") int userId);
+
+    @PUT("patient-profile/by-user/{userId}")
+    Call<ApiResponse<PatientProfileResponse>> updatePatientProfile(@Path("userId") int userId, @Body UpdatePatientProfileRequest request);
 } 
