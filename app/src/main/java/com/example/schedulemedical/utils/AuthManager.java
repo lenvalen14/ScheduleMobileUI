@@ -3,6 +3,8 @@ package com.example.schedulemedical.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
+import android.util.Base64;
+import org.json.JSONObject;
 
 import com.example.schedulemedical.data.api.ApiClient;
 import com.example.schedulemedical.data.api.AuthApiService;
@@ -335,7 +337,32 @@ public class AuthManager {
     }
     
     public boolean isLoggedIn() {
-        return prefs.getBoolean(KEY_IS_LOGGED_IN, false) && getAccessToken() != null;
+        String token = getAccessToken();
+        if (token == null) return false;
+        if (isTokenExpired(token)) {
+            clearUserData();
+            return false;
+        }
+        return prefs.getBoolean(KEY_IS_LOGGED_IN, false);
+    }
+    
+    // Kiểm tra hạn token JWT
+    public boolean isTokenExpired(String token) {
+        try {
+            String[] parts = token.split("\\.");
+            if (parts.length != 3) return true;
+            String payload = parts[1];
+            while (payload.length() % 4 != 0) payload += "=";
+            byte[] decoded = Base64.decode(payload, Base64.URL_SAFE);
+            String json = new String(decoded);
+            JSONObject obj = new JSONObject(json);
+            long exp = obj.getLong("exp");
+            long now = System.currentTimeMillis() / 1000L;
+            return exp < now;
+        } catch (Exception e) {
+            Log.e(TAG, "Error checking token expiry", e);
+            return true;
+        }
     }
     
     public boolean isAdmin() {

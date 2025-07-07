@@ -26,7 +26,7 @@ import java.util.List;
 public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapter.DoctorViewHolder> {
 
     private final Context context;
-    private final List<DoctorResponse> doctorList = new ArrayList<>();
+    private List<DoctorResponse> doctorList = new ArrayList<>();
     private OnDoctorClickListener listener;
 
 
@@ -43,6 +43,11 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
 
     public FilterDoctorAdapter(Context context) {
         this.context = context;
+    }
+
+    public FilterDoctorAdapter(Context context, List<DoctorResponse> doctorList) {
+        this.context = context;
+        this.doctorList = doctorList;
     }
 
     public void updateDoctors(List<DoctorResponse> doctors) {
@@ -73,7 +78,6 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
     class DoctorViewHolder extends RecyclerView.ViewHolder {
         TextView tvDoctorName, tvDoctorSpecialty, tvHospitalName;
         ImageView ivDoctorPhoto;
-        ImageButton btnCall, btnChat, btnInfo;
         View btnBookAppointment;
         RatingBar ratingBar;
         TextView tvRatingValue;
@@ -85,9 +89,6 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
             tvDoctorSpecialty = itemView.findViewById(R.id.tvDoctorSpecialty);
             tvHospitalName = itemView.findViewById(R.id.tvHospitalName);
             ivDoctorPhoto = itemView.findViewById(R.id.ivDoctorPhoto);
-            btnCall = itemView.findViewById(R.id.btnCall);
-            btnChat = itemView.findViewById(R.id.btnChat);
-            btnInfo = itemView.findViewById(R.id.btnInfo);
             btnBookAppointment = itemView.findViewById(R.id.btnBookAppointment);
             ratingBar = itemView.findViewById(R.id.ratingBar);
             tvRatingValue = itemView.findViewById(R.id.tvRatingValue);
@@ -131,24 +132,11 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
                 if (listener != null) listener.onDoctorClick(doctor);
             });
 
-            // Info button => cũng xem chi tiết
-            btnInfo.setOnClickListener(v -> {
-                if (listener != null) listener.onDoctorClick(doctor);
-            });
-
             // Book appointment
             btnBookAppointment.setOnClickListener(v -> {
                 if (listener != null) listener.onBookAppointmentClick(doctor);
             });
 
-            // Call & Chat demo
-            btnCall.setOnClickListener(v -> {
-                Toast.makeText(context, "Tính năng gọi sẽ được phát triển sớm!", Toast.LENGTH_SHORT).show();
-            });
-
-            btnChat.setOnClickListener(v -> {
-                Toast.makeText(context, "Tính năng nhắn tin sẽ được phát triển sớm!", Toast.LENGTH_SHORT).show();
-            });
         }
     }
 }

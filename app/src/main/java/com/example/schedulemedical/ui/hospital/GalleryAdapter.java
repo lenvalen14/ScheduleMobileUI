@@ -10,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.schedulemedical.R;
+import com.example.schedulemedical.ui.home.HomeActivity;
 
 import java.util.List;
 
@@ -21,13 +20,15 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.GalleryV
     private Context context;
     private OnImageClickListener onImageClickListener;
 
+    public GalleryAdapter(HomeActivity context, List<String> imageUrls) {
+    }
+
     public interface OnImageClickListener {
         void onImageClick(int position, String imageUrl);
     }
 
-    public GalleryAdapter(Context context, List<String> imageUrls) {
+    public GalleryAdapter(Context context) {
         this.context = context;
-        this.imageUrls = imageUrls;
     }
 
     public void setOnImageClickListener(OnImageClickListener listener) {

@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.model.dto.response.HospitalResponse;
+import com.example.schedulemedical.ui.home.HomeActivity;
 import com.example.schedulemedical.ui.hospital.HospitalActivity;
 import com.google.android.material.button.MaterialButton;
 
@@ -31,6 +32,12 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
     }
     
     public HospitalAdapter(HospitalActivity context, List<HospitalResponse> hospitalList) {
+        this.context = context;
+        this.hospitalList = hospitalList != null ? hospitalList : new ArrayList<>();
+        this.filteredList = new ArrayList<>(this.hospitalList);
+    }
+
+    public HospitalAdapter(HomeActivity context, List<HospitalResponse> hospitalList) {
         this.context = context;
         this.hospitalList = hospitalList != null ? hospitalList : new ArrayList<>();
         this.filteredList = new ArrayList<>(this.hospitalList);
@@ -55,7 +62,7 @@ public class HospitalAdapter extends RecyclerView.Adapter<HospitalAdapter.Hospit
     
     @Override
     public int getItemCount() {
-        return filteredList.size();
+        return filteredList != null ? filteredList.size() : 0;
     }
     
     public void updateHospitals(List<HospitalResponse> newHospitals) {

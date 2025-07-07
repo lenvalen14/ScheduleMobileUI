@@ -235,7 +235,7 @@ public class HospitalDetailActivity extends AppCompatActivity {
     private void setupGalleryRecyclerView(List<String> imageUrls) {
         android.util.Log.d("HospitalDetail", "Setting up RecyclerView with " + imageUrls.size() + " images");
         
-        galleryAdapter = new GalleryAdapter(this, imageUrls);
+        galleryAdapter = new GalleryAdapter(this);
         
         // Setup grid layout with 3 columns
         GridLayoutManager layoutManager = new GridLayoutManager(this, 3);

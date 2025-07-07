@@ -14,24 +14,48 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
+import com.example.schedulemedical.Adapter.DoctorSelectionAdapter;
+import com.example.schedulemedical.Adapter.FilterDoctorAdapter;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.data.api.ApiClient;
 import com.example.schedulemedical.data.repository.HomeRepository;
+import com.example.schedulemedical.model.Doctor;
 import com.example.schedulemedical.services.NotificationService;
 import com.example.schedulemedical.ui.base.BaseActivity;
 import com.example.schedulemedical.ui.login.LoginActivity;
 import com.example.schedulemedical.utils.AuthManager;
 import com.example.schedulemedical.utils.NavigationHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.example.schedulemedical.Adapter.DoctorAdapter;
+import com.example.schedulemedical.data.repository.HospitalRepository;
+import com.example.schedulemedical.data.repository.SpecialtyRepository;
+import com.example.schedulemedical.model.dto.response.DoctorResponse;
+import com.example.schedulemedical.model.dto.response.DoctorListResponse;
+import com.example.schedulemedical.model.dto.response.HospitalResponse;
+import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
+import java.util.List;
+import com.example.schedulemedical.data.repository.DoctorRepository;
+import com.example.schedulemedical.model.Specialty;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import com.example.schedulemedical.model.dto.response.HospitalListResponse;
+import com.example.schedulemedical.model.dto.response.ApiResponse;
+import com.example.schedulemedical.Adapter.HospitalCardAdapter;
+import com.example.schedulemedical.Adapter.SpecialtyCardAdapter;
 
 public class HomeActivity extends BaseActivity {
     private static final String TAG = "HomeActivity";
 
     // Repository and managers
-    private HomeRepository homeRepository;
     private AuthManager authManager;
     private ProgressDialog progressDialog;
+    private HospitalRepository hospitalRepository;
+    private SpecialtyRepository specialtyRepository;
+    private DoctorRepository doctorRepository;
 
     // UI Components
     private TextView tvUsername;
@@ -50,6 +74,8 @@ public class HomeActivity extends BaseActivity {
     // Notification receiver
     private BroadcastReceiver notificationReceiver;
 
+    private RecyclerView recyclerDoctors, recyclerHospitals, recyclerSpecialties;
+
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_home;
@@ -60,7 +86,9 @@ public class HomeActivity extends BaseActivity {
         // Initialize API client and managers
         ApiClient.init(this);
         authManager = new AuthManager(this);
-        homeRepository = new HomeRepository(this);
+        hospitalRepository = new HospitalRepository();
+        specialtyRepository = new SpecialtyRepository();
+        doctorRepository = new DoctorRepository();
 
         // Check authentication
         if (!authManager.isLoggedIn()) {
@@ -94,6 +122,14 @@ public class HomeActivity extends BaseActivity {
          tvHospital = findViewById(R.id.tvSeeAllHospital); // Not in layout
         tvSpecialty = findViewById(R.id.tvSpecialty);
          tvDoctor = findViewById(R.id.tvDoctor); // Not in layout
+
+        recyclerDoctors = findViewById(R.id.recycler_doctors);
+        recyclerHospitals = findViewById(R.id.recycler_hospitals);
+        recyclerSpecialties = findViewById(R.id.recycler_specialties);
+        // Set LayoutManager
+        recyclerDoctors.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        recyclerHospitals.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
+        recyclerSpecialties.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
 
         // Set initial user info from cache
         String userName = authManager.getUserName();
@@ -291,28 +327,70 @@ public class HomeActivity extends BaseActivity {
 
     private void loadDashboardData() {
         showLoading();
-
-        homeRepository.loadDashboardData(new HomeRepository.DashboardCallback() {
+        // Load doctors
+        doctorRepository.filterDoctors(null, null, null, 1, 10, new Callback<DoctorListResponse>() {
             @Override
-            public void onDashboardDataLoaded(HomeRepository.DashboardData data) {
-                runOnUiThread(() -> {
-                    hideLoading();
-                    updateUI(data);
-                });
+            public void onResponse(Call<DoctorListResponse> call, Response<DoctorListResponse> response) {
+                Log.d("HomeActivity", "Doctor API response: " + response);
+                if (response.isSuccessful() && response.body() != null && recyclerDoctors != null) {
+                    List<DoctorResponse> doctorList = response.body().getData();
+                    Log.d("HomeActivity", "Doctor raw list size: " + (doctorList != null ? doctorList.size() : 0));
+                    FilterDoctorAdapter doctorAdapter = new FilterDoctorAdapter(HomeActivity.this, doctorList);
+                    recyclerDoctors.setAdapter(doctorAdapter);
+                } else {
+                    Log.d("HomeActivity", "Doctor response null or empty, or recyclerDoctors is null");
+                }
             }
-
             @Override
-            public void onError(String error) {
-                runOnUiThread(() -> {
-                    hideLoading();
-                    Log.e(TAG, "Dashboard data load error: " + error);
-                    Toast.makeText(HomeActivity.this, "Có lỗi khi tải dữ liệu: " + error, Toast.LENGTH_LONG).show();
-
-                    // Set fallback data
-                    setFallbackUserInfo();
-                });
+            public void onFailure(Call<DoctorListResponse> call, Throwable t) {
+                Log.e("HomeActivity", "Doctor API failure: " + t.getMessage());
             }
         });
+        // Load hospitals
+        hospitalRepository.getHospitals(1, 10, new Callback<HospitalListResponse>() {
+            @Override
+            public void onResponse(Call<HospitalListResponse> call, Response<HospitalListResponse> response) {
+                Log.d("HomeActivity", "Hospital API response: " + response);
+                if (response.isSuccessful() && response.body() != null && recyclerHospitals != null) {
+                    List<HospitalResponse> hospitalList = response.body().getData();
+                    Log.d("HomeActivity", "Hospital raw list size: " + (hospitalList != null ? hospitalList.size() : 0));
+                    HospitalCardAdapter hospitalAdapter = new HospitalCardAdapter(HomeActivity.this, hospitalList);
+                    recyclerHospitals.setAdapter(hospitalAdapter);
+                } else {
+                    Log.d("HomeActivity", "Hospital response null or empty, or recyclerHospitals is null");
+                }
+            }
+            @Override
+            public void onFailure(Call<HospitalListResponse> call, Throwable t) {
+                Log.e("HomeActivity", "Hospital API failure: " + t.getMessage());
+            }
+        });
+        // Load specialties
+        specialtyRepository.getSpecialties(1, 10, new Callback<ApiResponse<List<SpecialtyResponse>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<SpecialtyResponse>>> call, Response<ApiResponse<List<SpecialtyResponse>>> response) {
+                Log.d("HomeActivity", "Specialty API response: " + response);
+                if (response.isSuccessful() && response.body() != null && recyclerSpecialties != null) {
+                    List<SpecialtyResponse> rawList = response.body().getData();
+                    Log.d("HomeActivity", "Specialty raw list size: " + (rawList != null ? rawList.size() : 0));
+                    List<Specialty> specialties = new java.util.ArrayList<>();
+                    if (rawList != null) {
+                        for (SpecialtyResponse s : rawList) {
+                            specialties.add(new Specialty(s.getSpecialtyId(), s.getName(), s.getDescription(), 0));
+                        }
+                    }
+                    SpecialtyCardAdapter specialtyAdapter = new SpecialtyCardAdapter(HomeActivity.this, specialties);
+                    recyclerSpecialties.setAdapter(specialtyAdapter);
+                } else {
+                    Log.d("HomeActivity", "Specialty response null or empty, or recyclerSpecialties is null");
+                }
+            }
+            @Override
+            public void onFailure(Call<ApiResponse<List<SpecialtyResponse>>> call, Throwable t) {
+                Log.e("HomeActivity", "Specialty API failure: " + t.getMessage());
+            }
+        });
+        hideLoading();
     }
 
     private void updateUI(HomeRepository.DashboardData data) {

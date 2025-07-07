@@ -317,7 +317,7 @@
                         android:id="@+id/tvDoctor"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="see all >>"
+                        android:text="See all >>"
                         android:textColor="#9E9E9E"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -361,7 +361,7 @@
                         android:id="@+id/tvSeeAllHospital"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="see all >>"
+                        android:text="See all >>"
                         android:textColor="#9E9E9E"
                         android:textSize="14sp" />
                 </LinearLayout>
@@ -404,7 +404,7 @@
                         android:id="@+id/tvSpecialty"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="see all >>"
+                        android:text="See all >>"
                         android:textColor="#9E9E9E"
                         android:textSize="14sp" />
                 </LinearLayout>

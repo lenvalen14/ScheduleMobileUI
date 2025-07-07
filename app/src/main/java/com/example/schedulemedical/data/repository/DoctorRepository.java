@@ -50,50 +50,13 @@ public class DoctorRepository {
             Integer hospitalId,
             Integer page,
             Integer limit,
-            MutableLiveData<ResponseWrapper<DoctorListResponse>> result
+            Callback<DoctorListResponse> callback
     ) {
         Log.d(TAG, "Filtering doctors with: specialtyId=" + specialtyId + ", minRating=" + minRating +
                 ", hospitalId=" + hospitalId + ", page=" + page + ", limit=" + limit);
 
         ApiClient.getDoctorApiService().filterDoctors(specialtyId, minRating, hospitalId, page, limit)
-                .enqueue(new Callback<DoctorListResponse>() {
-                    @Override
-                    public void onResponse(@NonNull Call<DoctorListResponse> call, @NonNull Response<DoctorListResponse> response) {
-                        Log.d(TAG, "API Response received: " + response.code());
-
-                        if (response.isSuccessful() && response.body() != null) {
-                            DoctorListResponse doctorListResponse = response.body();
-
-                            List<DoctorResponse> doctorList = doctorListResponse.getData();
-
-                            Log.d(TAG, "API Response body: " + new Gson().toJson(doctorListResponse));
-                            Log.d(TAG, "Number of doctors received: " + (doctorList != null ? doctorList.size() : 0));
-
-                            if (doctorList != null && !doctorList.isEmpty()) {
-                                DoctorResponse firstDoctor = doctorList.get(0);
-                                Log.d(TAG, "First doctor data: " + new Gson().toJson(firstDoctor));
-                            }
-
-                            result.postValue(new ResponseWrapper<>("Success", doctorListResponse));
-                        } else {
-                            Log.e(TAG, "API Error: " + response.code() + " - " + response.message());
-                            try {
-                                if (response.errorBody() != null) {
-                                    Log.e(TAG, "Error body: " + response.errorBody().string());
-                                }
-                            } catch (Exception e) {
-                                Log.e(TAG, "Could not read error body", e);
-                            }
-                            result.postValue(new ResponseWrapper<>("Lỗi không xác định: " + response.code(), null));
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(@NonNull Call<DoctorListResponse> call, @NonNull Throwable t) {
-                        Log.e(TAG, "Network error: " + t.getMessage(), t);
-                        result.postValue(new ResponseWrapper<>("Lỗi kết nối: " + t.getMessage(), null));
-                    }
-                });
+                .enqueue(callback);
     }
 
     public void getDoctorProfileByUserId(int userId, MutableLiveData<DoctorResponse> result) {

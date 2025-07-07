@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="8dp"
+    android:layout_margin="10dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="2dp"
     app:strokeColor="@color/gray_f0"
@@ -88,7 +89,7 @@
                     android:layout_weight="1"
                     android:layout_marginStart="8dp"
                     android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:maxLines="2"
                     android:ellipsize="end"
                     tools:text="280 Nam Kỳ Khởi Nghĩa, Quận 3, TP.HCM" />
@@ -156,14 +157,14 @@
                     android:id="@+id/btnBookNow"
                     style="@style/Widget.MaterialComponents.Button"
                     android:layout_width="wrap_content"
-                    android:layout_height="32dp"
+                    android:layout_height="50dp"
                     android:backgroundTint="@color/blue_447f"
                     android:text="Đặt lịch"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:minWidth="0dp"
                     android:paddingHorizontal="16dp"
                     app:cornerRadius="6dp"
-                    android:textColor="@color/text_primary" />
+                    android:textColor="@color/white" />
 
             </LinearLayout>
 

@@ -134,6 +134,9 @@ public class NotificationService extends Service {
             // Add authentication
             String accessToken = authManager.getAccessToken();
             if (accessToken != null) {
+                if (options.auth == null) {
+                    options.auth = new java.util.HashMap<>();
+                }
                 options.auth.put("token", accessToken);
             }
             

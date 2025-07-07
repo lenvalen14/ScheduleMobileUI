@@ -1,39 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="0dp"
-    app:strokeColor="@color/gray_e0"
-    app:strokeWidth="1dp">
+    android:layout_width="120dp"
+    android:layout_height="140dp"
+    android:layout_margin="6dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="2dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@android:color/white">
 
     <LinearLayout
-        android:layout_width="108dp"
-        android:layout_height="match_parent"
-        android:gravity="center"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:gravity="center_horizontal"
+        android:padding="8dp">
 
-        <ImageView
-            android:id="@+id/ivSpecialtyIcon"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:background="@drawable/bg_icon_circular"
-            android:padding="10dp"
-            android:src="@drawable/ic_specialty_stomach" />
+        <!-- Nền tròn + icon bên trong -->
+        <FrameLayout
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_gravity="center"
+            android:background="@drawable/bg_icon_circle_soft"
+            android:padding="12dp">
 
+            <ImageView
+                android:id="@+id/ivSpecialtyIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_specialty_stomach"
+                android:scaleType="centerInside"
+                android:contentDescription="Specialty Icon" />
+        </FrameLayout>
+
+        <!-- Tên chuyên khoa -->
         <TextView
             android:id="@+id/tvSpecialtyName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="Tiêu hóa"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="14sp" />
-
+            android:textSize="14sp"
+            android:textColor="@color/text_primary"
+            android:fontFamily="@font/inter_medium"
+            android:textAlignment="center" />
     </LinearLayout>
 
 </com.google.android.material.card.MaterialCardView>
