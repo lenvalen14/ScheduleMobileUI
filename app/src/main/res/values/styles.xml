@@ -40,4 +40,10 @@
         <item name="android:background">@drawable/bg_glassmorphism_button</item>
         <item name="android:backgroundTint">@color/white_alpha_15</item>
     </style>
+
+    <style name="CustomRatingBar" parent="Theme.MaterialComponents.Light">
+        <item name="colorControlNormal">@color/gray_e0</item> <!-- màu sao chưa chọn -->
+        <item name="colorControlActivated">@color/yellow_ffc</item> <!-- màu sao được chọn -->
+    </style>
+
 </resources>

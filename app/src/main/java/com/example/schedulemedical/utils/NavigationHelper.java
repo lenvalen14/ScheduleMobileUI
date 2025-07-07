@@ -19,6 +19,7 @@ import com.example.schedulemedical.ui.register.RegisterActivity;
 import com.example.schedulemedical.ui.schedule.MyScheduledActivity;
 import com.example.schedulemedical.ui.schedule.ScheduleActivity;
 import com.example.schedulemedical.ui.profile.ProfileActivity;
+import com.example.schedulemedical.ui.speciatly.SpecialtyActivity;
 
 /**
  * Helper class để quản lý tất cả các Intent điều hướng trong ứng dụng
@@ -33,6 +34,11 @@ public class NavigationHelper {
     public static final String EXTRA_EMAIL = "email";
     public static final String EXTRA_OTP_CODE = "otp_code";
     public static final String EXTRA_FILTER_DATA = "filter_data";
+
+    public static void navigateToSpecialty(Context context) {
+        Intent intent = new Intent(context, SpecialtyActivity.class);
+        context.startActivity(intent);
+    }
 
     /**
      * Điều hướng đến LoginActivity

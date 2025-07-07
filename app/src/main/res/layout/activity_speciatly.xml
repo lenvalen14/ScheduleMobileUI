@@ -4,28 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/background_light">
+    android:background="#F8F9FA">
 
-    <!-- Header Section -->
-    <LinearLayout
+    <!-- Header -->
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header_section"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/md_theme_surface"
+        android:background="#FFFFFF"
+        android:elevation="4dp"
+        android:paddingHorizontal="20dp"
         android:paddingTop="40dp"
-        android:paddingBottom="20dp"
-        android:paddingStart="20dp"
-        android:paddingEnd="20dp"
-        android:elevation="4dp">
+        android:paddingBottom="20dp">
 
-        <!-- Navigation Bar -->
         <LinearLayout
             android:id="@+id/navigation_bar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <ImageView
                 android:id="@+id/btnBack"
@@ -34,31 +34,29 @@
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:padding="4dp"
                 android:src="@drawable/ic_arrow_back"
-                app:tint="@color/text_primary" />
+                app:tint="#212529" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
                 android:layout_weight="1"
-                android:layout_marginStart="16dp"
-                android:layout_marginEnd="16dp"
                 android:gravity="center"
-                android:text="Danh sách bác sĩ"
-                android:textColor="@color/text_primary"
+                android:text="Danh sách Chuyên Khoa"
+                android:textColor="#212529"
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
             <ImageView
-                android:id="@+id/btnFilter"
+                android:id="@+id/btnNotification"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:background="?android:attr/selectableItemBackgroundBorderless"
                 android:padding="4dp"
-                android:src="@drawable/ic_filter_list"
-                app:tint="@color/text_secondary" />
+                android:src="@drawable/ic_notification_bell"
+                app:tint="#6C757D" />
         </LinearLayout>
 
-        <!-- Search Bar -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/search_card"
             android:layout_width="match_parent"
@@ -66,7 +64,10 @@
             android:layout_marginTop="20dp"
             app:cardCornerRadius="25dp"
             app:cardElevation="0dp"
-            app:cardBackgroundColor="@color/gray_f1">
+            app:cardBackgroundColor="#F1F3F4"
+            app:layout_constraintTop_toBottomOf="@id/navigation_bar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -79,7 +80,7 @@
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:src="@drawable/ic_search"
-                    app:tint="@color/text_hint" />
+                    app:tint="#9E9E9E" />
 
                 <EditText
                     android:id="@+id/etSearch"
@@ -87,39 +88,49 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
                     android:background="@android:color/transparent"
-                    android:hint="Tìm kiếm bác sĩ"
-                    android:textColor="@color/text_primary"
-                    android:textColorHint="@color/text_hint"
+                    android:hint="Tìm kiếm chuyên khoa"
+                    android:textColor="#212529"
+                    android:textColorHint="#9E9E9E"
                     android:textSize="14sp"
                     android:singleLine="true"
                     android:imeOptions="actionSearch"
-                    android:inputType="text" />
+                    android:inputType="text"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="0dp" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-    </LinearLayout>
 
-    <!-- RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvDoctors"
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!-- Content -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="561dp"
-        android:layout_below="@id/header_section"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="14dp"
-        android:layout_marginEnd="20dp"
-        android:clipToPadding="false"
-        android:paddingBottom="16dp"
-        android:scrollbars="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        tools:listitem="@layout/list_item_doctor" />
+        android:layout_height="match_parent"
+        android:layout_below="@id/header_section">
+<!--        android:layout_above="@+id/bottom_navigation">-->
 
-    <!-- Bottom Navigation -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewSpecialties"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginHorizontal="20dp"
+            android:paddingTop="16dp"
+            android:paddingBottom="24dp"
+            android:clipToPadding="false"
+            tools:listitem="@layout/item_specialty_view"
+            tools:itemCount="6"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+<!--    &lt;!&ndash; Bottom Nav &ndash;&gt;-->
 <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
 <!--        android:id="@+id/bottom_navigation"-->
 <!--        android:layout_width="match_parent"-->
 <!--        android:layout_height="wrap_content"-->
 <!--        android:layout_alignParentBottom="true"-->
-<!--        android:background="@color/md_theme_surface"-->
+<!--        android:background="#FFFFFF"-->
 <!--        android:elevation="8dp"-->
 <!--        app:menu="@menu/bottom_nav_menu"-->
 <!--        app:labelVisibilityMode="unlabeled"-->

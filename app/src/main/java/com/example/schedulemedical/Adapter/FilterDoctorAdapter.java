@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,8 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
     private final Context context;
     private final List<DoctorResponse> doctorList = new ArrayList<>();
     private OnDoctorClickListener listener;
+
+
 
     // Listener interface cho các hành động từ view
     public interface OnDoctorClickListener {
@@ -72,6 +75,9 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
         ImageView ivDoctorPhoto;
         ImageButton btnCall, btnChat, btnInfo;
         View btnBookAppointment;
+        RatingBar ratingBar;
+        TextView tvRatingValue;
+
 
         DoctorViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -83,6 +89,9 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
             btnChat = itemView.findViewById(R.id.btnChat);
             btnInfo = itemView.findViewById(R.id.btnInfo);
             btnBookAppointment = itemView.findViewById(R.id.btnBookAppointment);
+            ratingBar = itemView.findViewById(R.id.ratingBar);
+            tvRatingValue = itemView.findViewById(R.id.tvRatingValue);
+
         }
 
         void bind(DoctorResponse doctor) {
@@ -96,6 +105,18 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
             tvDoctorName.setText(user != null ? user.getFullName() : "Không rõ tên");
             tvDoctorSpecialty.setText(specialty != null ? specialty.getName() : "Chưa rõ chuyên khoa");
             tvHospitalName.setText(hospital != null ? hospital.getName() : "Chưa rõ bệnh viện");
+
+            // Rating xử lý null
+            Float rating = doctor.getRating();
+            if (rating != null && rating > 0) {
+                ratingBar.setVisibility(View.VISIBLE);
+                ratingBar.setRating(rating);
+                tvRatingValue.setText(String.format("%.1f ★", rating));
+            } else {
+                ratingBar.setVisibility(View.GONE); // Ẩn RatingBar nếu không có đánh giá
+                tvRatingValue.setText("Chưa có đánh giá");
+            }
+
 
             // Load avatar
             String avatarUrl = user != null ? user.getAvatar() : null;
@@ -122,11 +143,11 @@ public class FilterDoctorAdapter extends RecyclerView.Adapter<FilterDoctorAdapte
 
             // Call & Chat demo
             btnCall.setOnClickListener(v -> {
-                Toast.makeText(context, "Gọi cho bác sĩ: " + (user != null ? user.getFullName() : ""), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Tính năng gọi sẽ được phát triển sớm!", Toast.LENGTH_SHORT).show();
             });
 
             btnChat.setOnClickListener(v -> {
-                Toast.makeText(context, "Nhắn tin với bác sĩ: " + (user != null ? user.getFullName() : ""), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Tính năng nhắn tin sẽ được phát triển sớm!", Toast.LENGTH_SHORT).show();
             });
         }
     }

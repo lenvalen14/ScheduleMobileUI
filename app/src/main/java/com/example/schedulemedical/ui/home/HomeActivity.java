@@ -91,7 +91,7 @@ public class HomeActivity extends BaseActivity {
         ivDoctorAvatar = findViewById(R.id.ivDoctorAvatar);
 
         // Quick navigation
-         tvHospital = findViewById(R.id.tvHospital); // Not in layout
+         tvHospital = findViewById(R.id.tvSeeAllHospital); // Not in layout
         tvSpecialty = findViewById(R.id.tvSpecialty);
          tvDoctor = findViewById(R.id.tvDoctor); // Not in layout
 
@@ -110,8 +110,9 @@ public class HomeActivity extends BaseActivity {
         // Quick navigation clicks
         if (tvSpecialty != null) {
             tvSpecialty.setOnClickListener(view -> {
-                // TODO: Navigate to specialties
-                Toast.makeText(this, "Specialties feature coming soon!", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "tvSpecialty clicked, navigating to SpeciatlyActivity");
+                NavigationHelper.navigateToSpecialty(this);
+//                Toast.makeText(this, "Specialties feature coming soon!", Toast.LENGTH_SHORT).show();
             });
         }
 
@@ -122,6 +123,16 @@ public class HomeActivity extends BaseActivity {
             });
         } else {
             Log.e(TAG, "tvDoctor is NULL. Check layout file ID.");
+        }
+
+        if(tvHospital != null){
+            tvHospital.setOnClickListener(view -> {
+                Log.d(TAG, "tvHospital clicked navigating to HospitalActivity");
+                NavigationHelper.navigateToHospital((this));
+            });
+        }
+        else {
+            Log.e(TAG, "tvHospital is NULL. Check layout file ID.");
         }
 
 

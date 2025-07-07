@@ -9,14 +9,14 @@
     android:layout_marginVertical="8dp"
     app:cardCornerRadius="16dp"
     app:cardElevation="4dp"
-    app:cardBackgroundColor="@color/white"
+    app:cardBackgroundColor="@color/md_theme_surface"
     app:strokeColor="@color/gray_e0"
     app:strokeWidth="1dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/white"
+        android:backgroundTint="@color/md_theme_surface"
         android:paddingHorizontal="20dp"
         android:paddingVertical="16dp">
 
@@ -35,11 +35,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:fontFamily="@font/inter_semibold"
             android:text="Ths. BS. Chae Song Hwa"
             android:textColor="@color/text_primary"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:fontFamily="@font/inter_semibold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/ivDoctorPhoto"
             app:layout_constraintTop_toTopOf="@id/ivDoctorPhoto" />
@@ -60,10 +60,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:fontFamily="@font/inter_medium"
             android:text="Khoa thần kinh"
             android:textColor="@color/text_secondary"
             android:textSize="14sp"
-            android:fontFamily="@font/inter_medium"
             app:layout_constraintBottom_toBottomOf="@id/icSpecialty"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/icSpecialty"
@@ -85,10 +85,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:fontFamily="@font/inter_medium"
             android:text="Bệnh viện Yulje"
             android:textColor="@color/text_secondary"
             android:textSize="14sp"
-            android:fontFamily="@font/inter_medium"
             app:layout_constraintBottom_toBottomOf="@+id/icHospital"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/icHospital"
@@ -115,11 +115,28 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider">
 
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_star_filled"
-                app:tint="@color/yellow_ffc" />
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="0"
+                android:scaleX="0.9"
+                android:scaleY="0.9"
+                android:stepSize="0.5"
+                android:theme="@style/CustomRatingBar" />
+
+            <TextView
+                android:id="@+id/tvRatingValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="Chưa có đánh giá"
+                android:textColor="@color/text_secondary"
+                android:textSize="14sp" />
         </LinearLayout>
 
         <!-- Action Buttons -->
@@ -128,15 +145,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:orientation="horizontal"
             android:gravity="end"
+            android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/divider">
 
             <ImageButton
                 android:id="@+id/btnCall"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="38dp"
+                android:layout_height="match_parent"
                 android:layout_marginEnd="4dp"
                 android:adjustViewBounds="true"
                 android:background="@drawable/bg_button_gray_circle"
@@ -147,21 +164,21 @@
 
             <ImageButton
                 android:id="@+id/btnChat"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="4dp"
-                android:background="@drawable/bg_button_gray_circle"
-                android:src="@drawable/ic_chat"
-                android:scaleType="centerInside"
                 android:adjustViewBounds="true"
+                android:background="@drawable/bg_button_gray_circle"
+                android:contentDescription="@string/chat"
                 android:padding="10dp"
-                android:contentDescription="@string/chat" />
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_chat" />
 
             <ImageButton
                 android:id="@+id/btnInfo"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="42dp"
+                android:layout_height="match_parent"
                 android:layout_marginStart="8dp"
                 android:adjustViewBounds="true"
                 android:background="@drawable/bg_button_gray_circle"
@@ -180,7 +197,7 @@
             android:backgroundTint="@color/blue_447f"
             android:fontFamily="@font/inter_semibold"
             android:text="Đặt lịch ngay"
-            android:textColor="@color/white"
+            android:textColor="@color/text_primary"
             android:textSize="12sp"
             app:cornerRadius="18dp"
             app:iconPadding="0dp"
