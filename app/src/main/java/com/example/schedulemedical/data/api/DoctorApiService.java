@@ -1,5 +1,6 @@
 package com.example.schedulemedical.data.api;
 
+import com.example.schedulemedical.model.dto.request.doctor.UpdateDoctorDTO;
 import com.example.schedulemedical.model.dto.response.DoctorListResponse;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
@@ -10,7 +11,9 @@ import com.example.schedulemedical.model.dto.response.ResponseWrapper;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -35,6 +38,12 @@ public interface DoctorApiService {
     // Get doctor by user ID
     @GET("doctor/user/{id}")
     Call<ApiResponse<DoctorResponse>> getDoctorByUserId(@Path("id") int userId);
+
+    @PUT("doctor/{id}")
+    Call<ApiResponse<DoctorResponse>> updateDoctor(
+            @Path("id") int doctorId,
+            @Body UpdateDoctorDTO updateRequest
+    );
 
     @GET("doctor/filter/doctor")
     Call<DoctorListResponse> filterDoctors(

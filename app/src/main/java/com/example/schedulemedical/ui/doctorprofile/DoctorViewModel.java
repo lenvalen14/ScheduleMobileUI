@@ -6,6 +6,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.schedulemedical.data.repository.DoctorRepository;
+import com.example.schedulemedical.model.dto.request.doctor.UpdateDoctorDTO;
+import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.DoctorListResponse;
 import com.example.schedulemedical.model.dto.response.ResponseWrapper;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
@@ -39,4 +41,9 @@ public class DoctorViewModel extends ViewModel {
         repository.filterDoctors(specialtyId, minRating, hospitalId, page, limit)
                 .observeForever(_filteredDoctors::postValue);
     }
+
+    public LiveData<ApiResponse<DoctorResponse>> updateDoctorProfile(int doctorId, UpdateDoctorDTO dto) {
+        return repository.updateDoctorProfile(doctorId, dto);
+    }
+
 }
