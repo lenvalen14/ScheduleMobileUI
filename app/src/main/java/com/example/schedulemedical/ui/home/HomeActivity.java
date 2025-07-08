@@ -211,10 +211,10 @@ public class HomeActivity extends BaseActivity {
                 // Navigate to notifications
                 Toast.makeText(this, "Thông báo đang được phát triển!", Toast.LENGTH_SHORT).show();
                 return true;
-            } else if (itemId == R.id.menu_profile) {
-                // Navigate to profile
-                NavigationHelper.navigateToUserProfile(this);
-                return true;
+//            } else if (itemId == R.id.menu_profile) {
+//                // Navigate to profile
+//                NavigationHelper.navigateToUserProfile(this, role);
+//                return true;
             } else if (itemId == R.id.menu_settings) {
                 // Navigate to settings
                 Toast.makeText(this, "Cài đặt đang được phát triển!", Toast.LENGTH_SHORT).show();
@@ -558,11 +558,13 @@ public class HomeActivity extends BaseActivity {
                     return true;
                 } else if (itemId == R.id.nav_profile) {
                     String role = authManager.getUserRole();
-                    if ("DOCTOR".equalsIgnoreCase(role)) {
-                        NavigationHelper.navigateToDoctorProfile(this);
-                    } else {
-                        NavigationHelper.navigateToUserProfile(this);
-                    }
+                    NavigationHelper.navigateToUserProfile(this, role);
+
+//                    if ("DOCTOR".equalsIgnoreCase(role)) {
+//                        NavigationHelper.navigateToDoctorProfile(this);
+//                    } else {
+//                        NavigationHelper.navigateToUserProfile(this);
+//                    }
                     return true;
                 }
 
