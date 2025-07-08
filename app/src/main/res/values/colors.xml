@@ -26,6 +26,7 @@
 <!--    <color name="gray_f0">#F0F0F0</color>-->
 <!--    <color name="blue_007b">#007BFF</color>-->
     <color name="white">#FFFFFF</color>
+    <color name="beige">#FBFAF9</color>
     <color name="primaryColor">#447F98</color>
 <!--    <color name="primary_color">#007BFF</color>-->
     <color name="field_stroke_focused">#2196F3</color>
@@ -44,14 +45,6 @@
     <color name="background_light">#F8F9FA</color>
 <!--    <color name="gray_f1">#F1F3F4</color>-->
     <color name="teal_700">#007B83</color>
-<!--    <color name="gray_546e">#546E7A</color>-->
-<!--    <color name="blue_447f">#447F98</color>-->
-<!--    <color name="gray_ee">#EEEEEE</color>-->
-<!--    <color name="gray_2121">#212121</color>-->
-<!--    <color name="blue_03">#03A9F4</color>-->
-<!--    <color name="gray_7575">#757575</color>-->
-<!--    <color name="gray_6161">#616161</color>-->
-<!--    <color name="gray_de">#DEE2E6</color>-->
     <color name="orange">#FF9800</color>
     <color name="blue">#2196F3</color>
     <color name="green">#4CAF50</color>
@@ -92,5 +85,12 @@
     <color name="bg_default">#F6FAFB</color>
     <color name="chip_unselected_bg">#E0E0E0</color>
 
+    <color name="divider_dashed">#D6DDEA</color>
+    <!-- Bảng màu theo "Vibe" mới -->
+    <color name="colorPrimary">#5E72E4</color>
+    <color name="colorPrimaryDark">#32325D</color>
 
+    <!-- Màu trạng thái -->
+    <color name="status_bg_upcoming">#E3E8FF</color>
+    <color name="status_text_upcoming">#5E72E4</color>
 </resources>

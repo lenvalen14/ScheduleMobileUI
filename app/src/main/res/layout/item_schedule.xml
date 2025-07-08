@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginHorizontal="16dp"
@@ -14,153 +15,143 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Doctor Avatar -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ivDoctor"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/sample_profile_image"
-            app:civ_border_width="1dp"
-            app:civ_border_color="@color/gray_ee"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <!-- Doctor Name -->
+        <!-- Tên Bác sĩ -->
         <TextView
-            android:id="@+id/tvDoctorName"
+            android:id="@+id/tv_doctor_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Dr. Maihin"
-            android:textStyle="bold"
-            android:textColor="@color/gray_2121"
+            android:layout_marginEnd="8dp"
+            android:text="BS. Trần Thanh Tâm"
+            android:textColor="@color/text_primary"
             android:textSize="16sp"
-            app:layout_constraintStart_toEndOf="@id/ivDoctor"
-            app:layout_constraintTop_toTopOf="@id/ivDoctor"
-            app:layout_constraintEnd_toStartOf="@id/tvStatus"
-            android:layout_marginStart="12dp" />
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/tv_status"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Status Label (Upcoming / Complete / Cancel) -->
+        <!-- Chuyên khoa -->
         <TextView
-            android:id="@+id/tvStatus"
+            android:id="@+id/tv_doctor_specialty"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Chuyên khoa Tim mạch"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="@+id/tv_doctor_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_doctor_name" />
+
+        <!-- Trạng thái (Sắp tới) -->
+        <TextView
+            android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/background_status_upcoming"
             android:paddingHorizontal="10dp"
             android:paddingVertical="4dp"
-            android:text="Upcoming"
-            android:textColor="@color/blue_03"
+            android:text="Sắp tới"
+            android:textColor="@color/status_text_upcoming"
             android:textSize="12sp"
-            android:background="@drawable/bg_status_upcoming"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <!-- Specialty -->
+        <!-- Đường kẻ đứt -->
+        <View
+            android:id="@+id/divider"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/shape_dashed_line"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_doctor_specialty" />
+
+        <!-- Icon Lịch -->
+        <ImageView
+            android:id="@+id/iv_calendar_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="12dp"
+            android:src="@drawable/ic_calendar"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/divider"
+            app:tint="@color/colorPrimary" />
+
+        <!-- Thông tin Ngày & Giờ -->
         <TextView
-            android:id="@+id/tvSpecialty"
+            android:id="@+id/tv_date_time"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Neur specialist"
+            android:layout_marginStart="8dp"
+            android:text="Thứ 4, 09/07/2025 - 10:00"
+            android:textColor="@color/text_secondary"
             android:textSize="14sp"
-            android:textColor="@color/gray_7575"
-            app:layout_constraintStart_toEndOf="@id/ivDoctor"
-            app:layout_constraintTop_toBottomOf="@id/tvDoctorName"
-            app:layout_constraintEnd_toStartOf="@id/tvStatus"
-            android:layout_marginStart="12dp" />
+            app:layout_constraintBottom_toBottomOf="@+id/iv_calendar_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_calendar_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_calendar_icon" />
 
-        <!-- Info Row: date, time, status -->
-        <LinearLayout
-            android:id="@+id/llInfo"
+        <!-- Icon Bệnh viện -->
+        <ImageView
+            android:id="@+id/iv_hospital_icon"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/ic_hospital"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_calendar_icon"
+            app:tint="@color/colorPrimary" />
+
+        <!-- Thông tin Bệnh viện -->
+        <TextView
+            android:id="@+id/tv_hospital_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:orientation="horizontal"
-            android:gravity="center_vertical"
-            app:layout_constraintTop_toBottomOf="@id/ivDoctor"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_marginStart="8dp"
+            android:text="Bệnh viện Chợ Rẫy"
+            android:textColor="@color/text_secondary"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_hospital_icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_hospital_icon"
+            app:layout_constraintTop_toTopOf="@+id/iv_hospital_icon" />
 
-            <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:src="@drawable/ic_calendar"
-                app:tint="@color/blue_03" />
-
-            <TextView
-                android:id="@+id/tvDate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="23-11-2024"
-                android:textColor="@color/gray_2121"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="8dp"
-                android:layout_height="0dp" />
-
-            <TextView
-                android:id="@+id/tvTime"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="10:30 AM"
-                android:textColor="@color/gray_2121"
-                android:textSize="14sp" />
-
-            <View
-                android:layout_width="8dp"
-                android:layout_height="0dp" />
-
-            <ImageView
-                android:layout_width="8dp"
-                android:layout_height="8dp"
-                android:src="@drawable/ic_dot_active"
-                android:tint="@color/blue_03" />
-
-            <TextView
-                android:id="@+id/tvConfirmStatus"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:text="Confirmed"
-                android:textColor="@color/gray_6161"
-                android:textSize="14sp" />
-        </LinearLayout>
-
-        <!-- Buttons: Cancel & Reschedule -->
+        <!-- Nhóm nút thao tác -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:id="@+id/ll_buttons"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toBottomOf="@id/llInfo"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            android:layout_marginTop="12dp"
+            app:layout_constraintTop_toBottomOf="@id/tv_hospital_name"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnCancel"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Cancel"
-                android:textColor="@color/gray_2121"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Hủy"
+                android:textColor="@color/white"
                 android:textSize="14sp"
                 app:cornerRadius="12dp"
-                app:backgroundTint="@color/gray_f1" />
+                app:backgroundTint="@color/red"
+                android:layout_marginEnd="8dp"
+                android:visibility="gone" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnReschedule"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Reschedule"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:text="Đặt lại lịch"
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 app:cornerRadius="12dp"
                 app:backgroundTint="@color/blue_007b"
-                android:layout_marginStart="8dp" />
+                android:visibility="gone" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-</com.google.android.material.card.MaterialCardView>
+</androidx.cardview.widget.CardView>

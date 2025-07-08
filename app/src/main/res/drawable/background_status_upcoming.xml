@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Background cho TextView trạng thái "Sắp tới" -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="@color/status_bg_upcoming" />
+    <corners android:radius="6dp" />
+</shape>
