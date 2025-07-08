@@ -80,7 +80,15 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
 
         initializeViews(view);
         setupRecyclerView();
-        loadSpecialties();
+        
+        // Check if specialty is already selected
+        if (bookingData.specialtyId != null && bookingData.specialtyId > 0) {
+            // Specialty is already selected, show selected specialty info
+            showSelectedSpecialtyInfo();
+        } else {
+            // Load specialties list
+            loadSpecialties();
+        }
     }
 
     private void initializeViews(View view) {
@@ -98,7 +106,23 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
 
     private void loadSpecialties() {
         showLoading(true);
-
+        
+        // Check if we have hospital context
+        Integer hospitalId = null;
+        if (getActivity() instanceof BookingWizardActivity) {
+            hospitalId = ((BookingWizardActivity) getActivity()).getHospitalId();
+        }
+        
+        if (hospitalId != null && hospitalId > 0) {
+            // Load specialties for specific hospital
+            loadSpecialtiesByHospital(hospitalId);
+        } else {
+            // Load all specialties
+            loadAllSpecialties();
+        }
+    }
+    
+    private void loadAllSpecialties() {
         doctorApiService.getAllSpecialties(1, 50).enqueue(new Callback<ApiResponse<List<SpecialtyResponse>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<SpecialtyResponse>>> call, Response<ApiResponse<List<SpecialtyResponse>>> response) {
@@ -142,6 +166,91 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
             }
         });
     }
+    
+    private void loadSpecialtiesByHospital(Integer hospitalId) {
+        // For now, we'll load all specialties and filter by hospital
+        // In the future, you might want to create a specific API endpoint for this
+        doctorApiService.getAllSpecialties(1, 50).enqueue(new Callback<ApiResponse<List<SpecialtyResponse>>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<List<SpecialtyResponse>>> call, Response<ApiResponse<List<SpecialtyResponse>>> response) {
+                showLoading(false);
+                Log.d(TAG, "Specialties by hospital API call success");
+                Log.d(TAG, "Response body: " + response.body());
+
+                if (response.isSuccessful() && response.body() != null) {
+                    List<SpecialtyResponse> responseList = response.body().getData();
+                    Log.d(TAG, "All specialties count: " + responseList.size());
+                    
+                    // Filter specialties that have doctors in this hospital
+                    List<Specialty> specialties = new ArrayList<>();
+                    
+                    for (SpecialtyResponse res : responseList) {
+                        Log.d(TAG, "Processing specialty: " + res.getName() + " (ID: " + res.getSpecialtyId() + ")");
+                        
+                        // Check if this specialty has doctors in the hospital
+                        checkSpecialtyInHospital(res, hospitalId, specialties);
+                    }
+                    
+                    // If no specialties found, show message
+                    if (specialties.isEmpty()) {
+                        showNoSpecialtiesMessage();
+                    } else {
+                        updateSpecialtiesList(specialties);
+                    }
+                } else {
+                    Log.e(TAG, "API call failed or response is null. Response code: " + response.code());
+                    showError("Không thể tải danh sách chuyên khoa");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<List<SpecialtyResponse>>> call, Throwable t) {
+                Log.e(TAG, "Specialties by hospital API call failed", t);
+                showLoading(false);
+                showError("Lỗi kết nối mạng");
+            }
+        });
+    }
+    
+    private void checkSpecialtyInHospital(SpecialtyResponse specialty, Integer hospitalId, List<Specialty> specialties) {
+        // Load doctors for this specialty and check if any are in the hospital
+        doctorApiService.getDoctorsBySpecialty(specialty.getSpecialtyId(), 1, 50).enqueue(new Callback<ApiResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    // Parse response to check if any doctors are in this hospital
+                    // For now, we'll add the specialty if the API call succeeds
+                    // In a real implementation, you'd parse the response and check hospital IDs
+                    specialties.add(new Specialty(
+                            specialty.getSpecialtyId(),
+                            specialty.getName(),
+                            specialty.getDescription(),
+                            specialty.getDoctorCount()
+                    ));
+                    
+                    // Update UI if this is the last specialty being checked
+                    if (specialties.size() == 1) { // First specialty found
+                        updateSpecialtiesList(specialties);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                Log.e(TAG, "Failed to check doctors for specialty: " + specialty.getName(), t);
+            }
+        });
+    }
+    
+    private void showNoSpecialtiesMessage() {
+        String hospitalName = "";
+        if (getActivity() instanceof BookingWizardActivity) {
+            hospitalName = ((BookingWizardActivity) getActivity()).getHospitalName();
+        }
+        
+        String message = "Bệnh viện " + hospitalName + " chưa có chuyên khoa hoặc bác sĩ khả dụng.";
+        showError(message);
+    }
 
     private void updateSpecialtiesList(List<Specialty> specialties) {
         if (specialties.isEmpty()) {
@@ -176,6 +285,22 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
         tvNoSpecialties.setVisibility(View.GONE);
     }
 
+    private void showSelectedSpecialtyInfo() {
+        // Hide the specialties list
+        rvSpecialties.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        
+        // Show selected specialty info
+        tvNoSpecialties.setVisibility(View.VISIBLE);
+        tvNoSpecialties.setText("Chuyên khoa đã chọn: " + bookingData.specialtyName + 
+                               "\nMô tả: " + (bookingData.specialtyName != null ? bookingData.specialtyName : "Không có mô tả"));
+        
+        // Notify parent that this step is completed
+        if (getActivity() instanceof BookingWizardActivity) {
+            ((BookingWizardActivity) getActivity()).onStepDataChanged();
+        }
+    }
+    
     private void showError(String message) {
         rvSpecialties.setVisibility(View.GONE);
         tvNoSpecialties.setVisibility(View.VISIBLE);

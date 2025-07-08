@@ -1,6 +1,7 @@
 package com.example.schedulemedical.ui.booking;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,6 +18,8 @@ import com.example.schedulemedical.data.api.ApiClient;
 import com.example.schedulemedical.data.api.AppointmentApiService;
 import com.example.schedulemedical.model.dto.request.CreateAppointmentRequest;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
+import com.example.schedulemedical.model.dto.response.DoctorResponse;
+import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.example.schedulemedical.utils.AuthManager;
 import com.google.android.material.button.MaterialButton;
 import com.google.gson.Gson;
@@ -59,6 +62,7 @@ public class BookingWizardActivity extends AppCompatActivity {
         public Integer doctorId;
         public String doctorName;
         public String doctorSpecialty;
+        public Integer hospitalId; // Add hospital ID
         public String hospitalName;
         public Date selectedDate;
         public String selectedTimeSlot;
@@ -112,10 +116,77 @@ public class BookingWizardActivity extends AppCompatActivity {
         setupViewPager();
         setupProgressDialog();
         
+        // Parse intent data if available
+        parseIntentData();
+        
         Log.d(TAG, "Initial bookingData state:");
         logBookingDataState();
         
+        // Auto-advance to appropriate step based on available data
+        autoAdvanceToAppropriateStep();
+        
         updateStepUI();
+    }
+    
+    private void parseIntentData() {
+        Intent intent = getIntent();
+        if (intent != null) {
+            // Check if doctor data is passed
+            if (intent.hasExtra("doctor_id")) {
+                bookingData.doctorId = intent.getIntExtra("doctor_id", 0);
+                bookingData.doctorName = intent.getStringExtra("doctor_name");
+                bookingData.doctorSpecialty = intent.getStringExtra("doctor_specialty");
+                bookingData.hospitalName = intent.getStringExtra("hospital_name");
+                bookingData.specialtyId = intent.getIntExtra("specialty_id", 0);
+                bookingData.specialtyName = intent.getStringExtra("specialty_name");
+                
+                Log.d(TAG, "Received doctor data - doctorId: " + bookingData.doctorId + 
+                          ", doctorName: " + bookingData.doctorName + 
+                          ", specialtyId: " + bookingData.specialtyId);
+            }
+            
+            // Check if hospital data is passed
+            if (intent.hasExtra("hospital_id")) {
+                bookingData.hospitalId = intent.getIntExtra("hospital_id", 0);
+                bookingData.hospitalName = intent.getStringExtra("hospital_name");
+                
+                Log.d(TAG, "Received hospital data - hospitalId: " + bookingData.hospitalId + 
+                          ", hospitalName: " + bookingData.hospitalName);
+            }
+        }
+    }
+    
+    private void autoAdvanceToAppropriateStep() {
+        // Determine the best starting step based on available data
+        if (bookingData.doctorId != null && bookingData.doctorId > 0) {
+            // We have a doctor selected
+            if (bookingData.specialtyId != null && bookingData.specialtyId > 0) {
+                // We have both doctor and specialty, skip to schedule selection
+                currentStep = 2;
+                Log.d(TAG, "Auto-advancing to schedule selection (step 2) - doctor and specialty already selected");
+            } else {
+                // We have doctor but no specialty, skip to doctor selection (will show selected doctor)
+                currentStep = 1;
+                Log.d(TAG, "Auto-advancing to doctor selection (step 1) - doctor selected but need specialty info");
+            }
+        } else if (bookingData.specialtyId != null && bookingData.specialtyId > 0) {
+            // We have specialty but no doctor, skip to doctor selection
+            currentStep = 1;
+            Log.d(TAG, "Auto-advancing to doctor selection (step 1) - specialty already selected");
+        } else if (bookingData.hospitalId != null && bookingData.hospitalId > 0) {
+            // We have hospital context, start from specialty selection
+            currentStep = 0;
+            Log.d(TAG, "Starting from specialty selection (step 0) - hospital context provided");
+        } else {
+            // No pre-selected data, start from beginning
+            currentStep = 0;
+            Log.d(TAG, "Starting from beginning (step 0) - no pre-selected data");
+        }
+        
+        // Update ViewPager to the determined step
+        if (viewPager != null) {
+            viewPager.setCurrentItem(currentStep, false);
+        }
     }
     
     private void initializeServices() {
@@ -372,6 +443,35 @@ public class BookingWizardActivity extends AppCompatActivity {
     // Helper methods
     public BookingData getBookingData() {
         return bookingData;
+    }
+    
+    // Static method to create intent with doctor data
+    public static Intent createIntentWithDoctor(Context context, DoctorResponse doctor) {
+        Intent intent = new Intent(context, BookingWizardActivity.class);
+        intent.putExtra("doctor_id", doctor.getDoctorId());
+        intent.putExtra("doctor_name", doctor.getUser().getFullName());
+        intent.putExtra("doctor_specialty", doctor.getSpecialty().getName());
+        intent.putExtra("hospital_name", doctor.getHospital().getName());
+        intent.putExtra("specialty_id", doctor.getSpecialty().getSpecialtyId());
+        intent.putExtra("specialty_name", doctor.getSpecialty().getName());
+        return intent;
+    }
+    
+    // Static method to create intent with hospital data
+    public static Intent createIntentWithHospital(Context context, HospitalResponse hospital) {
+        Intent intent = new Intent(context, BookingWizardActivity.class);
+        intent.putExtra("hospital_id", hospital.getHospitalId());
+        intent.putExtra("hospital_name", hospital.getName());
+        return intent;
+    }
+    
+    // Getter for hospital context
+    public Integer getHospitalId() {
+        return bookingData.hospitalId;
+    }
+    
+    public String getHospitalName() {
+        return bookingData.hospitalName;
     }
     
     private void showLoading() {

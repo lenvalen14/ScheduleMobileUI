@@ -120,6 +120,12 @@ public class ServiceSelectionFragment extends Fragment implements ServiceAdapter
     private void loadServices() {
         showLoading(true);
         
+        // For now, load all services since Service model doesn't have hospitalId
+        // In the future, if services are hospital-specific, we can modify this
+        loadAllServices();
+    }
+    
+    private void loadAllServices() {
         serviceApiService.getServices(1, 50, null).enqueue(new Callback<ApiResponse<Object>>() {
             @Override
             public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {

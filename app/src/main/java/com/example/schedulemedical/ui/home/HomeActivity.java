@@ -336,6 +336,23 @@ public class HomeActivity extends BaseActivity {
                     List<DoctorResponse> doctorList = response.body().getData();
                     Log.d("HomeActivity", "Doctor raw list size: " + (doctorList != null ? doctorList.size() : 0));
                     FilterDoctorAdapter doctorAdapter = new FilterDoctorAdapter(HomeActivity.this, doctorList);
+                    
+                    // Set click listener for booking
+                    doctorAdapter.setOnDoctorClickListener(new FilterDoctorAdapter.OnDoctorClickListener() {
+                        @Override
+                        public void onDoctorClick(DoctorResponse doctor) {
+                            // Navigate to doctor detail
+                            // TODO: Implement doctor detail navigation
+                        }
+
+                        @Override
+                        public void onBookAppointmentClick(DoctorResponse doctor) {
+                            // Navigate to booking with doctor data
+                            Intent intent = com.example.schedulemedical.ui.booking.BookingWizardActivity.createIntentWithDoctor(HomeActivity.this, doctor);
+                            startActivity(intent);
+                        }
+                    });
+                    
                     recyclerDoctors.setAdapter(doctorAdapter);
                 } else {
                     Log.d("HomeActivity", "Doctor response null or empty, or recyclerDoctors is null");
@@ -355,6 +372,30 @@ public class HomeActivity extends BaseActivity {
                     List<HospitalResponse> hospitalList = response.body().getData();
                     Log.d("HomeActivity", "Hospital raw list size: " + (hospitalList != null ? hospitalList.size() : 0));
                     HospitalCardAdapter hospitalAdapter = new HospitalCardAdapter(HomeActivity.this, hospitalList);
+                    
+                    // Set click listener for booking
+                    hospitalAdapter.setOnHospitalClickListener(new HospitalCardAdapter.OnHospitalClickListener() {
+                        @Override
+                        public void onHospitalClick(HospitalResponse hospital) {
+                            // Navigate to hospital detail
+                            // TODO: Implement hospital detail navigation
+                        }
+
+                        @Override
+                        public void onBookNowClick(HospitalResponse hospital) {
+                            // Navigate to booking with hospital data
+                            Intent intent = com.example.schedulemedical.ui.booking.BookingWizardActivity.createIntentWithHospital(HomeActivity.this, hospital);
+                            startActivity(intent);
+                        }
+                        
+                        @Override
+                        public boolean isHospitalBookable(HospitalResponse hospital) {
+                            // For now, assume all hospitals are bookable
+                            // In the future, you can check if hospital has doctors/services
+                            return true;
+                        }
+                    });
+                    
                     recyclerHospitals.setAdapter(hospitalAdapter);
                 } else {
                     Log.d("HomeActivity", "Hospital response null or empty, or recyclerHospitals is null");

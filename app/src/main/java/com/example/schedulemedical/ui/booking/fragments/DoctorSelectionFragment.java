@@ -80,7 +80,15 @@ public class DoctorSelectionFragment extends Fragment implements DoctorSelection
         initializeViews(view);
         setupRecyclerView();
         updateSpecialtyInfo();
-        loadDoctors();
+        
+        // Check if doctor is already selected
+        if (bookingData.doctorId != null && bookingData.doctorId > 0) {
+            // Doctor is already selected, show selected doctor info
+            showSelectedDoctorInfo();
+        } else {
+            // Load doctors list
+            loadDoctors();
+        }
     }
     
     private void initializeViews(View view) {
@@ -128,12 +136,26 @@ public class DoctorSelectionFragment extends Fragment implements DoctorSelection
                             List<Doctor> doctors = new ArrayList<>();
                             
                             Gson gson = new Gson();
+                            Integer hospitalId = null;
+                            if (getActivity() instanceof BookingWizardActivity) {
+                                hospitalId = ((BookingWizardActivity) getActivity()).getHospitalId();
+                            }
                             for (Object item : dataList) {
                                 Doctor doctor = gson.fromJson(gson.toJson(item), Doctor.class);
-                                doctors.add(doctor);
+                                Integer docHospitalId = (doctor.getHospital() != null) ? doctor.getHospital().getHospitalId() : null;
+                                if (hospitalId == null || (docHospitalId != null && docHospitalId.equals(hospitalId))) {
+                                    doctors.add(doctor);
+                                }
                             }
-                            
-                            updateDoctorsList(doctors);
+                            if (doctors.isEmpty()) {
+                                String hospitalName = "";
+                                if (getActivity() instanceof BookingWizardActivity) {
+                                    hospitalName = ((BookingWizardActivity) getActivity()).getHospitalName();
+                                }
+                                showError("Bệnh viện " + hospitalName + " không có bác sĩ cho chuyên khoa này");
+                            } else {
+                                updateDoctorsList(doctors);
+                            }
                         } else {
                             showError("Không thể tải danh sách bác sĩ");
                         }
@@ -185,6 +207,23 @@ public class DoctorSelectionFragment extends Fragment implements DoctorSelection
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         rvDoctors.setVisibility(show ? View.GONE : View.VISIBLE);
         tvNoDoctors.setVisibility(View.GONE);
+    }
+    
+    private void showSelectedDoctorInfo() {
+        // Hide the doctors list
+        rvDoctors.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+        
+        // Show selected doctor info
+        tvNoDoctors.setVisibility(View.VISIBLE);
+        tvNoDoctors.setText("Bác sĩ đã chọn: " + bookingData.doctorName + 
+                           "\nChuyên khoa: " + bookingData.doctorSpecialty + 
+                           "\nBệnh viện: " + bookingData.hospitalName);
+        
+        // Notify parent that this step is completed
+        if (getActivity() instanceof BookingWizardActivity) {
+            ((BookingWizardActivity) getActivity()).onStepDataChanged();
+        }
     }
     
     private void showError(String message) {

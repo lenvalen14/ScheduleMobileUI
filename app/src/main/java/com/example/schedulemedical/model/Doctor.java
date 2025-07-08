@@ -1,7 +1,9 @@
 package com.example.schedulemedical.model;
 
+import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
+import com.example.schedulemedical.model.Hospital;
 
 public class Doctor {
     @SerializedName("doctorId")
@@ -41,7 +43,7 @@ public class Doctor {
     private Specialty specialty;
     
     @SerializedName("hospital")
-    private Hospital hospital;
+    private HospitalResponse hospital;
     
     @SerializedName("schedules")
     private List<Schedule> schedules;
@@ -145,11 +147,11 @@ public class Doctor {
         this.specialty = specialty;
     }
     
-    public Hospital getHospital() {
+    public HospitalResponse getHospital() {
         return hospital;
     }
     
-    public void setHospital(Hospital hospital) {
+    public void setHospital(HospitalResponse hospital) {
         this.hospital = hospital;
     }
     
@@ -243,42 +245,6 @@ class User {
     
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-    }
-}
-
-class Hospital {
-    @SerializedName("hospitalId")
-    private Integer hospitalId;
-    
-    @SerializedName("name")
-    private String name;
-    
-    @SerializedName("address")
-    private String address;
-    
-    // Getters and Setters
-    public Integer getHospitalId() {
-        return hospitalId;
-    }
-    
-    public void setHospitalId(Integer hospitalId) {
-        this.hospitalId = hospitalId;
-    }
-    
-    public String getName() {
-        return name;
-    }
-    
-    public void setName(String name) {
-        this.name = name;
-    }
-    
-    public String getAddress() {
-        return address;
-    }
-    
-    public void setAddress(String address) {
-        this.address = address;
     }
 }
 
