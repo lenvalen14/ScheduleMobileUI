@@ -12,7 +12,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.example.schedulemedical.Adapter.SpecialtyAdapterView;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.data.api.ApiClient;
-import com.example.schedulemedical.data.repository.DoctorFilterRepository;
+import com.example.schedulemedical.data.repository.DoctorRepository;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
 import com.example.schedulemedical.ui.filterDoctor.DoctorFilterOptionsViewModel;
@@ -45,10 +45,7 @@ public class SpecialtyActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
 
         // Tạo ViewModel
-        DoctorFilterRepository repo = new DoctorFilterRepository(
-                ApiClient.getDoctorApiService(),
-                ApiClient.getHospitalApiService()
-        );
+        DoctorRepository repo = new DoctorRepository();
         DoctorFilterOptionsViewModelFactory factory = new DoctorFilterOptionsViewModelFactory(repo);
         viewModel = new ViewModelProvider(this, factory).get(DoctorFilterOptionsViewModel.class);
 

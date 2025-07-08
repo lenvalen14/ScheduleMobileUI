@@ -1,6 +1,6 @@
 package com.example.schedulemedical.ui.filterDoctor;
 
-import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,14 +15,14 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.schedulemedical.Adapter.FilterDoctorAdapter;
+import com.example.schedulemedical.Adapter.DoctorAdapter;
 import com.example.schedulemedical.R;
-import com.example.schedulemedical.data.api.ApiClient;
-import com.example.schedulemedical.data.repository.DoctorFilterRepository;
+import com.example.schedulemedical.data.repository.DoctorRepository;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
 import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
+import com.example.schedulemedical.ui.doctorprofile.DoctorViewModel;
 import com.example.schedulemedical.utils.NavigationHelper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -34,8 +34,8 @@ public class FilterDoctorActivity extends BaseActivity {
     private static final String TAG = "FilterDoctorActivity";
 
     private RecyclerView recyclerView;
-    private FilterDoctorAdapter adapter;
-    private FilterDoctorViewModel viewModel;
+    private DoctorAdapter adapter;
+    private DoctorViewModel viewModel;
     private DoctorFilterOptionsViewModel doctorFilterOptionsViewModel;
 
     private List<SpecialtyResponse> specialtyList = new ArrayList<>();
@@ -56,10 +56,10 @@ public class FilterDoctorActivity extends BaseActivity {
 
         recyclerView = findViewById(R.id.rvDoctors);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new FilterDoctorAdapter(this);
+        adapter = new DoctorAdapter(this);
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnDoctorClickListener(new FilterDoctorAdapter.OnDoctorClickListener() {
+        adapter.setOnDoctorClickListener(new DoctorAdapter.OnDoctorClickListener() {
             @Override
             public void onDoctorClick(DoctorResponse doctor) {
                 if (doctor != null && doctor.getUser() != null) {
@@ -80,10 +80,20 @@ public class FilterDoctorActivity extends BaseActivity {
                 if (doctor != null && doctor.getUser() != null) {
                     String doctorName = doctor.getUser().getFullName() != null
                             ? doctor.getUser().getFullName() : "Unknown Doctor";
-                    Log.d(TAG, "Book appointment clicked for: " + doctorName);
+
+                    String specialty = doctor.getSpecialty().getName() != null ? doctor.getSpecialty().getName() : "Không rõ";
+                    String hospital = doctor.getHospital().getName() != null ? doctor.getHospital().getName() : "Không rõ";
+
+                    Log.d(TAG, "Book appointment clicked for: " + doctorName + " - " + doctor.getDoctorId());
 
                     if (doctor.getDoctorId() != null) {
-                        NavigationHelper.navigateToSchedule(FilterDoctorActivity.this, doctor.getDoctorId());
+                        NavigationHelper.navigateToSchedule(
+                                FilterDoctorActivity.this,
+                                doctor.getDoctorId(),
+                                doctorName,
+                                specialty,
+                                hospital
+                        );
                     } else {
                         Toast.makeText(FilterDoctorActivity.this, "Không thể đặt lịch với bác sĩ này", Toast.LENGTH_SHORT).show();
                     }
@@ -91,12 +101,9 @@ public class FilterDoctorActivity extends BaseActivity {
             }
         });
 
-        viewModel = new ViewModelProvider(this).get(FilterDoctorViewModel.class);
+        viewModel = new ViewModelProvider(this).get(DoctorViewModel.class);
 
-        DoctorFilterRepository repository = new DoctorFilterRepository(
-                ApiClient.getDoctorApiService(),
-                ApiClient.getHospitalApiService()
-        );
+        DoctorRepository repository = new DoctorRepository();
         DoctorFilterOptionsViewModelFactory factory = new DoctorFilterOptionsViewModelFactory(repository);
         doctorFilterOptionsViewModel = new ViewModelProvider(this, factory).get(DoctorFilterOptionsViewModel.class);
 
@@ -116,10 +123,13 @@ public class FilterDoctorActivity extends BaseActivity {
 
         observeData();
 
-        viewModel.filterDoctors(null, null, null, 1, 20); // Load initial
+        // Load dữ liệu ban đầu
+        viewModel.filterDoctors(null, null, null, 1, 20);
 
         ImageView filterButton = findViewById(R.id.btnFilter);
-        filterButton.setOnClickListener(v -> showFilterBottomSheet());
+        if (filterButton != null) {
+            filterButton.setOnClickListener(v -> showFilterBottomSheet());
+        }
     }
 
     private void setupNavigation() {
@@ -152,6 +162,7 @@ public class FilterDoctorActivity extends BaseActivity {
         TextView btnCancel = view.findViewById(R.id.btnCancel);
         TextView tvClear = view.findViewById(R.id.tvClearFilters);
 
+        // Specialty
         List<String> specialtyNames = new ArrayList<>();
         specialtyNames.add("Tất cả");
         for (SpecialtyResponse s : specialtyList) {
@@ -161,6 +172,7 @@ public class FilterDoctorActivity extends BaseActivity {
         specialtyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerSpecialty.setAdapter(specialtyAdapter);
 
+        // Hospital
         List<String> hospitalNames = new ArrayList<>();
         hospitalNames.add("Tất cả");
         for (HospitalResponse h : hospitalList) {
@@ -170,6 +182,7 @@ public class FilterDoctorActivity extends BaseActivity {
         hospitalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerHospital.setAdapter(hospitalAdapter);
 
+        // Rating
         seekBarRating.setMax(50);
         seekBarRating.setProgress(selectedRating != null ? (int) (selectedRating * 10) : 0);
         tvRatingValue.setText(selectedRating != null ? "Từ " + selectedRating + " sao" : "Tất cả đánh giá");
@@ -199,7 +212,7 @@ public class FilterDoctorActivity extends BaseActivity {
             int ratingProgress = seekBarRating.getProgress();
             selectedRating = ratingProgress > 0 ? ratingProgress / 10.0f : null;
 
-            viewModel.filterDoctors(selectedHospitalId, selectedRating, selectedSpecialtyId, 1, 20);
+            viewModel.filterDoctors(selectedSpecialtyId, selectedRating, selectedHospitalId, 1, 20);
             bottomSheetDialog.dismiss();
         });
 

@@ -1,6 +1,7 @@
 package com.example.schedulemedical.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class HospitalCardAdapter extends RecyclerView.Adapter<HospitalCardAdapte
     public interface OnHospitalClickListener {
         void onHospitalClick(HospitalResponse hospital);
         void onBookNowClick(HospitalResponse hospital);
+        boolean isHospitalBookable(HospitalResponse hospital); // Add method to check if hospital is bookable
     }
 
     public HospitalCardAdapter(Context context, List<HospitalResponse> hospitalList) {
@@ -90,8 +92,14 @@ public class HospitalCardAdapter extends RecyclerView.Adapter<HospitalCardAdapte
 
             btnBookNow.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
-                if (pos != RecyclerView.NO_POSITION && onHospitalClickListener != null) {
-                    onHospitalClickListener.onBookNowClick(hospitalList.get(pos));
+                if (pos != RecyclerView.NO_POSITION) {
+                    if (onHospitalClickListener != null) {
+                        onHospitalClickListener.onBookNowClick(hospitalList.get(pos));
+                    } else {
+                        // Fallback: direct navigation to booking
+                        Intent intent = com.example.schedulemedical.ui.booking.BookingWizardActivity.createIntentWithHospital(context, hospitalList.get(pos));
+                        context.startActivity(intent);
+                    }
                 }
             });
         }
@@ -106,6 +114,21 @@ public class HospitalCardAdapter extends RecyclerView.Adapter<HospitalCardAdapte
                 Glide.with(context).load(hospital.getLogo()).into(ivHospitalLogo);
             } else {
                 ivHospitalLogo.setImageResource(R.drawable.logo_benh_vien_mat);
+            }
+            
+            // Check if hospital is bookable
+            boolean isBookable = true;
+            if (onHospitalClickListener != null) {
+                isBookable = onHospitalClickListener.isHospitalBookable(hospital);
+            }
+            
+            btnBookNow.setEnabled(isBookable);
+            if (!isBookable) {
+                btnBookNow.setText("Chưa có dịch vụ");
+                btnBookNow.setAlpha(0.5f);
+            } else {
+                btnBookNow.setText("Đặt lịch ngay");
+                btnBookNow.setAlpha(1.0f);
             }
         }
     }

@@ -153,6 +153,21 @@ public class NavigationHelper {
     /**
      * Điều hướng đến ScheduleActivity với ID bác sĩ
      */
+    public static void navigateToSchedule(
+            Context context,
+            int doctorId,
+            String doctorName,
+            String specialty,
+            String hospitalName
+    ) {
+        Intent intent = new Intent(context, ScheduleActivity.class);
+        intent.putExtra("doctorId", doctorId);
+        intent.putExtra("doctorName", doctorName);
+        intent.putExtra("specialty", specialty);
+        intent.putExtra("hospitalName", hospitalName);
+        context.startActivity(intent);
+    }
+
     public static void navigateToSchedule(Context context, int doctorId) {
         Intent intent = new Intent(context, ScheduleActivity.class);
         intent.putExtra(EXTRA_DOCTOR_ID, doctorId);

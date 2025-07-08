@@ -33,20 +33,20 @@ import retrofit2.Response;
 public class DoctorSelectionFragment extends Fragment implements DoctorSelectionAdapter.OnDoctorSelectedListener {
     private static final String TAG = "DoctorSelectionFragment";
     private static final String ARG_BOOKING_DATA = "booking_data";
-    
+
     // UI Components
     private RecyclerView rvDoctors;
     private ProgressBar progressBar;
     private TextView tvNoDoctors, tvSelectedSpecialty;
-    
+
     // Data
     private BookingWizardActivity.BookingData bookingData;
     private List<Doctor> doctorsList;
     private DoctorSelectionAdapter doctorAdapter;
-    
+
     // Services
     private DoctorApiService doctorApiService;
-    
+
     public static DoctorSelectionFragment newInstance(BookingWizardActivity.BookingData bookingData) {
         DoctorSelectionFragment fragment = new DoctorSelectionFragment();
         Bundle args = new Bundle();
@@ -54,49 +54,57 @@ public class DoctorSelectionFragment extends Fragment implements DoctorSelection
         fragment.setArguments(args);
         return fragment;
     }
-    
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             bookingData = (BookingWizardActivity.BookingData) getArguments().getSerializable(ARG_BOOKING_DATA);
         }
-        
+
         ApiClient.init(requireContext());
         doctorApiService = ApiClient.getDoctorApiService();
         doctorsList = new ArrayList<>();
     }
-    
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_doctor_selection, container, false);
     }
-    
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        
+
         initializeViews(view);
         setupRecyclerView();
         updateSpecialtyInfo();
-        loadDoctors();
+
+        // Check if doctor is already selected
+        if (bookingData.doctorId != null && bookingData.doctorId > 0) {
+            // Doctor is already selected, show selected doctor info
+            showSelectedDoctorInfo();
+        } else {
+            // Load doctors list
+            loadDoctors();
+        }
     }
-    
+
     private void initializeViews(View view) {
         rvDoctors = view.findViewById(R.id.rvDoctors);
         progressBar = view.findViewById(R.id.progressBar);
         tvNoDoctors = view.findViewById(R.id.tvNoDoctors);
         tvSelectedSpecialty = view.findViewById(R.id.tvSelectedSpecialty);
     }
-    
+
     private void setupRecyclerView() {
         doctorAdapter = new DoctorSelectionAdapter(requireContext(), doctorsList);
         doctorAdapter.setOnDoctorSelectedListener(this);
         rvDoctors.setLayoutManager(new LinearLayoutManager(requireContext()));
         rvDoctors.setAdapter(doctorAdapter);
     }
-    
+
     private void updateSpecialtyInfo() {
         if (bookingData.specialtyName != null) {
             tvSelectedSpecialty.setText("Chuyên khoa: " + bookingData.specialtyName);
@@ -105,35 +113,49 @@ public class DoctorSelectionFragment extends Fragment implements DoctorSelection
             tvSelectedSpecialty.setVisibility(View.GONE);
         }
     }
-    
+
     private void loadDoctors() {
         if (bookingData.specialtyId == null) {
             showError("Vui lòng chọn chuyên khoa trước");
             return;
         }
-        
+
         showLoading(true);
-        
+
         doctorApiService.getDoctorsBySpecialty(bookingData.specialtyId, 1, 50).enqueue(new Callback<ApiResponse<Object>>() {
             @Override
             public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
                 showLoading(false);
-                
+
                 if (response.isSuccessful() && response.body() != null) {
                     try {
                         ApiResponse<Object> apiResponse = response.body();
-                        
+
                         if (apiResponse.getData() instanceof List) {
                             List<?> dataList = (List<?>) apiResponse.getData();
                             List<Doctor> doctors = new ArrayList<>();
-                            
+
                             Gson gson = new Gson();
+                            Integer hospitalId = null;
+                            if (getActivity() instanceof BookingWizardActivity) {
+                                hospitalId = ((BookingWizardActivity) getActivity()).getHospitalId();
+                            }
                             for (Object item : dataList) {
                                 Doctor doctor = gson.fromJson(gson.toJson(item), Doctor.class);
-                                doctors.add(doctor);
+                                Integer docHospitalId = (doctor.getHospital() != null) ? doctor.getHospital().getHospitalId() : null;
+                                if (hospitalId == null || (docHospitalId != null && docHospitalId.equals(hospitalId))) {
+                                    doctors.add(doctor);
+                                }
                             }
-                            
-                            updateDoctorsList(doctors);
+                            if (doctors.isEmpty()) {
+                                String hospitalName = "";
+                                if (getActivity() instanceof BookingWizardActivity) {
+                                    hospitalName = ((BookingWizardActivity) getActivity()).getHospitalName();
+                                }
+                                showError("Bệnh viện " + hospitalName + " không có bác sĩ cho chuyên khoa này");
+                            } else {
+                                updateDoctorsList(doctors);
+                            }
                         } else {
                             showError("Không thể tải danh sách bác sĩ");
                         }
@@ -145,7 +167,7 @@ public class DoctorSelectionFragment extends Fragment implements DoctorSelection
                     showError("Không thể tải danh sách bác sĩ");
                 }
             }
-            
+
             @Override
             public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
                 Log.e(TAG, "Doctors API call failed", t);
@@ -154,7 +176,7 @@ public class DoctorSelectionFragment extends Fragment implements DoctorSelection
             }
         });
     }
-    
+
     private void updateDoctorsList(List<Doctor> doctors) {
         if (doctors.isEmpty()) {
             showError("Không có bác sĩ khả dụng cho chuyên khoa này");
@@ -166,7 +188,7 @@ public class DoctorSelectionFragment extends Fragment implements DoctorSelection
             tvNoDoctors.setVisibility(View.GONE);
         }
     }
-    
+
     @Override
     public void onDoctorSelected(Doctor doctor, int position) {
         // Update booking data
@@ -174,19 +196,36 @@ public class DoctorSelectionFragment extends Fragment implements DoctorSelection
         bookingData.doctorName = doctor.getFullName();
         bookingData.doctorSpecialty = doctor.getSpecialtyName();
         bookingData.hospitalName = doctor.getHospitalName();
-        
+
         // Notify parent activity
         if (getActivity() instanceof BookingWizardActivity) {
             ((BookingWizardActivity) getActivity()).onStepDataChanged();
         }
     }
-    
+
     private void showLoading(boolean show) {
         progressBar.setVisibility(show ? View.VISIBLE : View.GONE);
         rvDoctors.setVisibility(show ? View.GONE : View.VISIBLE);
         tvNoDoctors.setVisibility(View.GONE);
     }
-    
+
+    private void showSelectedDoctorInfo() {
+        // Hide the doctors list
+        rvDoctors.setVisibility(View.GONE);
+        progressBar.setVisibility(View.GONE);
+
+        // Show selected doctor info
+        tvNoDoctors.setVisibility(View.VISIBLE);
+        tvNoDoctors.setText("Bác sĩ đã chọn: " + bookingData.doctorName +
+                "\nChuyên khoa: " + bookingData.doctorSpecialty +
+                "\nBệnh viện: " + bookingData.hospitalName);
+
+        // Notify parent that this step is completed
+        if (getActivity() instanceof BookingWizardActivity) {
+            ((BookingWizardActivity) getActivity()).onStepDataChanged();
+        }
+    }
+
     private void showError(String message) {
         rvDoctors.setVisibility(View.GONE);
         tvNoDoctors.setVisibility(View.VISIBLE);

@@ -35,7 +35,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.appcompat)
     implementation(libs.material)
     implementation(libs.activity)
@@ -60,8 +59,10 @@ dependencies {
     // Socket.IO for real-time notifications
     implementation(libs.socket.io.client)
     implementation(libs.swiperefreshlayout)
+    implementation(libs.google.flexbox)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    annotationProcessor(libs.glide.compiler)
 }

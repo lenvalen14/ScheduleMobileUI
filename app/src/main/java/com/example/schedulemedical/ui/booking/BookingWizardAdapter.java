@@ -12,9 +12,9 @@ import com.example.schedulemedical.ui.booking.fragments.SpecialtySelectionFragme
 
 public class BookingWizardAdapter extends FragmentStateAdapter {
     private BookingWizardActivity.BookingData bookingData;
-    
-    public BookingWizardAdapter(@NonNull FragmentActivity fragmentActivity, 
-                               BookingWizardActivity.BookingData bookingData) {
+
+    public BookingWizardAdapter(@NonNull FragmentActivity fragmentActivity,
+                                BookingWizardActivity.BookingData bookingData) {
         super(fragmentActivity);
         this.bookingData = bookingData;
     }
@@ -22,6 +22,13 @@ public class BookingWizardAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
+        if (bookingData.doctorId != null && bookingData.doctorId > 0) {
+            // Nếu đã có doctor, bỏ qua fragment chọn doctor
+            if (position == 1) {
+                // Trả về fragment chọn lịch khám luôn
+                return ScheduleSelectionFragment.newInstance(bookingData);
+            }
+        }
         switch (position) {
             case 0: return SpecialtySelectionFragment.newInstance(bookingData);
             case 1: return DoctorSelectionFragment.newInstance(bookingData);

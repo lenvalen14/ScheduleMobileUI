@@ -163,22 +163,6 @@
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="@color/md_theme_onSurfaceVariant" />
 
-            <!-- Certifications -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Certifications"
-                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                android:layout_marginTop="24dp"
-                android:textColor="@color/md_theme_onBackground" />
-
-            <LinearLayout
-                android:id="@+id/layoutCertifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp"/>
-
             <!-- Time Slots -->
             <TextView
                 android:layout_width="match_parent"
@@ -196,20 +180,36 @@
                 android:layout_marginTop="8dp"
                 android:textAppearance="@style/TextAppearance.Material3.BodyMedium"
                 android:textColor="@color/md_theme_onSurfaceVariant" />
+
+            <!-- Certifications -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Certifications"
+                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
+                android:layout_marginTop="24dp"
+                android:textColor="@color/md_theme_onBackground" />
+
+            <LinearLayout
+                android:id="@+id/layoutCertifications"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginTop="8dp"/>
         </LinearLayout>
     </ScrollView>
 
-<!--    &lt;!&ndash; Bottom Nav &ndash;&gt;-->
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
-<!--        android:id="@+id/bottom_navigation"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="bottom"-->
-<!--        android:background="#FFFFFF"-->
-<!--        app:menu="@menu/bottom_nav_menu"-->
-<!--        app:labelVisibilityMode="labeled"-->
-<!--        app:itemIconTint="@color/selector_nav_color"-->
-<!--        app:itemTextColor="@color/selector_nav_color"-->
-<!--        android:elevation="8dp" />-->
+    <!--    &lt;!&ndash; Bottom Nav &ndash;&gt;-->
+    <!--    <com.google.android.material.bottomnavigation.BottomNavigationView-->
+    <!--        android:id="@+id/bottom_navigation"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        android:layout_gravity="bottom"-->
+    <!--        android:background="#FFFFFF"-->
+    <!--        app:menu="@menu/bottom_nav_menu"-->
+    <!--        app:labelVisibilityMode="labeled"-->
+    <!--        app:itemIconTint="@color/selector_nav_color"-->
+    <!--        app:itemTextColor="@color/selector_nav_color"-->
+    <!--        android:elevation="8dp" />-->
 
 </LinearLayout>

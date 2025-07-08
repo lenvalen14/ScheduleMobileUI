@@ -1,21 +1,21 @@
 package com.example.schedulemedical.ui.doctorprofile;
 
-import android.content.Intent;
-import android.net.Uri;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.util.Log;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 import com.example.schedulemedical.ui.base.BaseActivity;
 import com.example.schedulemedical.utils.AuthManager;
 import com.example.schedulemedical.utils.NavigationHelper;
+import com.google.gson.Gson;
 
 public class DoctorProfileActivity extends BaseActivity {
 
@@ -33,8 +33,6 @@ public class DoctorProfileActivity extends BaseActivity {
 
     @Override
     protected void setupViews() {
-
-        Toast.makeText(DoctorProfileActivity.this, "DoctorProfileActivity setupViews", Toast.LENGTH_SHORT).show();
         setupNavigation();
         handleIntentExtras();
         setupViewModel();
@@ -56,20 +54,31 @@ public class DoctorProfileActivity extends BaseActivity {
         Button scheduleButton = findViewById(R.id.btnSchedule);
         if (scheduleButton != null) {
             scheduleButton.setOnClickListener(view -> {
-                int doctorId = getIntent().getIntExtra(NavigationHelper.EXTRA_DOCTOR_ID, -1);
-                if (doctorId != -1) {
-                    NavigationHelper.navigateToSchedule(this, doctorId);
+                DoctorResponse doctor = viewModel.doctorProfile.getValue();
+                if (doctor != null && doctor.getDoctorId() != null) {
+                    String doctorName = doctor.getUser() != null ? doctor.getUser().getFullName() : "Unknown";
+                    String specialty = doctor.getSpecialty() != null ? doctor.getSpecialty().getName() : "Chưa rõ";
+                    String hospital = doctor.getHospital() != null ? doctor.getHospital().getName() : "Chưa rõ";
+
+                    NavigationHelper.navigateToSchedule(
+                            this,
+                            doctor.getDoctorId(),
+                            doctorName,
+                            specialty,
+                            hospital
+                    );
                 } else {
-                    NavigationHelper.navigateToSchedule(this);
+                    Log.e("DoctorProfile", "Không có thông tin bác sĩ để đặt lịch");
                 }
             });
         }
+
     }
 
     private void handleIntentExtras() {
         int doctorId = getIntent().getIntExtra(NavigationHelper.EXTRA_DOCTOR_ID, -1);
         if (doctorId != -1) {
-            Toast.makeText(DoctorProfileActivity.this, "Loading doctor ID: " + doctorId, Toast.LENGTH_SHORT).show();
+            Log.d("DoctorProfile", "Loading doctor ID: " + doctorId);
         }
     }
 
@@ -82,9 +91,9 @@ public class DoctorProfileActivity extends BaseActivity {
         if (doctorId == -1) {
             AuthManager authManager = new AuthManager(this);
             doctorId = authManager.getUserId();
-            Toast.makeText(DoctorProfileActivity.this, "Load profile bằng userId (self): " + doctorId, Toast.LENGTH_SHORT).show();
+            Log.d("DoctorProfile", "Load profile bằng userId (self): " + doctorId);
         } else {
-            Toast.makeText(DoctorProfileActivity.this, "Load profile bằng doctorId: " + doctorId, Toast.LENGTH_SHORT).show();
+            Log.d("DoctorProfile", "Load profile bằng doctorId: " + doctorId);
         }
 
         viewModel.loadDoctorProfileByUserId(doctorId);
@@ -93,7 +102,7 @@ public class DoctorProfileActivity extends BaseActivity {
             if (doctor != null) {
                 mapDoctorProfileToUI(doctor);
             } else {
-                Toast.makeText(DoctorProfileActivity.this, "Không thể tải thông tin bác sĩ", Toast.LENGTH_SHORT).show();
+                Log.e("DoctorProfile", "Không thể tải thông tin bác sĩ");
             }
         });
     }
@@ -107,6 +116,7 @@ public class DoctorProfileActivity extends BaseActivity {
         TextView doctorRating = findViewById(R.id.tvDoctorRating);
         TextView doctorExperience = findViewById(R.id.tvDoctorExperience);
         ImageView doctorAvatar = findViewById(R.id.ivDoctorAvatar);
+        TextView doctorSchedule = findViewById(R.id.tvDoctorSchedule);
 
         try {
             if (doctorName != null && doctor.getUser() != null) {
@@ -151,12 +161,37 @@ public class DoctorProfileActivity extends BaseActivity {
                 // TODO: Glide or Picasso load avatar here
             }
 
+            if (doctorSchedule != null && doctor.getSchedules() != null && !doctor.getSchedules().isEmpty()) {
+                StringBuilder scheduleBuilder = new StringBuilder();
+
+                Log.d("DoctorProfile lich", "Schedules: " + new Gson().toJson(doctor.getSchedules()));
+
+                String[] weekdays = {"Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"};
+
+                doctor.getSchedules().stream()
+                        .sorted((a, b) -> Integer.compare(a.getDayOfWeek(), b.getDayOfWeek()))
+                        .forEach(schedule -> {
+                            int dayIndex = schedule.getDayOfWeek();
+                            String dayName = (dayIndex >= 1 && dayIndex <= 7) ? weekdays[dayIndex - 1] : "Không rõ";
+                            scheduleBuilder.append(dayName)
+                                    .append(": ")
+                                    .append(schedule.getStartTime())
+                                    .append(" - ")
+                                    .append(schedule.getEndTime())
+                                    .append("\n");
+                        });
+
+                doctorSchedule.setText(scheduleBuilder.toString().trim());
+                Log.d("DoctorProfile", "Set lịch làm việc:\n" + scheduleBuilder);
+            } else if (doctorSchedule != null) {
+                doctorSchedule.setText("Chưa cập nhật lịch làm việc");
+                Log.d("DoctorProfile lich", "Không có lịch làm việc");
+            }
+
         } catch (Exception e) {
             Log.e("DoctorProfile", "Lỗi khi map UI: " + e.getMessage(), e);
-            Toast.makeText(DoctorProfileActivity.this, "Lỗi khi map UI: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
-
 
     private void setupCertifications() {
         int doctorId = getIntent().getIntExtra(NavigationHelper.EXTRA_DOCTOR_ID, -1);
@@ -172,16 +207,23 @@ public class DoctorProfileActivity extends BaseActivity {
             layoutCertifications.removeAllViews();
 
             for (CertificationResponseDTO cert : response.getData()) {
-                TextView fileView = new TextView(this);
                 String fileUrl = cert.getFileUrl();
-                fileView.setText(fileUrl.substring(fileUrl.lastIndexOf('/') + 1));
-                fileView.setTextColor(getResources().getColor(R.color.md_theme_primary));
-                fileView.setPadding(0, 8, 0, 8);
-                fileView.setOnClickListener(v -> {
-                    Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(fileUrl));
-                    startActivity(intent);
-                });
-                layoutCertifications.addView(fileView);
+
+                ImageView imageView = new ImageView(this);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT
+                );
+                params.setMargins(0, 16, 0, 16);
+                imageView.setLayoutParams(params);
+                imageView.setAdjustViewBounds(true);
+                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+
+                Glide.with(this)
+                        .load(fileUrl)
+                        .into(imageView);
+
+                layoutCertifications.addView(imageView);
             }
         });
     }
