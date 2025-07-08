@@ -3,8 +3,6 @@ package com.example.schedulemedical.data.api;
 import com.example.schedulemedical.model.dto.request.CreateAppointmentRequest;
 import com.example.schedulemedical.model.dto.request.UpdateAppointmentStatusRequest;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
-import com.example.schedulemedical.model.dto.response.AppointmentResponse;
-import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;

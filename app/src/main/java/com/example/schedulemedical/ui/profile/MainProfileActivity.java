@@ -3,13 +3,12 @@ package com.example.schedulemedical.ui.profile;
 import static com.example.schedulemedical.utils.NavigationHelper.ROLE;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.example.schedulemedical.R;
@@ -19,6 +18,7 @@ import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.ProfileResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
 import com.example.schedulemedical.ui.doctorprofile.DoctorEditProfileActivity;
+import com.example.schedulemedical.ui.doctorprofile.DoctorViewModel;
 import com.example.schedulemedical.ui.forgotPassword.ResetPasswordActivity;
 import com.example.schedulemedical.ui.schedule.ManageSchedule;
 import com.example.schedulemedical.ui.schedule.MyScheduledActivity;
@@ -31,6 +31,9 @@ import retrofit2.Response;
 
 public class MainProfileActivity extends BaseActivity {
 
+    private DoctorViewModel viewModel;
+    private AuthManager authManager;
+
     @Override
     protected int getLayoutResourceId() {
         return R.layout.activity_main_profile;
@@ -38,6 +41,12 @@ public class MainProfileActivity extends BaseActivity {
 
     @Override
     protected void setupViews() {
+
+        authManager = new AuthManager(this);
+
+        // ✅ Khởi tạo ViewModel ở đây
+        viewModel = new ViewModelProvider(this).get(DoctorViewModel.class);
+
         String role = getIntent().getStringExtra(ROLE);
 
         ImageView btnBack = findViewById(R.id.btnBack);
@@ -77,7 +86,6 @@ public class MainProfileActivity extends BaseActivity {
             }
         });
 
-        // Thiết lập menu items
         setupMenuItem(R.id.itemMyAppointments, R.drawable.ic_calendar, "Lịch khám của tôi");
         setupMenuItem(R.id.itemPersonalDetails, R.drawable.ic_person_outline, "Thông tin cá nhân");
 
@@ -94,10 +102,30 @@ public class MainProfileActivity extends BaseActivity {
         setupMenuItem(R.id.itemLogout, R.drawable.ic_logout, "Đăng xuất");
 
         // Xử lý click
-        findViewById(R.id.itemSchedule).setOnClickListener(v->
+        findViewById(R.id.itemSchedule).setOnClickListener(v ->
                 startActivity(new Intent(this, ManageSchedule.class)));
-        findViewById(R.id.itemMyAppointments).setOnClickListener(v ->
-                startActivity(new Intent(this, MyScheduledActivity.class)));
+
+        findViewById(R.id.itemMyAppointments).setOnClickListener(v -> {
+            Intent intent = new Intent(this, MyScheduledActivity.class);
+            intent.putExtra("role", role);
+
+            if ("DOCTOR".equalsIgnoreCase(role)) {
+                int userId = authManager.getUserId();
+                viewModel.loadDoctorProfileByUserId(userId);
+
+                viewModel.doctorProfile.observe(this, doctor -> {
+                    if (doctor != null) {
+                        intent.putExtra("doctorId", doctor.getDoctorId());
+                        startActivity(intent);
+                    } else {
+                        Toast.makeText(this, "Không tìm thấy hồ sơ bác sĩ", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                startActivity(intent);
+            }
+        });
+
         findViewById(R.id.itemPersonalDetails).setOnClickListener(v -> {
             if ("DOCTOR".equalsIgnoreCase(role)) {
                 startActivity(new Intent(this, DoctorEditProfileActivity.class));
@@ -105,6 +133,7 @@ public class MainProfileActivity extends BaseActivity {
                 startActivity(new Intent(this, ProfileActivity.class));
             }
         });
+
         findViewById(R.id.itemPassword).setOnClickListener(v ->
                 startActivity(new Intent(this, ResetPasswordActivity.class)));
 
