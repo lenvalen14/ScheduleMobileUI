@@ -19,7 +19,7 @@ public interface AppointmentApiService {
     
     // Create new appointment
     @POST("appointment")
-    Call<ApiResponse> createAppointment(@Body CreateAppointmentRequest request);
+    Call<ApiResponse<Object>> createAppointment(@Body CreateAppointmentRequest request);
     
     // Get appointments with filters
     @GET("appointment")

@@ -383,25 +383,25 @@ public class ScheduleActivity extends AppCompatActivity implements
             "SCHEDULED"
         );
         
-        appointmentApiService.createAppointment(request).enqueue(new Callback<ApiResponse>() {
-            @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
-                hideLoading();
-                
-                if (response.isSuccessful() && response.body() != null) {
-                    showSuccessAndNavigateToPayment(response.body());
-                } else {
-                    showError("Không thể đặt lịch khám. Vui lòng thử lại.");
-                }
-            }
-            
-            @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
-                Log.e(TAG, "Create appointment failed", t);
-                hideLoading();
-                showError("Lỗi kết nối mạng. Vui lòng thử lại.");
-            }
-        });
+//        appointmentApiService.createAppointment(request).enqueue(new Callback<ApiResponse>() {
+//            @Override
+//            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+//                hideLoading();
+//
+//                if (response.isSuccessful() && response.body() != null) {
+//                    showSuccessAndNavigateToPayment(response.body());
+//                } else {
+//                    showError("Không thể đặt lịch khám. Vui lòng thử lại.");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ApiResponse> call, Throwable t) {
+//                Log.e(TAG, "Create appointment failed", t);
+//                hideLoading();
+//                showError("Lỗi kết nối mạng. Vui lòng thử lại.");
+//            }
+//        });
     }
     
     private boolean validateBookingData() {

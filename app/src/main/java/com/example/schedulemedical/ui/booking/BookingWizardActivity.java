@@ -362,7 +362,7 @@ public class BookingWizardActivity extends AppCompatActivity {
 
         appointmentApiService.createAppointment(request).enqueue(new Callback<ApiResponse<Object>>() {
             @Override
-            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
                 hideLoading();
 
                 if (response.isSuccessful() && response.body() != null) {
@@ -373,7 +373,7 @@ public class BookingWizardActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ApiResponse> call, Throwable t) {
+            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
                 Log.e(TAG, "Create appointment failed", t);
                 hideLoading();
                 showError("Lỗi kết nối mạng. Vui lòng thử lại.");
