@@ -83,8 +83,6 @@ public class FilterDoctorActivity extends BaseActivity {
 
                     String specialty = doctor.getSpecialty().getName() != null ? doctor.getSpecialty().getName() : "Không rõ";
                     String hospital = doctor.getHospital().getName() != null ? doctor.getHospital().getName() : "Không rõ";
-//                    String fee = doctor.getConsultationFee() != null ? doctor.getConsultationFee().toString() : "0";
-                    String fee =  "0";
 
                     Log.d(TAG, "Book appointment clicked for: " + doctorName + " - " + doctor.getDoctorId());
 
@@ -94,8 +92,7 @@ public class FilterDoctorActivity extends BaseActivity {
                                 doctor.getDoctorId(),
                                 doctorName,
                                 specialty,
-                                hospital,
-                                fee
+                                hospital
                         );
                     } else {
                         Toast.makeText(FilterDoctorActivity.this, "Không thể đặt lịch với bác sĩ này", Toast.LENGTH_SHORT).show();

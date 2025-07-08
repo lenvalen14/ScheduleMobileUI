@@ -157,15 +157,13 @@ public class NavigationHelper {
             int doctorId,
             String doctorName,
             String specialty,
-            String hospitalName,
-            String consultationFee
+            String hospitalName
     ) {
         Intent intent = new Intent(context, ScheduleActivity.class);
         intent.putExtra("doctorId", doctorId);
         intent.putExtra("doctorName", doctorName);
         intent.putExtra("specialty", specialty);
         intent.putExtra("hospitalName", hospitalName);
-        intent.putExtra("consultationFee", consultationFee);
         context.startActivity(intent);
     }
 

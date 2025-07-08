@@ -140,18 +140,18 @@
                             android:textColor="@color/text_secondary"
                             android:textSize="12sp" />
 
-                        <TextView
-                            android:id="@+id/tvConsultationFee"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:background="@drawable/price_badge_bg"
-                            android:paddingHorizontal="12dp"
-                            android:paddingVertical="4dp"
-                            android:text="500,000 VND"
-                            android:textColor="@color/blue_007b"
-                            android:textSize="12sp"
-                            android:textStyle="bold" />
+<!--                        <TextView-->
+<!--                            android:id="@+id/tvConsultationFee"-->
+<!--                            android:layout_width="wrap_content"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:layout_marginTop="8dp"-->
+<!--                            android:background="@drawable/price_badge_bg"-->
+<!--                            android:paddingHorizontal="12dp"-->
+<!--                            android:paddingVertical="4dp"-->
+<!--                            android:text="500,000 VND"-->
+<!--                            android:textColor="@color/blue_007b"-->
+<!--                            android:textSize="12sp"-->
+<!--                            android:textStyle="bold" />-->
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
