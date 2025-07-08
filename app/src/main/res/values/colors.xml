@@ -1,93 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
-
-    <color name="text_secondary">#6C757D</color>
-    <color name="text_primary">#212529</color>
-    <color name="text_disabled">#ADB5BD</color>
-
+    <!-- Primary teal colors from MedicalLife brand -->
+    <color name="teal_primary">#4A9B9B</color>
+    <color name="teal_secondary">#5BAFAF</color>
+    <color name="teal_light">#E8F4F4</color>
+    <color name="teal_dark">#3A8A8A</color>
+    <!-- Text colors -->
+    <color name="text_primary">#2C3E50</color>
+    <color name="text_secondary">#546E7A</color>
+    <color name="text_tertiary">#90A4AE</color>
+    <!-- Background colors -->
+    <color name="background_primary">#FFFFFF</color>
+    <color name="background_secondary">#F8FAFA</color>
+    <color name="notification_unread">#FF5722</color>
+    <color name="gray_e0">#E0E0E0</color>
+    <color name="yellow_ffc">#FFC107</color>
+    <color name="white_alpha_15">#26FFFFFF</color>
+    <color name="field_stroke">#E0E0E0</color>
+    <color name="field_background">#F5F5F5</color>
+    <color name="text_hint">#999999</color>
+    <color name="icon_tint_dark">#666666</color>
+    <color name="md_theme_primary">#447F98</color>
+    <color name="md_theme_background">#F5F5F5</color>
+    <color name="gray_f5">#F5F8FB</color>
+    <color name="gray_f0">#F0F0F0</color>
+    <color name="blue_007b">#007BFF</color>
+    <color name="white">#FFFFFF</color>
+    <color name="primaryColor">#447F98</color>
+    <color name="primary_color">#007BFF</color>
+    <color name="field_stroke_focused">#2196F3</color>
     <color name="primary_blue">#007BFF</color>
     <color name="primary_blue_light">#E3F2FD</color>
-
-    <color name="primaryColor">#447F98</color>
-    <color name="primaryTextColor">#263238</color>
-    <color name="secondaryTextColor">#757575</color>
-    <color name="lightBorderColor">#CFD8DC</color>
-
-    <color name="md_theme_primary">#447F98</color>
-    <color name="md_theme_onPrimary">#FFFFFF</color>
-    <color name="md_theme_secondary">#546E7A</color>
-    <color name="md_theme_onSecondary">#FFFFFF</color>
-    <color name="md_theme_background">#F5F5F5</color>
-    <color name="md_theme_onBackground">#1C1B1F</color>
-    <color name="md_theme_surface">#FFFFFF</color>
-    <color name="md_theme_onSurface">#1C1B1F</color>
-
-    <color name="calendar_day_background">@android:color/transparent</color>
-    <color name="calendar_day_text">#212529</color>
-    <color name="calendar_day_selected">#007BFF</color>
-    <color name="calendar_day_today">#E3F2FD</color>
-
-    <color name="accent_blue">#2196F3</color>
-    <color name="success_green">#4CAF50</color>
-
-    <!-- Background Colors -->
-    <color name="background_light">#F8F9FA</color>
-
-    <!-- Text Colors -->
-    <color name="text_hint">#999999</color>
-
-    <!-- Icon Colors -->
-    <color name="icon_tint_dark">#666666</color>
-
-    <!-- Alpha Colors -->
-    <color name="white_alpha_15">#26FFFFFF</color>
-    <color name="white_alpha_20">#33FFFFFF</color>
     <color name="white_alpha_30">#4DFFFFFF</color>
-
-    <!-- Field Colors -->
-    <color name="field_background">#F5F5F5</color>
-    <color name="field_stroke">#E0E0E0</color>
-    <color name="field_stroke_focused">#2196F3</color>
-
+    <color name="orange_500">#FF9800</color>
+    <color name="gray_f8">#F8F9FA</color>
+    <color name="black">#FF000000</color>
+    <color name="primary">#2196F3</color>
+    <color name="md_theme_onBackground">#1C1B1F</color>
+    <color name="md_theme_outline">#79747E</color>
+    <color name="md_theme_secondary">#546E7A</color>
+    <color name="md_theme_onSurfaceVariant">#49454F</color>
+    <color name="gray_1d">#1D1D1D</color>
+    <color name="background_light">#F8F9FA</color>
+    <color name="gray_f1">#F1F3F4</color>
     <color name="teal_700">#007B83</color>
+    <color name="gray_546e">#546E7A</color>
+    <color name="blue_447f">#447F98</color>
+    <color name="gray_ee">#EEEEEE</color>
+    <color name="gray_2121">#212121</color>
+    <color name="blue_03">#03A9F4</color>
+    <color name="gray_7575">#757575</color>
+    <color name="gray_6161">#616161</color>
+    <color name="gray_de">#DEE2E6</color>
     <color name="orange">#FF9800</color>
     <color name="blue">#2196F3</color>
     <color name="green">#4CAF50</color>
     <color name="red">#F44336</color>
-    <color name="orange_500">#FF9800</color>
-
-    <color name="primary">#2196F3</color>
-    <color name="primary_color">#007BFF</color>
-    <color name="bottom_nav_color">#F0F0F0</color>
-
-    <color name="gray_f0">#F0F0F0</color>
-    <color name="gray_f1">#F1F3F4</color>
-    <color name="gray_de">#DEE2E6</color>
-    <color name="gray_f5">#F5F8FB</color>
-    <color name="gray_e0">#E0E0E0</color>
-    <color name="gray_f8">#F8F9FA</color>
-    <color name="blue_03">#03A9F4</color>
-    <color name="yellow_ffc">#FFC107</color>
-    <color name="gray_1d">#1D1D1D</color>
-    <color name="blue_3f">#3F51B5</color>
-    <color name="blue_1d">#1D1D8D</color>
-    <color name="gray_ee">#EEEEEE</color>
-    <color name="blue_007b">#007BFF</color>
-    <color name="blue_447f">#447F98</color>
-    <color name="gray_2121">#212121</color>
-    <color name="gray_6161">#616161</color>
-    <color name="gray_7575">#757575</color>
-    <color name="gray_546e">#546E7A</color>
-    <color name="gray_cccccc">#A6A5A5</color>
-
-    <color name="md_theme_outline">#79747E</color>
-    <color name="md_theme_onSurfaceVariant">#49454F</color>
-
-    <!-- Status Bar -->
-    <color name="status_bar_color">#005cbf</color>
-
-
-
+    <color name="text_disabled">#ADB5BD</color>
 </resources>

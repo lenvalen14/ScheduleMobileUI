@@ -180,10 +180,10 @@ public class HomeActivity extends BaseActivity {
             });
         }
 
-        // Notification click - Show dropdown menu
+        // Notification click - Show notification fragment
         if (ivNotification != null) {
             ivNotification.setOnClickListener(view -> {
-                showNotificationDropdown(view);
+                showNotificationFragment();
             });
         }
 
@@ -197,40 +197,12 @@ public class HomeActivity extends BaseActivity {
         // }
     }
 
-    private void showNotificationDropdown(View anchor) {
-        PopupMenu popup = new PopupMenu(this, anchor);
-
-        // Manually add menu items since we can't create menu XML file
-        popup.getMenu().add(0, R.id.menu_notifications, 0, "📢 Thông báo");
-        popup.getMenu().add(0, R.id.menu_profile, 1, "👤 Hồ sơ");
-        popup.getMenu().add(0, R.id.menu_settings, 2, "⚙️ Cài đặt");
-        popup.getMenu().add(0, R.id.menu_logout, 3, "🚪 Đăng xuất");
-
-        popup.setOnMenuItemClickListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.menu_notifications) {
-                // Navigate to notifications
-                Toast.makeText(this, "Thông báo đang được phát triển!", Toast.LENGTH_SHORT).show();
-                return true;
-            } else if (itemId == R.id.menu_profile) {
-                // Navigate to profile
-                NavigationHelper.navigateToUserProfile(this);
-                return true;
-            } else if (itemId == R.id.menu_settings) {
-                // Navigate to settings
-                Toast.makeText(this, "Cài đặt đang được phát triển!", Toast.LENGTH_SHORT).show();
-                return true;
-            } else if (itemId == R.id.menu_logout) {
-                // Logout
-                performLogout();
-                return true;
-            }
-
-            return false;
-        });
-
-        popup.show();
+    private void showNotificationFragment() {
+        getSupportFragmentManager()
+            .beginTransaction()
+            .replace(android.R.id.content, new com.example.schedulemedical.ui.main.NotificationFragment())
+            .addToBackStack(null)
+            .commit();
     }
 
     private void performLogout() {

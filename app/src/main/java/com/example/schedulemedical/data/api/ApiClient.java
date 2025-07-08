@@ -23,7 +23,7 @@ public class ApiClient {
         appContext = context.getApplicationContext();
     }
 
-    private static Retrofit getRetrofit() {
+    public static Retrofit getRetrofit() {
         if (retrofit == null) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor();
             logging.setLevel(HttpLoggingInterceptor.Level.BODY);
