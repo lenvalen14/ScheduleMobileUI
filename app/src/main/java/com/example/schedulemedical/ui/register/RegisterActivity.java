@@ -29,11 +29,28 @@ public class RegisterActivity extends ComponentActivity {
         // Khởi tạo repository
         registerRepository = new RegisterRepository();
 
+         // 1. Lấy ra AutoCompleteTextView
+    AutoCompleteTextView genderEdt = findViewById(R.id.autoCompleteGender);
+
+    // 2. Tạo danh sách các lựa chọn giới tính
+    String[] genderOptions = new String[]{"Nam", "Nữ", "Khác"};
+
+    // 3. Tạo một ArrayAdapter để kết nối danh sách với AutoCompleteTextView
+    //    Sử dụng layout mặc định của Android cho item trong danh sách thả xuống
+    ArrayAdapter<String> adapter = new ArrayAdapter<>(
+            this,
+            android.R.layout.simple_dropdown_item_1line,
+            genderOptions
+    );
+
+    // 4. Set adapter cho AutoCompleteTextView
+    genderEdt.setAdapter(adapter);
+
         EditText nameEdt = findViewById(R.id.editTextName);
         EditText emailEdt = findViewById(R.id.editTextEmail);
         EditText passwordEdt = findViewById(R.id.editTextPassword);
         EditText phoneEdt = findViewById(R.id.editTextPhone);
-        AutoCompleteTextView genderEdt = findViewById(R.id.autoCompleteGender);
+        // AutoCompleteTextView genderEdt = findViewById(R.id.autoCompleteGender);
         CheckBox cbTerms = findViewById(R.id.cbTerms);
         Button registerBtn = findViewById(R.id.btnRegister);
         ImageView btn_back = findViewById(R.id.ivBack);
