@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import com.example.schedulemedical.data.api.ApiClient;
 import com.example.schedulemedical.data.api.DoctorApiService;
 import com.example.schedulemedical.data.api.HospitalApiService;
+import com.example.schedulemedical.model.dto.request.doctor.UpdateDoctorDTO;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.DoctorListResponse;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
@@ -15,7 +16,6 @@ import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.example.schedulemedical.model.dto.response.ResponseWrapper;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
-import com.example.schedulemedical.model.dto.response.doctor.DoctorResponseDTO;
 
 import java.util.List;
 
@@ -160,6 +160,29 @@ public class DoctorRepository {
                     }
                 });
         return specialtiesLiveData;
+    }
+
+    // === Update doctor profile ===
+    public LiveData<ApiResponse<DoctorResponse>> updateDoctorProfile(int doctorId, UpdateDoctorDTO dto) {
+        MutableLiveData<ApiResponse<DoctorResponse>> resultLiveData = new MutableLiveData<>();
+
+        doctorApiService.updateDoctor(doctorId, dto).enqueue(new Callback<ApiResponse<DoctorResponse>>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiResponse<DoctorResponse>> call, @NonNull Response<ApiResponse<DoctorResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    resultLiveData.setValue(response.body());
+                } else {
+                    resultLiveData.setValue(null); // or handle error more gracefully
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ApiResponse<DoctorResponse>> call, @NonNull Throwable t) {
+                resultLiveData.setValue(null);
+            }
+        });
+
+        return resultLiveData;
     }
 
 }
