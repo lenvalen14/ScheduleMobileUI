@@ -14,6 +14,7 @@ import com.example.schedulemedical.model.dto.response.DoctorResponse;
 import com.example.schedulemedical.model.dto.response.HospitalListResponse;
 import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.example.schedulemedical.model.dto.response.ResponseWrapper;
+import com.example.schedulemedical.model.dto.response.ScheduleResponse;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 
@@ -185,4 +186,94 @@ public class DoctorRepository {
         return resultLiveData;
     }
 
+    // === Get schedules by doctor ID ===
+    public LiveData<List<ScheduleResponse>> getSchedulesByDoctorId(int doctorId) {
+        MutableLiveData<List<ScheduleResponse>> resultLiveData = new MutableLiveData<>();
+
+        doctorApiService.getSchedulesByDoctorId(doctorId)
+                .enqueue(new Callback<ApiResponse<List<ScheduleResponse>>>() {
+                    @Override
+                    public void onResponse(@NonNull Call<ApiResponse<List<ScheduleResponse>>> call,
+                                           @NonNull Response<ApiResponse<List<ScheduleResponse>>> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                            resultLiveData.setValue(response.body().getData());
+                        } else {
+                            resultLiveData.setValue(null);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<ApiResponse<List<ScheduleResponse>>> call, @NonNull Throwable t) {
+                        resultLiveData.setValue(null);
+                    }
+                });
+
+        return resultLiveData;
+    }
+
+    public LiveData<ScheduleResponse> createSchedule(ScheduleResponse request) {
+        MutableLiveData<ScheduleResponse> result = new MutableLiveData<>();
+
+        doctorApiService.createSchedule(request).enqueue(new Callback<ApiResponse<ScheduleResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<ScheduleResponse>> call,
+                                   Response<ApiResponse<ScheduleResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    result.postValue(response.body().getData());
+                } else {
+                    result.postValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<ScheduleResponse>> call, Throwable t) {
+                result.postValue(null);
+            }
+        });
+
+        return result;
+    }
+
+    // Cập nhật lịch làm việc
+    public LiveData<ScheduleResponse> updateSchedule(int scheduleId, ScheduleResponse request) {
+        MutableLiveData<ScheduleResponse> result = new MutableLiveData<>();
+
+        doctorApiService.updateSchedule(scheduleId, request).enqueue(new Callback<ApiResponse<ScheduleResponse>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<ScheduleResponse>> call,
+                                   Response<ApiResponse<ScheduleResponse>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    result.postValue(response.body().getData());
+                } else {
+                    result.postValue(null);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<ScheduleResponse>> call, Throwable t) {
+                result.postValue(null);
+            }
+        });
+
+        return result;
+    }
+
+    // Xoá lịch
+    public LiveData<Boolean> deleteSchedule(int scheduleId) {
+        MutableLiveData<Boolean> result = new MutableLiveData<>();
+
+        doctorApiService.deleteSchedule(scheduleId).enqueue(new Callback<ApiResponse<Void>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Void>> call, Response<ApiResponse<Void>> response) {
+                result.postValue(response.isSuccessful());
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Void>> call, Throwable t) {
+                result.postValue(false);
+            }
+        });
+
+        return result;
+    }
 }

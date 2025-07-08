@@ -3,6 +3,7 @@ package com.example.schedulemedical.data.api;
 import com.example.schedulemedical.model.dto.request.doctor.UpdateDoctorDTO;
 import com.example.schedulemedical.model.dto.response.DoctorListResponse;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
+import com.example.schedulemedical.model.dto.response.ScheduleResponse;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
@@ -12,7 +13,9 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
@@ -103,4 +106,25 @@ public interface DoctorApiService {
         @Query("page") int page,
         @Query("limit") int limit
     );
+
+    @GET("doctor/doctorSchedule/doctor/{doctorId}")
+    Call<ApiResponse<List<ScheduleResponse>>> getSchedulesByDoctorId(@Path("doctorId") int doctorId);
+
+    @POST("doctor/doctorSchedule")
+    Call<ApiResponse<ScheduleResponse>> createSchedule(@Body ScheduleResponse request);
+
+    // Lấy chi tiết một lịch làm việc theo scheduleId
+    @GET("doctor/doctorSchedule/{id}")
+    Call<ApiResponse<ScheduleResponse>> getScheduleById(@Path("id") int scheduleId);
+
+    // Cập nhật lịch làm việc
+    @PUT("doctor/doctorSchedule/{id}")
+    Call<ApiResponse<ScheduleResponse>> updateSchedule(
+            @Path("id") int scheduleId,
+            @Body ScheduleResponse request
+    );
+
+    // Xoá lịch làm việc
+    @DELETE("doctor/doctorSchedule/{id}")
+    Call<ApiResponse<Void>> deleteSchedule(@Path("id") int scheduleId);
 } 

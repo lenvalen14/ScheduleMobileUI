@@ -10,6 +10,7 @@ import com.example.schedulemedical.model.dto.request.doctor.UpdateDoctorDTO;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.DoctorListResponse;
 import com.example.schedulemedical.model.dto.response.ResponseWrapper;
+import com.example.schedulemedical.model.dto.response.ScheduleResponse;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
 
@@ -22,6 +23,9 @@ public class DoctorViewModel extends ViewModel {
     public MutableLiveData<ResponseWrapper<DoctorListResponse>> filteredDoctors = _filteredDoctors;
     public MutableLiveData<ResponseWrapper<List<CertificationResponseDTO>>> certifications = new MutableLiveData<>();
     public MutableLiveData<DoctorResponse> doctorProfile = new MutableLiveData<>();
+
+    private final MutableLiveData<List<ScheduleResponse>> _doctorSchedules = new MutableLiveData<>();
+    public LiveData<List<ScheduleResponse>> doctorSchedules = _doctorSchedules;
 
     public void loadDoctorCertifications(int doctorId, int page, int limit) {
         repository.getDoctorCertifications(doctorId, page, limit, certifications);
@@ -44,6 +48,26 @@ public class DoctorViewModel extends ViewModel {
 
     public LiveData<ApiResponse<DoctorResponse>> updateDoctorProfile(int doctorId, UpdateDoctorDTO dto) {
         return repository.updateDoctorProfile(doctorId, dto);
+    }
+
+    public void loadSchedulesByDoctorId(int doctorId) {
+        repository.getSchedulesByDoctorId(doctorId)
+                .observeForever(_doctorSchedules::postValue);
+    }
+
+    // === Thêm mới lịch làm việc ===
+    public LiveData<ScheduleResponse> createSchedule(ScheduleResponse schedule) {
+        return repository.createSchedule(schedule);
+    }
+
+    // === Cập nhật lịch làm việc ===
+    public LiveData<ScheduleResponse> updateSchedule(int scheduleId, ScheduleResponse schedule) {
+        return repository.updateSchedule(scheduleId, schedule);
+    }
+
+    // === Xoá lịch làm việc ===
+    public LiveData<Boolean> deleteSchedule(int scheduleId) {
+        return repository.deleteSchedule(scheduleId);
     }
 
 }

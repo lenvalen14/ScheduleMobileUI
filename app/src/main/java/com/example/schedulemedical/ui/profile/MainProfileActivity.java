@@ -102,8 +102,21 @@ public class MainProfileActivity extends BaseActivity {
         setupMenuItem(R.id.itemLogout, R.drawable.ic_logout, "Đăng xuất");
 
         // Xử lý click
-        findViewById(R.id.itemSchedule).setOnClickListener(v ->
-                startActivity(new Intent(this, ManageSchedule.class)));
+        findViewById(R.id.itemSchedule).setOnClickListener(v -> {
+            int userId = authManager.getUserId();
+            viewModel.loadDoctorProfileByUserId(userId);
+
+            viewModel.doctorProfile.observe(this, doctor -> {
+                if (doctor != null) {
+                    Intent intent = new Intent(this, ManageSchedule.class);
+                    intent.putExtra("doctorId", doctor.getDoctorId());
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "Không tìm thấy hồ sơ bác sĩ", Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
+
 
         findViewById(R.id.itemMyAppointments).setOnClickListener(v -> {
             Intent intent = new Intent(this, MyScheduledActivity.class);

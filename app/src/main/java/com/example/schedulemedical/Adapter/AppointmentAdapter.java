@@ -70,11 +70,17 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         holder.tvDoctorName.setText(name);
 
         // Chuyên khoa
-        String specialty = appointment.getDoctor() != null &&
-                appointment.getDoctor().getSpecialty() != null
-                ? appointment.getDoctor().getSpecialty().getName()
-                : "";
-        holder.tvSpecialty.setText("Chuyên khoa " + specialty);
+        if (!isDoctor) {
+            String specialty = appointment.getDoctor() != null &&
+                    appointment.getDoctor().getSpecialty() != null
+                    ? appointment.getDoctor().getSpecialty().getName()
+                    : "";
+            holder.tvSpecialty.setVisibility(View.VISIBLE);
+            holder.tvSpecialty.setText("Chuyên khoa " + specialty);
+        } else {
+            holder.tvSpecialty.setVisibility(View.GONE);
+        }
+
 
         // Ngày giờ hẹn
         if (appointment.getScheduledTime() != null) {

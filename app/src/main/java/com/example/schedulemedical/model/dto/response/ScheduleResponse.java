@@ -7,6 +7,16 @@ public class ScheduleResponse {
     private String startTime;
     private String endTime;
 
+    public ScheduleResponse(Integer scheduleId, Integer doctorId, Integer dayOfWeek, String startTime, String endTime) {
+        this.scheduleId = scheduleId;
+        this.doctorId = doctorId;
+        this.dayOfWeek = dayOfWeek;
+        this.startTime = startTime;
+        this.endTime = endTime;
+    }
+
+    public ScheduleResponse() {}
+
     public Integer getScheduleId() { return scheduleId; }
     public void setScheduleId(Integer scheduleId) { this.scheduleId = scheduleId; }
 

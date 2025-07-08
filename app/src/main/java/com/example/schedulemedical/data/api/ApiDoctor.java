@@ -5,7 +5,9 @@ import com.example.schedulemedical.model.dto.request.doctor.CreateDoctorDTO;
 import com.example.schedulemedical.model.dto.request.doctor.DoctorScheduleDTO;
 import com.example.schedulemedical.model.dto.request.doctor.SpecialtyDTO;
 import com.example.schedulemedical.model.dto.request.doctor.UpdateDoctorDTO;
+import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.ResponseWrapper;
+import com.example.schedulemedical.model.dto.response.ScheduleResponse;
 import com.example.schedulemedical.model.dto.response.doctor.AchievementResponseDTO;
 import com.example.schedulemedical.model.dto.response.doctor.DoctorResponseDTO;
 import com.example.schedulemedical.model.dto.response.doctor.DoctorScheduleResponseDTO;
@@ -62,6 +64,7 @@ public interface ApiDoctor {
             @Query("page") int page,
             @Query("limit") int limit
     );
+
 
     // Certification APIs
     @Multipart
