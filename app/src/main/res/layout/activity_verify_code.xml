@@ -77,6 +77,11 @@
             style="@style/OtpEditTextStyle"
             android:autofillHints=""
             tools:ignore="LabelFor" />
+        <EditText
+            android:id="@+id/etOtp6"
+            style="@style/OtpEditTextStyle"
+            android:autofillHints=""
+            tools:ignore="LabelFor" />
 
     </LinearLayout>
 

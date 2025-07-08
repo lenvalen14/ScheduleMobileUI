@@ -46,4 +46,15 @@
         <item name="colorControlActivated">@color/yellow_ffc</item> <!-- màu sao được chọn -->
     </style>
 
+    <style name="CustomFilterChip" parent="Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_background_selector</item>
+        <item name="android:textColor">@color/chip_text_color_selector</item>
+        <item name="checkedIconVisible">false</item>
+        <item name="android:fontFamily">@font/inter_medium</item>
+    </style>
+    <style name="ToolbarTitleAppearance" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:fontFamily">@font/inter_semibold</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

@@ -37,6 +37,8 @@ import com.example.schedulemedical.ui.base.BaseActivity;
 import com.example.schedulemedical.ui.login.LoginActivity;
 import com.example.schedulemedical.utils.AuthManager;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.button.MaterialButton;
+import com.example.schedulemedical.ui.schedule.MyScheduledActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -68,6 +70,7 @@ public class ProfileActivity extends BaseActivity {
     private Spinner spinnerEthnicity;
     private EditText etInsurance, etAllergies, etChronicDiseases, etObstetricHistory, etSurgicalHistory, etFamilyHistory, etSocialHistory, etMedicationHistory;
     private EditText etNationalId;
+    private MaterialButton btnMyAppointments;
     
     // Data
     private ProfileResponse currentProfile;
@@ -142,7 +145,6 @@ public class ProfileActivity extends BaseActivity {
         etMedicationHistory = findViewById(R.id.etMedicationHistory);
         etNationalId = findViewById(R.id.etNationalId);
         Button btnSaveProfile = findViewById(R.id.btnUpdateProfile);
-        btnLogout = findViewById(R.id.btnLogout);
         // tvChangePassword = findViewById(R.id.tvChangePassword); // Not in layout
         
         // Disable email editing (usually not changeable)
@@ -159,9 +161,6 @@ public class ProfileActivity extends BaseActivity {
             }
         });
         
-        if (btnLogout != null) {
-            btnLogout.setOnClickListener(v -> logout());
-        }
     }
     
     private void setupImagePickerLauncher() {

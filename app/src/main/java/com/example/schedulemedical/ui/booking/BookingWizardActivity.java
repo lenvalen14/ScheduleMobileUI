@@ -258,9 +258,9 @@ public class BookingWizardActivity extends AppCompatActivity {
             "SCHEDULED"
         );
         
-        appointmentApiService.createAppointment(request).enqueue(new Callback<ApiResponse<Object>>() {
+        appointmentApiService.createAppointment(request).enqueue(new Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                 hideLoading();
                 
                 if (response.isSuccessful() && response.body() != null) {
@@ -271,7 +271,7 @@ public class BookingWizardActivity extends AppCompatActivity {
             }
             
             @Override
-            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+            public void onFailure(Call<ApiResponse> call, Throwable t) {
                 Log.e(TAG, "Create appointment failed", t);
                 hideLoading();
                 showError("Lỗi kết nối mạng. Vui lòng thử lại.");
@@ -311,7 +311,7 @@ public class BookingWizardActivity extends AppCompatActivity {
         return isoFormat.format(cal.getTime());
     }
     
-    private void showSuccessAndFinish(ApiResponse<Object> response) {
+    private void showSuccessAndFinish(ApiResponse response) {
         Toast.makeText(this, "Đặt lịch khám thành công!", Toast.LENGTH_LONG).show();
         
         // You can navigate to appointments list or show success dialog
@@ -323,7 +323,7 @@ public class BookingWizardActivity extends AppCompatActivity {
         finish();
     }
     
-    private Integer extractAppointmentId(ApiResponse<Object> response) {
+    private Integer extractAppointmentId(ApiResponse response) {
         try {
             Gson gson = new Gson();
             JsonElement element = gson.toJsonTree(response.getData());

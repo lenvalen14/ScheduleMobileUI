@@ -336,13 +336,11 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         request.setStatus("SCHEDULED");
         
         appointmentApiService.createAppointment(request)
-            .enqueue(new Callback<ApiResponse<Object>>() {
+            .enqueue(new Callback<ApiResponse>() {
                 @Override
-                public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
                     hideLoading();
-                    
                     if (response.isSuccessful() && response.body() != null) {
-                        // Appointment created successfully
                         showSuccessAndNavigateToPayment(response.body());
                     } else {
                         String errorMsg = "Không thể đặt lịch hẹn";
@@ -352,9 +350,8 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
                         Toast.makeText(BookingActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                     }
                 }
-                
                 @Override
-                public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                public void onFailure(Call<ApiResponse> call, Throwable t) {
                     hideLoading();
                     Log.e(TAG, "Failed to create appointment", t);
                     Toast.makeText(BookingActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_LONG).show();
@@ -362,7 +359,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
             });
     }
     
-    private void showSuccessAndNavigateToPayment(ApiResponse<Object> response) {
+    private void showSuccessAndNavigateToPayment(ApiResponse response) {
         Toast.makeText(this, "Đặt lịch hẹn thành công!", Toast.LENGTH_SHORT).show();
         
         // Navigate to payment
@@ -378,14 +375,13 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         finish();
     }
     
-    private Integer extractAppointmentId(ApiResponse<Object> response) {
+    private Integer extractAppointmentId(ApiResponse response) {
         try {
-            // Try to extract appointment ID from response
             Object data = response.getData();
             if (data instanceof Number) {
                 return ((Number) data).intValue();
             }
-            // Could be more complex extraction based on actual API response
+            // Có thể cần parse thêm nếu API trả về object phức tạp
             return 1; // Fallback ID
         } catch (Exception e) {
             Log.e(TAG, "Error extracting appointment ID", e);

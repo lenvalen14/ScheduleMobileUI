@@ -3,6 +3,9 @@ package com.example.schedulemedical.data.api;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.PatientProfileResponse;
 import com.example.schedulemedical.model.dto.request.UpdatePatientProfileRequest;
+import com.example.schedulemedical.model.dto.request.UpdatePasswordRequest;
+
+import java.util.Map;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -57,4 +60,11 @@ public interface UserApiService {
 
     @PUT("patient-profile/by-user/{userId}")
     Call<ApiResponse<PatientProfileResponse>> updatePatientProfile(@Path("userId") int userId, @Body UpdatePatientProfileRequest request);
-} 
+
+    @PUT("users/{email}/password")
+    Call<ApiResponse<Object>> updateUserPassword(@Path("email") String email, @Body UpdatePasswordRequest body);
+
+    @POST("users/forgot-password")
+    Call<ApiResponse<Object>> forgotPassword(@Body Map<String, String> body);
+
+}

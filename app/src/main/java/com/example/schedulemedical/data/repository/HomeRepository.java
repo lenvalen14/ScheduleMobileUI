@@ -204,19 +204,17 @@ public class HomeRepository {
             callback.onError("User not logged in");
             return;
         }
-        
-        appointmentApi.getAppointmentCounts(userId, null).enqueue(new Callback<ApiResponse<Object>>() {
+        appointmentApi.getAppointmentCounts(userId, null).enqueue(new retrofit2.Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+            public void onResponse(retrofit2.Call<ApiResponse> call, retrofit2.Response<ApiResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body().getData());
                 } else {
                     callback.onError("Failed to load appointment counts");
                 }
             }
-            
             @Override
-            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+            public void onFailure(retrofit2.Call<ApiResponse> call, Throwable t) {
                 Log.e(TAG, "Appointment counts API call failed", t);
                 callback.onError("Network error: " + t.getMessage());
             }
@@ -230,19 +228,17 @@ public class HomeRepository {
             callback.onError("User not logged in");
             return;
         }
-        
-        appointmentApi.getAppointments(1, 5, userId, null, "SCHEDULED").enqueue(new Callback<ApiResponse<Object>>() {
+        appointmentApi.getAppointments(1, 5, userId, null, "SCHEDULED").enqueue(new retrofit2.Callback<ApiResponse>() {
             @Override
-            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+            public void onResponse(retrofit2.Call<ApiResponse> call, retrofit2.Response<ApiResponse> response) {
                 if (response.isSuccessful() && response.body() != null) {
                     callback.onSuccess(response.body().getData());
                 } else {
                     callback.onError("Failed to load upcoming appointments");
                 }
             }
-            
             @Override
-            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+            public void onFailure(retrofit2.Call<ApiResponse> call, Throwable t) {
                 Log.e(TAG, "Upcoming appointments API call failed", t);
                 callback.onError("Network error: " + t.getMessage());
             }

@@ -88,6 +88,8 @@
     <!-- Status Bar -->
     <color name="status_bar_color">#005cbf</color>
 
+    <color name="bg_default">#F6FAFB</color>
+    <color name="chip_unselected_bg">#E0E0E0</color>
 
 
 </resources>
