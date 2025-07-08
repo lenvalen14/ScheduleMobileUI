@@ -18,6 +18,7 @@ import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -97,9 +98,9 @@ public class DoctorRepository {
     }
 
 
-    // === Get doctor profile by user ID ===
-    public void getDoctorProfileByUserId(int userId, MutableLiveData<DoctorResponse> result) {
-        doctorApiService.getDoctorByUserId(userId)
+    // === Get doctor profile by ID ===
+    public void getDoctorProfileById(int doctorId, MutableLiveData<DoctorResponse> result) {
+        doctorApiService.getDoctorById(doctorId)
                 .enqueue(new Callback<ApiResponse<DoctorResponse>>() {
                     @Override
                     public void onResponse(@NonNull Call<ApiResponse<DoctorResponse>> call,
@@ -116,6 +117,25 @@ public class DoctorRepository {
                         result.setValue(null);
                     }
                 });
+    }
+
+    public void getDoctorsByUserIds(List<Integer> userIds, MutableLiveData<List<DoctorResponse>> result) {
+        String userIdsStr = userIds.stream().map(String::valueOf).collect(Collectors.joining(","));
+        doctorApiService.getDoctorsByUserIds(userIdsStr, 1, 1)
+            .enqueue(new Callback<ApiResponse<List<DoctorResponse>>>() {
+                @Override
+                public void onResponse(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Response<ApiResponse<List<DoctorResponse>>> response) {
+                    if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                        result.setValue(response.body().getData());
+                    } else {
+                        result.setValue(null);
+                    }
+                }
+                @Override
+                public void onFailure(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Throwable t) {
+                    result.setValue(null);
+                }
+            });
     }
 
     // === Get all hospitals ===

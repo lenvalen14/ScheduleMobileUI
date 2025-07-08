@@ -7,27 +7,40 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.model.Specialty;
-import java.util.List;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class SpecialtyCardAdapter extends RecyclerView.Adapter<SpecialtyCardAdapter.SpecialtyViewHolder> {
+public class SpecialtyCardAdapter extends ListAdapter<Specialty, SpecialtyCardAdapter.SpecialtyViewHolder> {
     private final Context context;
-    private final List<Specialty> specialtyList;
     private OnSpecialtyClickListener onSpecialtyClickListener;
 
     public interface OnSpecialtyClickListener {
         void onSpecialtyClick(Specialty specialty);
     }
 
-    public SpecialtyCardAdapter(Context context, List<Specialty> specialtyList) {
+    public SpecialtyCardAdapter(Context context) {
+        super(new DiffUtil.ItemCallback<Specialty>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull Specialty oldItem, @NonNull Specialty newItem) {
+                return oldItem.getName().equals(newItem.getName());
+            }
+            @Override
+            public boolean areContentsTheSame(@NonNull Specialty oldItem, @NonNull Specialty newItem) {
+                return oldItem.equals(newItem);
+            }
+        });
         this.context = context;
-        this.specialtyList = specialtyList;
     }
 
     public void setOnSpecialtyClickListener(OnSpecialtyClickListener listener) {
         this.onSpecialtyClickListener = listener;
+    }
+
+    public void updateData(java.util.List<Specialty> newList) {
+        submitList(newList != null ? new java.util.ArrayList<>(newList) : new java.util.ArrayList<>());
     }
 
     @NonNull
@@ -39,19 +52,13 @@ public class SpecialtyCardAdapter extends RecyclerView.Adapter<SpecialtyCardAdap
 
     @Override
     public void onBindViewHolder(@NonNull SpecialtyViewHolder holder, int position) {
-        Specialty specialty = specialtyList.get(position);
+        Specialty specialty = getItem(position);
         holder.bind(specialty);
-    }
-
-    @Override
-    public int getItemCount() {
-        return specialtyList != null ? specialtyList.size() : 0;
     }
 
     class SpecialtyViewHolder extends RecyclerView.ViewHolder {
         private final ImageView ivSpecialtyIcon;
         private final TextView tvSpecialtyName;
-
         public SpecialtyViewHolder(@NonNull View itemView) {
             super(itemView);
             ivSpecialtyIcon = itemView.findViewById(R.id.ivSpecialtyIcon);
@@ -59,15 +66,13 @@ public class SpecialtyCardAdapter extends RecyclerView.Adapter<SpecialtyCardAdap
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION && onSpecialtyClickListener != null) {
-                    onSpecialtyClickListener.onSpecialtyClick(specialtyList.get(pos));
+                    onSpecialtyClickListener.onSpecialtyClick(getItem(pos));
                 }
             });
         }
-
         public void bind(Specialty specialty) {
             tvSpecialtyName.setText(specialty.getName());
             // Nếu muốn set icon động, có thể map specialty.getName() sang icon tương ứng ở đây
-            // ivSpecialtyIcon.setImageResource(...);
         }
     }
 } 

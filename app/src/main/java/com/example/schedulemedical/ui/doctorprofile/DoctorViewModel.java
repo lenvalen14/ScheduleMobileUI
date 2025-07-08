@@ -22,13 +22,14 @@ public class DoctorViewModel extends ViewModel {
     public MutableLiveData<ResponseWrapper<DoctorListResponse>> filteredDoctors = _filteredDoctors;
     public MutableLiveData<ResponseWrapper<List<CertificationResponseDTO>>> certifications = new MutableLiveData<>();
     public MutableLiveData<DoctorResponse> doctorProfile = new MutableLiveData<>();
+    public MutableLiveData<List<DoctorResponse>> doctorList = new MutableLiveData<>();
 
     public void loadDoctorCertifications(int doctorId, int page, int limit) {
         repository.getDoctorCertifications(doctorId, page, limit, certifications);
     }
 
-    public void loadDoctorProfileByUserId(int userId) {
-        repository.getDoctorProfileByUserId(userId, doctorProfile);
+    public void loadDoctorProfileById(int doctorId) {
+        repository.getDoctorProfileById(doctorId, doctorProfile);
     }
 
     public void filterDoctors(
@@ -46,4 +47,7 @@ public class DoctorViewModel extends ViewModel {
         return repository.updateDoctorProfile(doctorId, dto);
     }
 
+    public void loadDoctorByUserIds(List<Integer> userIds) {
+        repository.getDoctorsByUserIds(userIds, doctorList);
+    }
 }

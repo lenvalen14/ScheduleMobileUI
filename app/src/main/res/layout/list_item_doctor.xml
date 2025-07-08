@@ -3,200 +3,250 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="20dp"
-    app:cardElevation="4dp"
-    app:cardBackgroundColor="@android:color/white">
+    android:layout_margin="12dp"
+    app:cardCornerRadius="16dp"
+    app:cardElevation="6dp"
+    app:cardBackgroundColor="@color/background_primary"
+    app:strokeColor="@color/gray_f1"
+    app:strokeWidth="1dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp">
+        android:orientation="vertical"
+        android:padding="20dp">
 
-        <!-- Ảnh bác sĩ -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/ivDoctorPhoto"
-            android:layout_width="72dp"
-            android:layout_height="72dp"
-            android:src="@drawable/sample_profile_image"
-            android:layout_gravity="center_vertical"
-            app:civ_border_color="@color/gray_f1"
-            app:civ_border_width="2dp"
-            android:layout_marginEnd="16dp" />
-
-        <!-- Thông tin -->
+        <!-- Header section with doctor info and favorite -->
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-            <!-- Tên bác sĩ + icon yêu thích -->
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <!-- Doctor photo -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/ivDoctorPhoto"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@drawable/sample_profile_image"
+                app:civ_border_color="@color/teal_primary"
+                app:civ_border_width="3dp"
+                android:layout_marginEnd="16dp" />
 
-                <TextView
-                    android:id="@+id/tvDoctorName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Dr. Lily Greyson"
-                    android:textColor="@android:color/black"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:fontFamily="@font/inter_semibold" />
-
-                <ImageView
-                    android:id="@+id/ivFavorite"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_alignParentEnd="true"
-                    android:src="@drawable/ic_heart_outline"
-                    app:tint="@color/blue_007b" />
-            </RelativeLayout>
-
-            <!-- chuyên khoa -->
+            <!-- Doctor info -->
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="2dp"
-                android:gravity="center_vertical">
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/icSpecialty"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_specialty"
-                    app:tint="@color/blue_007b"
-                    android:layout_marginEnd="4dp" />
-
-                <TextView
-                    android:id="@+id/tvDoctorSpecialty"
-                    android:layout_width="wrap_content"
+                <!-- Name and favorite row -->
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Cardiology"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/inter_medium" />
-            </LinearLayout>
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
 
-            <!-- bệnh viện -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="2dp"
-                android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/tvDoctorName"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Dr. Lily Greyson"
+                        android:textColor="@color/text_primary"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/inter_semibold" />
 
-                <ImageView
-                    android:id="@+id/icHospital"
-                    android:layout_width="16dp"
-                    android:layout_height="16dp"
-                    android:src="@drawable/ic_hospital"
-                    app:tint="@color/blue_007b"
-                    android:layout_marginEnd="4dp" />
+                    <ImageView
+                        android:id="@+id/ivFavorite"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:src="@drawable/ic_heart_outline"
+                        app:tint="@color/teal_primary"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="2dp" />
+                </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tvHospitalName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Yulje Hospital"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/inter_medium" />
-            </LinearLayout>
-
-            <!-- Rating -->
-            <LinearLayout
-                android:id="@+id/ratingContainer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
-
-                <RatingBar
-                    android:id="@+id/ratingBar"
-                    style="?android:attr/ratingBarStyleSmall"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:isIndicator="true"
-                    android:numStars="5"
-                    android:rating="4.7"
-                    android:stepSize="0.1"
-                    android:scaleX="0.85"
-                    android:scaleY="0.85"
-                    android:theme="@style/CustomRatingBar" />
-
-                <TextView
-                    android:id="@+id/tvRatingValue"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="6dp"
-                    android:fontFamily="@font/inter_medium"
-                    android:text="4.7"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <!-- Experience + Patients -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:orientation="horizontal"
-                android:gravity="start">
-
+                <!-- Specialty -->
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginEnd="5dp">
+                    android:orientation="horizontal"
+                    android:layout_marginTop="6dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/icSpecialty"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_specialty"
+                        app:tint="@color/teal_primary"
+                        android:layout_marginEnd="6dp" />
 
                     <TextView
+                        android:id="@+id/tvDoctorSpecialty"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Experience"
+                        android:text="Cardiology"
                         android:textColor="@color/text_secondary"
-                        android:textSize="12sp" />
-
+                        android:textSize="14sp"
+                        android:fontFamily="@font/inter_medium" />
                 </LinearLayout>
+
+                <!-- Hospital -->
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="4dp"
+                    android:gravity="center_vertical">
+
+                    <ImageView
+                        android:id="@+id/icHospital"
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_hospital"
+                        app:tint="@color/teal_primary"
+                        android:layout_marginEnd="6dp" />
+
+                    <TextView
+                        android:id="@+id/tvHospitalName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Yulje Hospital"
+                        android:textColor="@color/text_secondary"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/inter_medium" />
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Rating section -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <RatingBar
+                android:id="@+id/ratingBar"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:rating="4.7"
+                android:stepSize="0.1"
+                android:scaleX="1.0"
+                android:scaleY="1.0"
+                android:theme="@style/CustomRatingBar" />
+
+            <TextView
+                android:id="@+id/tvRatingValue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:fontFamily="@font/inter_semibold"
+                android:text="4.7"
+                android:textColor="@color/text_primary"
+                android:textSize="16sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:text="(124 reviews)"
+                android:textColor="@color/text_tertiary"
+                android:textSize="12sp"
+                android:fontFamily="@font/inter_medium" />
+        </LinearLayout>
+
+        <!-- Experience and Stats section -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <!-- Experience card -->
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:backgroundTint="@color/teal_light"
+                android:padding="6dp"
+                android:layout_marginEnd="8dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Experience"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter_medium" />
 
                 <TextView
                     android:id="@+id/tvExperience"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="6 years"
-                    android:textColor="@android:color/black"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"/>
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/inter_semibold"
+                    android:layout_marginTop="2dp" />
             </LinearLayout>
 
-            <RelativeLayout
-                android:layout_width="match_parent"
+            <!-- Patients card -->
+            <LinearLayout
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp">
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:backgroundTint="@color/teal_light"
+                android:padding="6dp"
+                android:layout_marginStart="8dp">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnBookAppointment"
+                <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="36dp"
-                    android:layout_alignParentEnd="true"
-                    android:minWidth="0dp"
-                    android:paddingHorizontal="20dp"
-                    android:text="Đặt lịch ngay"
-                    android:textColor="@android:color/white"
-                    android:textSize="13sp"
-                    android:backgroundTint="@color/blue_447f"
-                    app:cornerRadius="18dp" />
-            </RelativeLayout>
+                    android:layout_height="wrap_content"
+                    android:text="Patients"
+                    android:textColor="@color/text_tertiary"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/inter_medium" />
+
+                <TextView
+                    android:id="@+id/tvPatients"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="1,200+"
+                    android:textColor="@color/text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/inter_semibold"
+                    android:layout_marginTop="2dp" />
+            </LinearLayout>
         </LinearLayout>
+
+        <!-- Book appointment button -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnBookAppointment"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="20dp"
+            android:text="Đặt lịch ngay"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter_semibold"
+            android:backgroundTint="@color/teal_primary"
+            app:cornerRadius="12dp"
+            app:strokeWidth="0dp"
+            android:elevation="2dp" />
+
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

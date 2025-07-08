@@ -36,8 +36,7 @@ public class DoctorProfileActivity extends BaseActivity {
         setupNavigation();
         handleIntentExtras();
         setupViewModel();
-        loadDoctorProfileByUserId();
-        setupCertifications();
+        loadDoctorProfile();
     }
 
     private void setupNavigation() {
@@ -86,21 +85,38 @@ public class DoctorProfileActivity extends BaseActivity {
         viewModel = new ViewModelProvider(this).get(DoctorViewModel.class);
     }
 
-    private void loadDoctorProfileByUserId() {
+    private void loadDoctorProfile() {
         int doctorId = getIntent().getIntExtra(NavigationHelper.EXTRA_DOCTOR_ID, -1);
-        if (doctorId == -1) {
-            AuthManager authManager = new AuthManager(this);
-            doctorId = authManager.getUserId();
-            Log.d("DoctorProfile", "Load profile bằng userId (self): " + doctorId);
+        if (doctorId != -1) {
+            // Có doctorId, lấy profile trực tiếp
+            loadDoctorProfileById(doctorId);
         } else {
-            Log.d("DoctorProfile", "Load profile bằng doctorId: " + doctorId);
+            // Không có doctorId, thử lấy userId và gọi API by-userIds
+            AuthManager authManager = new AuthManager(this);
+            Integer userId = authManager.getUserId();
+            if (userId != null && userId > 0) {
+                viewModel.loadDoctorByUserIds(java.util.Collections.singletonList(userId));
+                viewModel.doctorList.observe(this, doctorList -> {
+                    if (doctorList != null && !doctorList.isEmpty()) {
+                        DoctorResponse doctor = doctorList.get(0);
+                        mapDoctorProfileToUI(doctor);
+                        setupCertifications(doctor.getDoctorId());
+                    } else {
+                        Log.e("DoctorProfile", "Không tìm thấy thông tin bác sĩ theo userId");
+                    }
+                });
+            } else {
+                Log.e("DoctorProfile", "Không có doctorId hoặc userId để load profile");
+            }
         }
+    }
 
-        viewModel.loadDoctorProfileByUserId(doctorId);
-
+    private void loadDoctorProfileById(int doctorId) {
+        viewModel.loadDoctorProfileById(doctorId);
         viewModel.doctorProfile.observe(this, doctor -> {
             if (doctor != null) {
                 mapDoctorProfileToUI(doctor);
+                setupCertifications(doctor.getDoctorId());
             } else {
                 Log.e("DoctorProfile", "Không thể tải thông tin bác sĩ");
             }
@@ -108,8 +124,6 @@ public class DoctorProfileActivity extends BaseActivity {
     }
 
     private void mapDoctorProfileToUI(DoctorResponse doctor) {
-        Log.d("DoctorProfile", "Bắt đầu map UI");
-
         TextView doctorName = findViewById(R.id.tvDoctorName);
         TextView doctorSpecialty = findViewById(R.id.tvDoctorSpecialty);
         TextView doctorHospital = findViewById(R.id.tvDoctorHospital);
@@ -117,98 +131,58 @@ public class DoctorProfileActivity extends BaseActivity {
         TextView doctorExperience = findViewById(R.id.tvDoctorExperience);
         ImageView doctorAvatar = findViewById(R.id.ivDoctorAvatar);
         TextView doctorSchedule = findViewById(R.id.tvDoctorSchedule);
-
-        try {
-            if (doctorName != null && doctor.getUser() != null) {
-                doctorName.setText(doctor.getUser().getFullName());
-                Log.d("DoctorProfile", "Set tên: " + doctor.getUser().getFullName());
+        if (doctorName != null && doctor.getUser() != null) {
+            doctorName.setText(doctor.getUser().getFullName());
+        }
+        if (doctorSpecialty != null) {
+            doctorSpecialty.setText(doctor.getSpecialty() != null ? doctor.getSpecialty().getName() : "Chưa cập nhật chuyên khoa");
+        }
+        if (doctorHospital != null) {
+            doctorHospital.setText(doctor.getHospital() != null ? doctor.getHospital().getName() : "Chưa cập nhật bệnh viện");
+        }
+        if (doctorRating != null) {
+            String rating = doctor.getRating() != null ? String.format("%.1f ★", doctor.getRating()) : "Chưa có đánh giá";
+            doctorRating.setText(rating);
+        }
+        if (doctorExperience != null) {
+            String exp = doctor.getYearsOfExperience() != null ? doctor.getYearsOfExperience() : "Chưa cập nhật kinh nghiệm";
+            doctorExperience.setText(exp);
+        }
+        if (doctorAvatar != null && doctor.getUser() != null && doctor.getUser().getAvatar() != null) {
+            Glide.with(this)
+                    .load(doctor.getUser().getAvatar())
+                    .placeholder(R.drawable.sample_profile_image)
+                    .error(R.drawable.sample_profile_image)
+                    .into(doctorAvatar);
+        }
+        if (doctorSchedule != null && doctor.getSchedules() != null && !doctor.getSchedules().isEmpty()) {
+            StringBuilder scheduleBuilder = new StringBuilder();
+            String[] weekdays = {"Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"};
+            for (var schedule : doctor.getSchedules()) {
+                int dayIndex = schedule.getDayOfWeek();
+                String dayName = (dayIndex >= 1 && dayIndex <= 7) ? weekdays[dayIndex - 1] : "Không rõ";
+                scheduleBuilder.append(dayName)
+                        .append(": ")
+                        .append(schedule.getStartTime())
+                        .append(" - ")
+                        .append(schedule.getEndTime())
+                        .append("\n");
             }
-
-            if (doctorSpecialty != null) {
-                if (doctor.getSpecialty() != null) {
-                    doctorSpecialty.setText(doctor.getSpecialty().getName());
-                    Log.d("DoctorProfile", "Set chuyên khoa: " + doctor.getSpecialty().getName());
-                } else {
-                    doctorSpecialty.setText("Chưa cập nhật chuyên khoa");
-                    Log.d("DoctorProfile", "Không có chuyên khoa");
-                }
-            }
-
-            if (doctorHospital != null) {
-                if (doctor.getHospital() != null) {
-                    doctorHospital.setText(doctor.getHospital().getName());
-                    Log.d("DoctorProfile", "Set bệnh viện: " + doctor.getHospital().getName());
-                } else {
-                    doctorHospital.setText("Chưa cập nhật bệnh viện");
-                    Log.d("DoctorProfile", "Không có bệnh viện");
-                }
-            }
-
-            if (doctorRating != null) {
-                String rating = doctor.getRating() != null ? String.format("%.1f ★", doctor.getRating()) : "Chưa có đánh giá";
-                doctorRating.setText(rating);
-                Log.d("DoctorProfile", "Set rating: " + rating);
-            }
-
-            if (doctorExperience != null) {
-                String exp = doctor.getYearsOfExperience() != null ? doctor.getYearsOfExperience() : "Chưa cập nhật kinh nghiệm";
-                doctorExperience.setText(exp);
-                Log.d("DoctorProfile", "Set kinh nghiệm: " + exp);
-            }
-
-            if (doctorAvatar != null && doctor.getUser() != null && doctor.getUser().getAvatar() != null) {
-                Log.d("DoctorProfile", "Avatar URL: " + doctor.getUser().getAvatar());
-                // TODO: Glide or Picasso load avatar here
-            }
-
-            if (doctorSchedule != null && doctor.getSchedules() != null && !doctor.getSchedules().isEmpty()) {
-                StringBuilder scheduleBuilder = new StringBuilder();
-
-                Log.d("DoctorProfile lich", "Schedules: " + new Gson().toJson(doctor.getSchedules()));
-
-                String[] weekdays = {"Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"};
-
-                doctor.getSchedules().stream()
-                        .sorted((a, b) -> Integer.compare(a.getDayOfWeek(), b.getDayOfWeek()))
-                        .forEach(schedule -> {
-                            int dayIndex = schedule.getDayOfWeek();
-                            String dayName = (dayIndex >= 1 && dayIndex <= 7) ? weekdays[dayIndex - 1] : "Không rõ";
-                            scheduleBuilder.append(dayName)
-                                    .append(": ")
-                                    .append(schedule.getStartTime())
-                                    .append(" - ")
-                                    .append(schedule.getEndTime())
-                                    .append("\n");
-                        });
-
-                doctorSchedule.setText(scheduleBuilder.toString().trim());
-                Log.d("DoctorProfile", "Set lịch làm việc:\n" + scheduleBuilder);
-            } else if (doctorSchedule != null) {
-                doctorSchedule.setText("Chưa cập nhật lịch làm việc");
-                Log.d("DoctorProfile lich", "Không có lịch làm việc");
-            }
-
-        } catch (Exception e) {
-            Log.e("DoctorProfile", "Lỗi khi map UI: " + e.getMessage(), e);
+            doctorSchedule.setText(scheduleBuilder.toString().trim());
+        } else if (doctorSchedule != null) {
+            doctorSchedule.setText("Chưa cập nhật lịch làm việc");
         }
     }
 
-    private void setupCertifications() {
-        int doctorId = getIntent().getIntExtra(NavigationHelper.EXTRA_DOCTOR_ID, -1);
-        if (doctorId == -1) return;
-
+    private void setupCertifications(Integer doctorId) {
+        if (doctorId == null || doctorId == -1) return;
         viewModel.loadDoctorCertifications(doctorId, 1, 10);
-
         LinearLayout layoutCertifications = findViewById(R.id.layoutCertifications);
-
         viewModel.certifications.observe(this, response -> {
             if (layoutCertifications == null || response == null || response.getData() == null) return;
-
             layoutCertifications.removeAllViews();
-
             for (CertificationResponseDTO cert : response.getData()) {
                 String fileUrl = cert.getFileUrl();
-
                 ImageView imageView = new ImageView(this);
                 LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -218,11 +192,9 @@ public class DoctorProfileActivity extends BaseActivity {
                 imageView.setLayoutParams(params);
                 imageView.setAdjustViewBounds(true);
                 imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
                 Glide.with(this)
                         .load(fileUrl)
                         .into(imageView);
-
                 layoutCertifications.addView(imageView);
             }
         });

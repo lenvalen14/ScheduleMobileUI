@@ -30,6 +30,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.Collections;
 
 public class DoctorEditProfileActivity extends BaseActivity {
 
@@ -97,13 +98,15 @@ public class DoctorEditProfileActivity extends BaseActivity {
             NavigationHelper.navigateToHome(this);
             return;
         }
-
-        viewModel.loadDoctorProfileByUserId(userId);
-        viewModel.doctorProfile.observe(this, doctor -> {
-            if (doctor != null) {
-                doctorId = doctor.getDoctorId();
+        viewModel.loadDoctorByUserIds(Collections.singletonList(userId));
+        viewModel.doctorList.observe(this, doctorList -> {
+            if (doctorList != null && !doctorList.isEmpty()) {
+                DoctorResponse doctor = doctorList.get(0);
+                this.doctorId = doctor.getDoctorId();
                 this.userId = doctor.getUserId();
                 mapDoctorProfileToUI(doctor);
+            } else {
+                Toast.makeText(this, "Không tìm thấy thông tin bác sĩ", Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -140,8 +143,8 @@ public class DoctorEditProfileActivity extends BaseActivity {
         ((EditText) findViewById(R.id.et_experience)).setText(String.valueOf(doctorResponse.getYearsOfExperience()));
         ((EditText) findViewById(R.id.et_clinic)).setText(doctorResponse.getClinic() != null ? doctorResponse.getClinic() : "");
 
-        TextView tvSpecialty = findViewById(R.id.tv_specialty);
-        TextView tvHospital = findViewById(R.id.tv_hospital);
+        TextView tvSpecialty = findViewById(R.id.tvSpecialty);
+        TextView tvHospital = findViewById(R.id.tvHospital);
 
         if (doctorResponse.getSpecialty() != null && doctorResponse.getSpecialty().getName() != null) {
             tvSpecialty.setText(doctorResponse.getSpecialty().getName());
