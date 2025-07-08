@@ -17,19 +17,17 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
-import com.example.schedulemedical.Adapter.DoctorSelectionAdapter;
-import com.example.schedulemedical.Adapter.FilterDoctorAdapter;
+import com.example.schedulemedical.Adapter.DoctorAdapter;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.data.api.ApiClient;
 import com.example.schedulemedical.data.repository.HomeRepository;
-import com.example.schedulemedical.model.Doctor;
 import com.example.schedulemedical.services.NotificationService;
 import com.example.schedulemedical.ui.base.BaseActivity;
+import com.example.schedulemedical.ui.filterDoctor.FilterDoctorActivity;
 import com.example.schedulemedical.ui.login.LoginActivity;
 import com.example.schedulemedical.utils.AuthManager;
 import com.example.schedulemedical.utils.NavigationHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.example.schedulemedical.Adapter.DoctorAdapter;
 import com.example.schedulemedical.data.repository.HospitalRepository;
 import com.example.schedulemedical.data.repository.SpecialtyRepository;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
@@ -328,24 +326,61 @@ public class HomeActivity extends BaseActivity {
     private void loadDashboardData() {
         showLoading();
         // Load doctors
-        doctorRepository.filterDoctors(null, null, null, 1, 10, new Callback<DoctorListResponse>() {
+        doctorRepository.filterDoctorsRaw(null, null, null, 1, 10, new Callback<DoctorListResponse>() {
             @Override
             public void onResponse(Call<DoctorListResponse> call, Response<DoctorListResponse> response) {
                 Log.d("HomeActivity", "Doctor API response: " + response);
                 if (response.isSuccessful() && response.body() != null && recyclerDoctors != null) {
                     List<DoctorResponse> doctorList = response.body().getData();
                     Log.d("HomeActivity", "Doctor raw list size: " + (doctorList != null ? doctorList.size() : 0));
-                    FilterDoctorAdapter doctorAdapter = new FilterDoctorAdapter(HomeActivity.this, doctorList);
+
+                    DoctorAdapter doctorAdapter = new DoctorAdapter(HomeActivity.this, doctorList);
+                    doctorAdapter.setOnDoctorClickListener(new DoctorAdapter.OnDoctorClickListener() {
+                        @Override
+                        public void onDoctorClick(DoctorResponse doctor) {
+                            if (doctor != null && doctor.getUser() != null) {
+                                String doctorName = doctor.getUser().getFullName() != null
+                                        ? doctor.getUser().getFullName() : "Unknown Doctor";
+                                Log.d(TAG, "Doctor clicked: " + doctorName);
+
+                                if (doctor.getDoctorId() != null) {
+                                    NavigationHelper.navigateToDoctorProfile(HomeActivity.this, doctor.getUserId());
+                                } else {
+                                    Toast.makeText(HomeActivity.this, "Không thể xem thông tin bác sĩ", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onBookAppointmentClick(DoctorResponse doctor) {
+                            if (doctor != null && doctor.getDoctorId() != null) {
+                                String doctorName = doctor.getUser() != null ? doctor.getUser().getFullName() : "Unknown";
+                                String specialty = doctor.getSpecialty() != null ? doctor.getSpecialty().getName() : "Không rõ";
+                                String hospital = doctor.getHospital() != null ? doctor.getHospital().getName() : "Không rõ";
+
+                                NavigationHelper.navigateToSchedule(
+                                        HomeActivity.this,
+                                        doctor.getDoctorId(),
+                                        doctorName,
+                                        specialty,
+                                        hospital
+                                );
+                            }
+                        }
+                    });
+
                     recyclerDoctors.setAdapter(doctorAdapter);
                 } else {
                     Log.d("HomeActivity", "Doctor response null or empty, or recyclerDoctors is null");
                 }
             }
+
             @Override
             public void onFailure(Call<DoctorListResponse> call, Throwable t) {
                 Log.e("HomeActivity", "Doctor API failure: " + t.getMessage());
             }
         });
+
         // Load hospitals
         hospitalRepository.getHospitals(1, 10, new Callback<HospitalListResponse>() {
             @Override

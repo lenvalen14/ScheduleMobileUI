@@ -17,6 +17,8 @@ navigationFragment = "2.9.0"
 navigationUi = "2.9.0"
 socketIoClient = "2.0.1"
 swiperefreshlayout = "1.1.0"
+flexboxVersion = "3.0.0"
+
 
 [libraries]
 circleimageview = { module = "de.hdodenhof:circleimageview", version.ref = "circleimageview" }
@@ -38,6 +40,7 @@ navigation-fragment = { group = "androidx.navigation", name = "navigation-fragme
 navigation-ui = { group = "androidx.navigation", name = "navigation-ui", version.ref = "navigationUi" }
 socket-io-client = { module = "io.socket:socket.io-client", version.ref = "socketIoClient" }
 swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefreshlayout" }
+google-flexbox = { group = "com.google.android.flexbox", name = "flexbox", version.ref = "flexboxVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

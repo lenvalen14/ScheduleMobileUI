@@ -27,6 +27,7 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
     private List<DoctorResponse> doctorList;
     private List<DoctorResponse> filteredList;
     private OnDoctorClickListener onDoctorClickListener;
+    private boolean useCircleAvatar = true;
 
     public interface OnDoctorClickListener {
         void onDoctorClick(DoctorResponse doctor);
@@ -39,26 +40,17 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         this.filteredList = new ArrayList<>(this.doctorList);
     }
 
+    public DoctorAdapter(Context context, List<DoctorResponse> doctorList, boolean useCircleAvatar) {
+        this(context, doctorList);
+        this.useCircleAvatar = useCircleAvatar;
+    }
+
+    public DoctorAdapter(Context context) {
+        this(context, new ArrayList<>());
+    }
+
     public void setOnDoctorClickListener(OnDoctorClickListener listener) {
         this.onDoctorClickListener = listener;
-    }
-
-    @NonNull
-    @Override
-    public DoctorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_doctor, parent, false);
-        return new DoctorViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull DoctorViewHolder holder, int position) {
-        DoctorResponse doctor = filteredList.get(position);
-        holder.bind(doctor);
-    }
-
-    @Override
-    public int getItemCount() {
-        return filteredList.size();
     }
 
     public void updateDoctors(List<DoctorResponse> newDoctors) {
@@ -132,47 +124,50 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
         filteredList.clear();
 
         for (DoctorResponse doctor : doctorList) {
-            HospitalResponse hospital = doctor.getHospital();
-            try {
-                float rating = hospital != null && hospital.getRating() != null
-                        ? hospital.getRating().floatValue() : 0f;
-                if (rating >= minRating) {
-                    filteredList.add(doctor);
-                }
-            } catch (Exception e) {
-                if (minRating == 0) {
-                    filteredList.add(doctor);
-                }
+            Float rating = doctor.getRating();
+            if (rating == null && minRating == 0) {
+                filteredList.add(doctor);
+            } else if (rating != null && rating >= minRating) {
+                filteredList.add(doctor);
             }
         }
 
         notifyDataSetChanged();
     }
 
+    @NonNull
+    @Override
+    public DoctorViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item_doctor, parent, false);
+        return new DoctorViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull DoctorViewHolder holder, int position) {
+        holder.bind(filteredList.get(position));
+    }
+
+    @Override
+    public int getItemCount() {
+        return filteredList.size();
+    }
+
     class DoctorViewHolder extends RecyclerView.ViewHolder {
-        private ImageView ivDoctorAvatar;
-        private TextView tvDoctorName;
-        private TextView tvSpecialty;
-        private TextView tvHospital;
-        private TextView tvExperience;
+        private ImageView ivDoctorPhoto;
+        private TextView tvDoctorName, tvSpecialty, tvHospital, tvExperience, tvRating;
         private RatingBar ratingBar;
-        private TextView tvRating;
-        private TextView tvReviews;
-        private TextView tvConsultationFee;
         private View btnBookAppointment;
 
         public DoctorViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            ivDoctorAvatar = itemView.findViewById(R.id.ivDoctorAvatar);
+            ivDoctorPhoto = itemView.findViewById(R.id.ivDoctorPhoto);
             tvDoctorName = itemView.findViewById(R.id.tvDoctorName);
-            tvSpecialty = itemView.findViewById(R.id.tvSpecialty);
-            tvHospital = itemView.findViewById(R.id.tvHospital);
+            tvSpecialty = itemView.findViewById(R.id.tvDoctorSpecialty);
+            tvHospital = itemView.findViewById(R.id.tvHospitalName);
             tvExperience = itemView.findViewById(R.id.tvExperience);
             ratingBar = itemView.findViewById(R.id.ratingBar);
-            tvRating = itemView.findViewById(R.id.tvRating);
-            tvReviews = itemView.findViewById(R.id.tvReviews);
-            tvConsultationFee = itemView.findViewById(R.id.tvConsultationFee);
+            tvRating = itemView.findViewById(R.id.tvRatingValue);
             btnBookAppointment = itemView.findViewById(R.id.btnBookAppointment);
 
             itemView.setOnClickListener(v -> {
@@ -197,42 +192,35 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
             SpecialtyResponse specialty = doctor.getSpecialty();
             HospitalResponse hospital = doctor.getHospital();
 
-            // Name
             tvDoctorName.setText(user != null && user.getFullName() != null ? user.getFullName() : "N/A");
-
-            // Specialty
             tvSpecialty.setText(specialty != null && specialty.getName() != null ? specialty.getName() : "General");
-
-            // Hospital
             tvHospital.setText(hospital != null && hospital.getName() != null ? hospital.getName() : "Hospital");
 
-            // Experience
-            String exp = doctor.getYearsOfExperience() != null ? doctor.getYearsOfExperience() + " năm" : "N/A";
+            String exp = doctor.getYearsOfExperience() != null ? doctor.getYearsOfExperience() + " năm" : "0 năm";
             tvExperience.setText(exp);
 
-            // Rating
-            float rating = hospital != null && hospital.getRating() != null ? hospital.getRating().floatValue() : 0f;
-            ratingBar.setRating(rating);
-            tvRating.setText(String.format("%.1f", rating));
+            Float rating = doctor.getRating();
+            float safeRating = rating != null ? rating : 0f;
+            ratingBar.setRating(safeRating);
+            tvRating.setText(String.format("%.1f", safeRating));
 
-            // Reviews
-            int reviewCount = hospital != null && hospital.getReviews() != null ? hospital.getReviews() : 0;
-            tvReviews.setText("(" + reviewCount + " reviews)");
-
-            // Fee
-//            String fee = doctor.getConsultationFee() != null ? doctor.getConsultationFee() + " VND" : "Chưa có giá";
-//            tvConsultationFee.setText(fee);
-
-            // Avatar
             if (user != null && user.getAvatar() != null && !user.getAvatar().isEmpty()) {
-                Glide.with(context)
-                        .load(user.getAvatar())
-                        .transform(new CircleCrop())
-                        .placeholder(R.drawable.sample_profile_image)
-                        .error(R.drawable.sample_profile_image)
-                        .into(ivDoctorAvatar);
+                if (useCircleAvatar) {
+                    Glide.with(context)
+                            .load(user.getAvatar())
+                            .transform(new CircleCrop())
+                            .placeholder(R.drawable.sample_profile_image)
+                            .error(R.drawable.sample_profile_image)
+                            .into(ivDoctorPhoto);
+                } else {
+                    Glide.with(context)
+                            .load(user.getAvatar())
+                            .placeholder(R.drawable.sample_profile_image)
+                            .error(R.drawable.sample_profile_image)
+                            .into(ivDoctorPhoto);
+                }
             } else {
-                ivDoctorAvatar.setImageResource(R.drawable.sample_profile_image);
+                ivDoctorPhoto.setImageResource(R.drawable.sample_profile_image);
             }
         }
     }
