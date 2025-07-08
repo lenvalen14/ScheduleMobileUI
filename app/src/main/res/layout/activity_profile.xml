@@ -8,8 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="vertical">
 
         <!-- Header -->
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -33,35 +32,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:text="Profile"
+                android:textColor="@color/text_primary"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="@color/text_primary"
-                app:layout_constraintStart_toEndOf="@id/ivBack"
-                app:layout_constraintEnd_toStartOf="@id/btnLogout"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginStart="16dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnLogout"
-                android:layout_width="wrap_content"
-                android:layout_height="36dp"
-                android:text="Logout"
-                android:textSize="14sp"
-                android:textColor="#DC3545"
-                android:backgroundTint="@android:color/white"
-                app:strokeColor="#DC3545"
-                app:strokeWidth="2dp"
-                app:cornerRadius="24dp"
-                android:paddingLeft="24dp"
-                android:paddingRight="24dp"
-                android:paddingTop="4dp"
-                android:paddingBottom="4dp"
-                android:foreground="?android:attr/selectableItemBackground"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:layout_constraintHorizontal_bias="0.43"
+                app:layout_constraintStart_toEndOf="@id/ivBack"
+                app:layout_constraintTop_toTopOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -111,11 +91,15 @@
             android:textStyle="bold"
             android:textColor="@color/text_primary"
             android:paddingTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:paddingBottom="8dp" />
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#E0E0E0"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:layout_marginBottom="16dp" />
 
         <!-- Các trường thuộc user: Full Name, Email, Phone, Date of Birth, Gender, Address, National ID, Ethnicity (Spinner) -->
@@ -128,7 +112,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etFullName"
@@ -141,7 +127,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="textPersonName"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_margin="16dp"/>
 
         <!-- Email -->
         <TextView
@@ -151,7 +139,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etEmail"
@@ -165,7 +155,9 @@
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:enabled="false"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Phone Number -->
         <TextView
@@ -175,7 +167,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etPhoneNumber"
@@ -188,7 +182,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="phone"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Date of Birth -->
         <TextView
@@ -198,7 +194,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <LinearLayout
             android:id="@+id/layoutDatePicker"
@@ -209,7 +207,9 @@
             android:gravity="center_vertical"
             android:paddingHorizontal="16dp"
             android:foreground="?android:attr/selectableItemBackground"
-            android:layout_marginBottom="16dp">
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
             <TextView
                 android:id="@+id/tvDateOfBirth"
@@ -235,14 +235,18 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <RadioGroup
             android:id="@+id/rgGender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginBottom="24dp">
+            android:layout_marginBottom="24dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp">
 
             <RadioButton
                 android:id="@+id/rbMale"
@@ -280,7 +284,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etAddress"
@@ -293,7 +299,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="textPostalAddress"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- National ID -->
         <TextView
@@ -303,7 +311,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etNationalId"
@@ -316,7 +326,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Ethnicity (Spinner) -->
         <TextView
@@ -326,14 +338,18 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <Spinner
             android:id="@+id/spinnerEthnicity"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@drawable/bg_edittext_rounded"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Patient Profile Section -->
         <TextView
@@ -344,12 +360,16 @@
             android:textStyle="bold"
             android:textColor="@color/text_primary"
             android:paddingTop="16dp"
-            android:paddingBottom="8dp" />
+            android:paddingBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="#E0E0E0"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Các trường thuộc patient profile: Insurance, Allergies, Chronic Diseases, Obstetric History, Surgical History, Family History, Social History, Medication History -->
 
@@ -361,7 +381,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etInsurance"
@@ -374,7 +396,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Allergies -->
         <TextView
@@ -384,7 +408,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etAllergies"
@@ -397,7 +423,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Chronic Diseases -->
         <TextView
@@ -407,7 +435,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etChronicDiseases"
@@ -420,7 +450,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Obstetric History -->
         <TextView
@@ -430,7 +462,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etObstetricHistory"
@@ -443,7 +477,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Surgical History -->
         <TextView
@@ -453,7 +489,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etSurgicalHistory"
@@ -466,7 +504,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Family History -->
         <TextView
@@ -476,7 +516,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etFamilyHistory"
@@ -489,7 +531,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Social History -->
         <TextView
@@ -499,7 +543,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etSocialHistory"
@@ -512,7 +558,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Medication History -->
         <TextView
@@ -522,7 +570,9 @@
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@color/text_primary"
-            android:layout_marginBottom="8dp" />
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <EditText
             android:id="@+id/etMedicationHistory"
@@ -535,7 +585,9 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:maxLines="1"
-            android:layout_marginBottom="16dp" />
+            android:layout_marginBottom="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
         <!-- Update Button -->
         <Button
@@ -548,7 +600,9 @@
             android:textStyle="bold"
             android:gravity="center"
             android:background="@drawable/button_primary"
-            android:foreground="?android:attr/selectableItemBackground" />
+            android:foreground="?android:attr/selectableItemBackground"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"/>
 
     </LinearLayout>
 

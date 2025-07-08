@@ -20,7 +20,16 @@
             android:name=".ui.speciatly.SpecialtyActivity"
             android:exported="false" />
         <activity
-            android:name=".Specialty"
+            android:name=".ui.profile.MainProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.forgotPassword.ResetPasswordActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.forgotPassword.ForgotPasswordResetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.forgotPassword.PasswordChangedActivity"
             android:exported="false" />
         <activity
             android:name=".ui.schedule.MyScheduledActivity"

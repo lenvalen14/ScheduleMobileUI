@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.schedulemedical.R;
-import com.example.schedulemedical.model.dto.request.appoiment.AppointmentDTO;
+import com.example.schedulemedical.model.dto.response.AppointmentResponse;
 import com.google.android.material.button.MaterialButton;
 
 import java.text.SimpleDateFormat;
@@ -25,15 +25,15 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.AppointmentViewHolder> {
 
-    private List<AppointmentDTO> appointmentList;
+    private List<AppointmentResponse> appointmentList;
     private OnAppointmentActionListener listener;
 
     public interface OnAppointmentActionListener {
-        void onCancelAppointment(AppointmentDTO appointment);
-        void onRescheduleAppointment(AppointmentDTO appointment);
+        void onCancelAppointment(AppointmentResponse appointment);
+        void onRescheduleAppointment(AppointmentResponse appointment);
     }
 
-    public AppointmentAdapter(List<AppointmentDTO> appointmentList) {
+    public AppointmentAdapter(List<AppointmentResponse> appointmentList) {
         this.appointmentList = appointmentList;
     }
 
@@ -41,7 +41,7 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         this.listener = listener;
     }
 
-    public void updateData(List<AppointmentDTO> newList) {
+    public void updateData(List<AppointmentResponse> newList) {
         this.appointmentList = newList;
         notifyDataSetChanged();
     }
@@ -56,21 +56,20 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull AppointmentViewHolder holder, int position) {
-        AppointmentDTO appointment = appointmentList.get(position);
+        AppointmentResponse appointment = appointmentList.get(position);
 
-        // TODO: Load doctor info from API
+        // TODO: Load doctor info from API if needed
         if (holder.tvDoctorName != null) {
-            holder.tvDoctorName.setText("Dr. " + appointment.getDoctorId()); // Placeholder
+            holder.tvDoctorName.setText("BS ID: " + appointment.getDoctorId()); // Placeholder
         }
         if (holder.tvSpecialty != null) {
-            holder.tvSpecialty.setText("General Medicine"); // Placeholder
+            holder.tvSpecialty.setText("Chuyên khoa ..."); // Placeholder
         }
 
-        // Format date and time with backward compatibility
+        // Format date and time
         if (appointment.getScheduledTime() != null) {
-            String dateStr = formatDateTime(appointment.getScheduledTime(), "dd/MM/yyyy");
-            String timeStr = formatDateTime(appointment.getScheduledTime(), "HH:mm");
-            
+            String dateStr = appointment.getScheduledTime().length() >= 10 ? appointment.getScheduledTime().substring(0, 10) : "";
+            String timeStr = appointment.getScheduledTime().length() >= 16 ? appointment.getScheduledTime().substring(11, 16) : "";
             if (holder.tvDate != null) {
                 holder.tvDate.setText(dateStr);
             }
@@ -80,12 +79,12 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         }
 
         if (holder.tvStatus != null) {
-            holder.tvStatus.setText(appointment.getStatus().getValue());
-            // Set status color and background
+            holder.tvStatus.setText(appointment.getStatus());
+            // Set status color and background (simple version)
             setStatusStyle(holder, appointment.getStatus());
         }
 
-        // Set note if available (using the "Confirmed" text in llInfo)
+        // Set note if available
         if (holder.tvConfirmStatus != null) {
             if (appointment.getNote() != null && !appointment.getNote().isEmpty()) {
                 holder.tvConfirmStatus.setText(appointment.getNote());
@@ -112,59 +111,22 @@ public class AppointmentAdapter extends RecyclerView.Adapter<AppointmentAdapter.
         }
     }
 
-    private String formatDateTime(LocalDateTime dateTime, String pattern) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            try {
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-                return dateTime.format(formatter);
-            } catch (Exception e) {
-                // Fallback to SimpleDateFormat
-                return formatDateTimeLegacy(dateTime, pattern);
-            }
-        } else {
-            return formatDateTimeLegacy(dateTime, pattern);
-        }
-    }
-
-    private String formatDateTimeLegacy(LocalDateTime dateTime, String pattern) {
-        try {
-            // Convert LocalDateTime to Date for backward compatibility
-            Date date = null;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                date = Date.from(dateTime.atZone(ZoneId.systemDefault()).toInstant());
-            }
-            SimpleDateFormat sdf = new SimpleDateFormat(pattern, Locale.getDefault());
-            return sdf.format(date);
-        } catch (Exception e) {
-            return "N/A";
-        }
-    }
-
-    private void setStatusStyle(AppointmentViewHolder holder, AppointmentDTO.AppointmentStatus status) {
+    private void setStatusStyle(AppointmentViewHolder holder, String status) {
         if (holder.tvStatus == null) return;
-        
         try {
-            switch (status) {
-                case PENDING:
-                    holder.tvStatus.setTextColor(holder.itemView.getContext().getColor(R.color.orange));
-                    holder.tvStatus.setBackgroundResource(R.drawable.bg_status_upcoming);
-                    break;
-                case CONFIRMED:
-                    holder.tvStatus.setTextColor(holder.itemView.getContext().getColor(R.color.blue));
-                    holder.tvStatus.setBackgroundResource(R.drawable.bg_status_upcoming);
-                    break;
-                case COMPLETED:
-                    holder.tvStatus.setTextColor(holder.itemView.getContext().getColor(R.color.green));
-                    holder.tvStatus.setBackgroundResource(R.drawable.bg_status_completed);
-                    break;
-                case CANCELLED:
-                case NO_SHOW:
-                    holder.tvStatus.setTextColor(holder.itemView.getContext().getColor(R.color.red));
-                    holder.tvStatus.setBackgroundResource(R.drawable.bg_status_canceled);
-                    break;
+            if ("PENDING".equalsIgnoreCase(status)) {
+                holder.tvStatus.setTextColor(holder.itemView.getContext().getColor(R.color.orange));
+                holder.tvStatus.setBackgroundResource(R.drawable.bg_status_upcoming);
+            } else if ("COMPLETED".equalsIgnoreCase(status)) {
+                holder.tvStatus.setTextColor(holder.itemView.getContext().getColor(R.color.green));
+                holder.tvStatus.setBackgroundResource(R.drawable.bg_status_completed);
+            } else if ("CANCELLED".equalsIgnoreCase(status)) {
+                holder.tvStatus.setTextColor(holder.itemView.getContext().getColor(R.color.red));
+                holder.tvStatus.setBackgroundResource(R.drawable.bg_status_canceled);
+            } else {
+                holder.tvStatus.setTextColor(holder.itemView.getContext().getColor(android.R.color.black));
             }
         } catch (Exception e) {
-            // Handle missing color resources gracefully
             holder.tvStatus.setTextColor(holder.itemView.getContext().getColor(android.R.color.black));
         }
     }

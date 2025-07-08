@@ -3,7 +3,6 @@ package com.example.schedulemedical.model;
 import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.google.gson.annotations.SerializedName;
 import java.util.List;
-import com.example.schedulemedical.model.Hospital;
 
 public class Doctor {
     @SerializedName("doctorId")

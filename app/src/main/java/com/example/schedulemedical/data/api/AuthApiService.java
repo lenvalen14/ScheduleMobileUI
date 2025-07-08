@@ -10,6 +10,8 @@ import com.example.schedulemedical.model.dto.response.RefreshTokenResponse;
 import com.example.schedulemedical.model.dto.response.ProfileResponse;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
 
+import java.util.Map;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -39,4 +41,10 @@ public interface AuthApiService {
     // Google Auth endpoints
     @GET("auth/google")
     Call<Void> googleLogin(); // This will redirect to Google OAuth
+
+    @POST("auth/send-otp")
+    Call<ApiResponse<Object>> sendOTP(@Body Map<String, String> body);
+
+    @POST("auth/verify-otp")
+    Call<ApiResponse<Object>> verifyOTP(@Body Map<String, String> body);
 } 

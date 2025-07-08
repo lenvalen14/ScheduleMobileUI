@@ -12,9 +12,9 @@ import com.example.schedulemedical.ui.booking.fragments.SpecialtySelectionFragme
 
 public class BookingWizardAdapter extends FragmentStateAdapter {
     private BookingWizardActivity.BookingData bookingData;
-    
-    public BookingWizardAdapter(@NonNull FragmentActivity fragmentActivity, 
-                               BookingWizardActivity.BookingData bookingData) {
+
+    public BookingWizardAdapter(@NonNull FragmentActivity fragmentActivity,
+                                BookingWizardActivity.BookingData bookingData) {
         super(fragmentActivity);
         this.bookingData = bookingData;
     }

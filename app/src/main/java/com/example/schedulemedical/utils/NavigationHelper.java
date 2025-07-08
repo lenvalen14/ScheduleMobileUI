@@ -15,6 +15,7 @@ import com.example.schedulemedical.ui.forgotPassword.VerifyCodeActivity;
 import com.example.schedulemedical.ui.home.HomeActivity;
 import com.example.schedulemedical.ui.hospital.HospitalActivity;
 import com.example.schedulemedical.ui.login.LoginActivity;
+import com.example.schedulemedical.ui.profile.MainProfileActivity;
 import com.example.schedulemedical.ui.register.RegisterActivity;
 import com.example.schedulemedical.ui.schedule.MyScheduledActivity;
 import com.example.schedulemedical.ui.schedule.ScheduleActivity;
@@ -185,7 +186,7 @@ public class NavigationHelper {
      * Điều hướng đến UserProfileActivity
      */
     public static void navigateToUserProfile(Context context) {
-        Intent intent = new Intent(context, ProfileActivity.class);
+        Intent intent = new Intent(context, MainProfileActivity.class);
         context.startActivity(intent);
     }
 
@@ -211,6 +212,14 @@ public class NavigationHelper {
      */
     public static void navigateToBookingWizard(Context context) {
         Intent intent = new Intent(context, BookingWizardActivity.class);
+        context.startActivity(intent);
+    }
+
+    /**
+     * Điều hướng đến MainProfileActivity (trang profile chính)
+     */
+    public static void navigateToMainProfile(Context context) {
+        Intent intent = new Intent(context, com.example.schedulemedical.ui.profile.MainProfileActivity.class);
         context.startActivity(intent);
     }
 

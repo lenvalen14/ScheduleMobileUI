@@ -16,7 +16,7 @@ import androidx.fragment.app.Fragment;
 
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.data.api.ApiClient;
-import com.example.schedulemedical.data.repository.DoctorFilterRepository;
+import com.example.schedulemedical.data.repository.DoctorRepository;
 import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 
@@ -60,10 +60,7 @@ public class DoctorFilterFragment extends Fragment {
         });
 
         // Tạo repository và ViewModel trực tiếp
-        DoctorFilterRepository repository = new DoctorFilterRepository(
-                ApiClient.getDoctorApiService(),
-                ApiClient.getHospitalApiService()
-        );
+        DoctorRepository repository = new DoctorRepository();
 
         viewModel = new DoctorFilterOptionsViewModel(repository);
 

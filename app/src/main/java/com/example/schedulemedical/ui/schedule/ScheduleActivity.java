@@ -383,25 +383,25 @@ public class ScheduleActivity extends AppCompatActivity implements
             "SCHEDULED"
         );
         
-        appointmentApiService.createAppointment(request).enqueue(new Callback<ApiResponse<Object>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
-                hideLoading();
-                
-                if (response.isSuccessful() && response.body() != null) {
-                    showSuccessAndNavigateToPayment(response.body());
-                } else {
-                    showError("Không thể đặt lịch khám. Vui lòng thử lại.");
-                }
-            }
-            
-            @Override
-            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
-                Log.e(TAG, "Create appointment failed", t);
-                hideLoading();
-                showError("Lỗi kết nối mạng. Vui lòng thử lại.");
-            }
-        });
+//        appointmentApiService.createAppointment(request).enqueue(new Callback<ApiResponse>() {
+//            @Override
+//            public void onResponse(Call<ApiResponse> call, Response<ApiResponse> response) {
+//                hideLoading();
+//
+//                if (response.isSuccessful() && response.body() != null) {
+//                    showSuccessAndNavigateToPayment(response.body());
+//                } else {
+//                    showError("Không thể đặt lịch khám. Vui lòng thử lại.");
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ApiResponse> call, Throwable t) {
+//                Log.e(TAG, "Create appointment failed", t);
+//                hideLoading();
+//                showError("Lỗi kết nối mạng. Vui lòng thử lại.");
+//            }
+//        });
     }
     
     private boolean validateBookingData() {
@@ -464,13 +464,10 @@ public class ScheduleActivity extends AppCompatActivity implements
         finish();
     }
     
-    private Integer extractAppointmentId(ApiResponse<Object> response) {
+    private Integer extractAppointmentId(ApiResponse response) {
         try {
-            Gson gson = new Gson();
-            JsonElement element = gson.toJsonTree(response.getData());
-            
-            if (element.isJsonObject()) {
-                JsonObject data = element.getAsJsonObject();
+            if (response != null && response.getData() != null) {
+                JsonObject data = (JsonObject) response.getData();
                 if (data.has("appointmentId")) {
                     return data.get("appointmentId").getAsInt();
                 }

@@ -4,13 +4,13 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.schedulemedical.data.repository.DoctorFilterRepository;
+import com.example.schedulemedical.data.repository.DoctorRepository;
 
 public class DoctorFilterOptionsViewModelFactory implements ViewModelProvider.Factory {
 
-    private final DoctorFilterRepository repository;
+    private final DoctorRepository repository;
 
-    public DoctorFilterOptionsViewModelFactory(DoctorFilterRepository repository) {
+    public DoctorFilterOptionsViewModelFactory(DoctorRepository repository) {
         this.repository = repository;
     }
 

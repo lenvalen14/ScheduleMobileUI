@@ -10,22 +10,32 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.schedulemedical.Adapter.AppointmentAdapter;
 import com.example.schedulemedical.R;
-import com.example.schedulemedical.model.dto.request.appoiment.AppointmentDTO;
+import com.example.schedulemedical.data.repository.AppointmentRepository;
+import com.example.schedulemedical.model.dto.response.AppointmentResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
+import com.example.schedulemedical.utils.AuthManager;
 import com.example.schedulemedical.utils.NavigationHelper;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.chip.ChipGroup;
+import com.example.schedulemedical.model.dto.response.ApiResponse;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import android.util.Log;
 
 public class MyScheduledActivity extends BaseActivity implements AppointmentAdapter.OnAppointmentActionListener {
 
     private RecyclerView recyclerView;
     private AppointmentAdapter adapter;
-    private List<AppointmentDTO> allAppointments;
+    private List<AppointmentResponse> allAppointments = new ArrayList<>();
+    private AppointmentRepository appointmentRepository;
+    private int userId;
+    private static final String TAG = "MyScheduledActivity";
 
     @Override
     protected int getLayoutResourceId() {
@@ -34,100 +44,68 @@ public class MyScheduledActivity extends BaseActivity implements AppointmentAdap
 
     @Override
     protected void setupViews() {
+        userId = new AuthManager(this).getUserId();
+        appointmentRepository = new AppointmentRepository();
         setupChipFilter();
         setupRecyclerView();
-        loadAllAppointments();
+        loadAppointments(null); // load all by default
     }
 
     private void setupChipFilter() {
         ChipGroup chipGroup = findViewById(R.id.chipGroupFilter);
         if (chipGroup != null) {
             chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
-                if (checkedId == R.id.chipAll) {
-                    adapter.updateData(allAppointments);
-                    updateAppointmentCount(allAppointments.size());
-                } else if (checkedId == R.id.chipUpcoming) {
-                    List<AppointmentDTO> filtered = filterByStatus(AppointmentDTO.AppointmentStatus.PENDING);
-                    adapter.updateData(filtered);
-                    updateAppointmentCount(filtered.size());
-                } else if (checkedId == R.id.chipCompleted) {
-                    List<AppointmentDTO> filtered = filterByStatus(AppointmentDTO.AppointmentStatus.COMPLETED);
-                    adapter.updateData(filtered);
-                    updateAppointmentCount(filtered.size());
-                } else if (checkedId == R.id.chipCanceled) {
-                    List<AppointmentDTO> filtered = filterByStatus(AppointmentDTO.AppointmentStatus.CANCELLED);
-                    adapter.updateData(filtered);
-                    updateAppointmentCount(filtered.size());
-                }
+                String status = null;
+                if (checkedId == R.id.chipAll) status = null;
+                else if (checkedId == R.id.chipUpcoming) status = "PENDING";
+                else if (checkedId == R.id.chipCompleted) status = "COMPLETED";
+                else if (checkedId == R.id.chipCanceled) status = "CANCELLED";
+                loadAppointments(status);
             });
         }
     }
 
     private void setupRecyclerView() {
+        Log.d(TAG, "setupRecyclerView called");
         recyclerView = findViewById(R.id.rvAppointments);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new AppointmentAdapter(new ArrayList<>());
         adapter.setOnAppointmentActionListener(this);
         recyclerView.setAdapter(adapter);
+        Log.d(TAG, "RecyclerView and Adapter set");
     }
 
-    private void loadAllAppointments() {
-        // Mock dữ liệu lịch hẹn với AppointmentDTO
-        allAppointments = new ArrayList<>();
-        
-        // Tạo mock appointments
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            allAppointments.add(new AppointmentDTO(1, 1, 1,
-                LocalDateTime.now().plusDays(5), "Khám tổng quát"));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            allAppointments.add(new AppointmentDTO(2, 1, 1,
-                LocalDateTime.now().minusDays(2), "Khám mắt"));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            allAppointments.add(new AppointmentDTO(3, 1, 1,
-                LocalDateTime.now().plusDays(6), "Tư vấn da liễu"));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            allAppointments.add(new AppointmentDTO(4, 1, 1,
-                LocalDateTime.now().minusDays(1), "Tiêm vaccine"));
-        }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            allAppointments.add(new AppointmentDTO(5, 1, 1,
-                LocalDateTime.now().minusDays(3), "Siêu âm"));
-        }
-
-        // Set status cho mock data
-        allAppointments.get(0).setStatus(AppointmentDTO.AppointmentStatus.PENDING);
-        allAppointments.get(1).setStatus(AppointmentDTO.AppointmentStatus.COMPLETED);
-        allAppointments.get(2).setStatus(AppointmentDTO.AppointmentStatus.PENDING);
-        allAppointments.get(3).setStatus(AppointmentDTO.AppointmentStatus.CANCELLED);
-        allAppointments.get(4).setStatus(AppointmentDTO.AppointmentStatus.COMPLETED);
-
-        adapter.updateData(allAppointments);
-        updateAppointmentCount(allAppointments.size());
-
-        // Chọn mặc định Chip "All"
-        Chip chipAll = findViewById(R.id.chipAll);
-        if (chipAll != null) {
-            chipAll.setChecked(true);
-        }
-    }
-
-    private List<AppointmentDTO> filterByStatus(AppointmentDTO.AppointmentStatus status) {
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            return allAppointments.stream()
-                    .filter(appointment -> appointment.getStatus() == status)
-                    .collect(Collectors.toList());
-        } else {
-            List<AppointmentDTO> filtered = new ArrayList<>();
-            for (AppointmentDTO appointment : allAppointments) {
-                if (appointment.getStatus() == status) {
-                    filtered.add(appointment);
+    private void loadAppointments(String status) {
+        Log.d(TAG, "loadAppointments called with status: " + status);
+        int page = 1, limit = 20;
+        appointmentRepository.getAppointments(userId, status, page, limit, new AppointmentRepository.DataCallback<ApiResponse>() {
+            @Override
+            public void onSuccess(ApiResponse response) {
+                List<AppointmentResponse> data = new ArrayList<>();
+                if (response != null && response.getData() != null) {
+                    try {
+                        Gson gson = new Gson();
+                        String json = gson.toJson(response.getData());
+                        Log.d(TAG, "API response data json: " + json);
+                        Type listType = new TypeToken<List<AppointmentResponse>>(){}.getType();
+                        data = gson.fromJson(json, listType);
+                    } catch (Exception e) {
+                        Log.e(TAG, "Error parsing appointments", e);
+                    }
                 }
+                allAppointments = data;
+                Log.d(TAG, "Appointments loaded: " + data.size());
+                adapter.updateData(data);
+                updateAppointmentCount(data.size());
             }
-            return filtered;
-        }
+            @Override
+            public void onError(String error) {
+                Log.e(TAG, "Error loading appointments: " + error);
+                allAppointments = new ArrayList<>();
+                adapter.updateData(allAppointments);
+                updateAppointmentCount(0);
+            }
+        });
     }
 
     private void updateAppointmentCount(int count) {
@@ -138,14 +116,14 @@ public class MyScheduledActivity extends BaseActivity implements AppointmentAdap
     }
 
     @Override
-    public void onCancelAppointment(AppointmentDTO appointment) {
-        // TODO: Implement cancel appointment logic
-        appointment.setStatus(AppointmentDTO.AppointmentStatus.CANCELLED);
-        adapter.updateData(allAppointments);
+    public void onCancelAppointment(AppointmentResponse appointment) {
+        // TODO: Implement cancel appointment logic (call API to cancel)
+        // Sau khi cancel thành công, reload lại danh sách
+        loadAppointments(null);
     }
 
     @Override
-    public void onRescheduleAppointment(AppointmentDTO appointment) {
+    public void onRescheduleAppointment(AppointmentResponse appointment) {
         // TODO: Implement reschedule appointment logic
         NavigationHelper.navigateToSchedule(this, appointment.getDoctorId());
     }

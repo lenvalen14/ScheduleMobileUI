@@ -80,7 +80,7 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
 
         initializeViews(view);
         setupRecyclerView();
-        
+
         // Check if specialty is already selected
         if (bookingData.specialtyId != null && bookingData.specialtyId > 0) {
             // Specialty is already selected, show selected specialty info
@@ -106,13 +106,13 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
 
     private void loadSpecialties() {
         showLoading(true);
-        
+
         // Check if we have hospital context
         Integer hospitalId = null;
         if (getActivity() instanceof BookingWizardActivity) {
             hospitalId = ((BookingWizardActivity) getActivity()).getHospitalId();
         }
-        
+
         if (hospitalId != null && hospitalId > 0) {
             // Load specialties for specific hospital
             loadSpecialtiesByHospital(hospitalId);
@@ -121,7 +121,7 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
             loadAllSpecialties();
         }
     }
-    
+
     private void loadAllSpecialties() {
         doctorApiService.getAllSpecialties(1, 50).enqueue(new Callback<ApiResponse<List<SpecialtyResponse>>>() {
             @Override
@@ -133,20 +133,20 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
                 if (response.isSuccessful() && response.body() != null) {
                     List<SpecialtyResponse> responseList = response.body().getData();
                     Log.d(TAG, "Specialties count: " + responseList.size());
-                    
+
                     List<Specialty> specialties = new ArrayList<>();
 
                     for (SpecialtyResponse res : responseList) {
                         Log.d(TAG, "Processing specialty: " + res.getName() + " (ID: " + res.getSpecialtyId() + ")");
                         Log.d(TAG, "Raw specialty data - name: " + res.getName() + ", id: " + res.getSpecialtyId() + ", description: " + res.getDescription() + ", doctorCount: " + res.getDoctorCount());
-                        
+
                         Specialty specialty = new Specialty(
                                 res.getSpecialtyId(),
                                 res.getName(),
                                 res.getDescription(),
                                 res.getDoctorCount()
                         );
-                        
+
                         Log.d(TAG, "Created Specialty object - name: " + specialty.getName() + ", id: " + specialty.getSpecialtyId());
                         specialties.add(specialty);
                     }
@@ -166,7 +166,7 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
             }
         });
     }
-    
+
     private void loadSpecialtiesByHospital(Integer hospitalId) {
         // For now, we'll load all specialties and filter by hospital
         // In the future, you might want to create a specific API endpoint for this
@@ -180,17 +180,17 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
                 if (response.isSuccessful() && response.body() != null) {
                     List<SpecialtyResponse> responseList = response.body().getData();
                     Log.d(TAG, "All specialties count: " + responseList.size());
-                    
+
                     // Filter specialties that have doctors in this hospital
                     List<Specialty> specialties = new ArrayList<>();
-                    
+
                     for (SpecialtyResponse res : responseList) {
                         Log.d(TAG, "Processing specialty: " + res.getName() + " (ID: " + res.getSpecialtyId() + ")");
-                        
+
                         // Check if this specialty has doctors in the hospital
                         checkSpecialtyInHospital(res, hospitalId, specialties);
                     }
-                    
+
                     // If no specialties found, show message
                     if (specialties.isEmpty()) {
                         showNoSpecialtiesMessage();
@@ -211,7 +211,7 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
             }
         });
     }
-    
+
     private void checkSpecialtyInHospital(SpecialtyResponse specialty, Integer hospitalId, List<Specialty> specialties) {
         // Load doctors for this specialty and check if any are in the hospital
         doctorApiService.getDoctorsBySpecialty(specialty.getSpecialtyId(), 1, 50).enqueue(new Callback<ApiResponse<Object>>() {
@@ -227,7 +227,7 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
                             specialty.getDescription(),
                             specialty.getDoctorCount()
                     ));
-                    
+
                     // Update UI if this is the last specialty being checked
                     if (specialties.size() == 1) { // First specialty found
                         updateSpecialtiesList(specialties);
@@ -241,13 +241,13 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
             }
         });
     }
-    
+
     private void showNoSpecialtiesMessage() {
         String hospitalName = "";
         if (getActivity() instanceof BookingWizardActivity) {
             hospitalName = ((BookingWizardActivity) getActivity()).getHospitalName();
         }
-        
+
         String message = "Bệnh viện " + hospitalName + " chưa có chuyên khoa hoặc bác sĩ khả dụng.";
         showError(message);
     }
@@ -271,7 +271,7 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
 
         bookingData.specialtyId = specialty.getSpecialtyId();
         bookingData.specialtyName = specialty.getName();
-        
+
         Log.d(TAG, "Updated bookingData - specialtyId: " + bookingData.specialtyId + ", specialtyName: " + bookingData.specialtyName);
 
         if (getActivity() instanceof BookingWizardActivity) {
@@ -289,18 +289,18 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
         // Hide the specialties list
         rvSpecialties.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
-        
+
         // Show selected specialty info
         tvNoSpecialties.setVisibility(View.VISIBLE);
-        tvNoSpecialties.setText("Chuyên khoa đã chọn: " + bookingData.specialtyName + 
-                               "\nMô tả: " + (bookingData.specialtyName != null ? bookingData.specialtyName : "Không có mô tả"));
-        
+        tvNoSpecialties.setText("Chuyên khoa đã chọn: " + bookingData.specialtyName +
+                "\nMô tả: " + (bookingData.specialtyName != null ? bookingData.specialtyName : "Không có mô tả"));
+
         // Notify parent that this step is completed
         if (getActivity() instanceof BookingWizardActivity) {
             ((BookingWizardActivity) getActivity()).onStepDataChanged();
         }
     }
-    
+
     private void showError(String message) {
         rvSpecialties.setVisibility(View.GONE);
         tvNoSpecialties.setVisibility(View.VISIBLE);
