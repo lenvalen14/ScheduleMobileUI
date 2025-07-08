@@ -103,22 +103,33 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
             @Override
             public void onResponse(Call<ApiResponse<List<SpecialtyResponse>>> call, Response<ApiResponse<List<SpecialtyResponse>>> response) {
                 showLoading(false);
+                Log.d(TAG, "Specialties API call success");
+                Log.d(TAG, "Response body: " + response.body());
 
                 if (response.isSuccessful() && response.body() != null) {
                     List<SpecialtyResponse> responseList = response.body().getData();
+                    Log.d(TAG, "Specialties count: " + responseList.size());
+                    
                     List<Specialty> specialties = new ArrayList<>();
 
                     for (SpecialtyResponse res : responseList) {
-                        specialties.add(new Specialty(
+                        Log.d(TAG, "Processing specialty: " + res.getName() + " (ID: " + res.getSpecialtyId() + ")");
+                        Log.d(TAG, "Raw specialty data - name: " + res.getName() + ", id: " + res.getSpecialtyId() + ", description: " + res.getDescription() + ", doctorCount: " + res.getDoctorCount());
+                        
+                        Specialty specialty = new Specialty(
                                 res.getSpecialtyId(),
                                 res.getName(),
                                 res.getDescription(),
-                                null
-                        ));
+                                res.getDoctorCount()
+                        );
+                        
+                        Log.d(TAG, "Created Specialty object - name: " + specialty.getName() + ", id: " + specialty.getSpecialtyId());
+                        specialties.add(specialty);
                     }
 
                     updateSpecialtiesList(specialties);
                 } else {
+                    Log.e(TAG, "API call failed or response is null. Response code: " + response.code());
                     showError("Không thể tải danh sách chuyên khoa");
                 }
             }
@@ -146,10 +157,13 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
 
     @Override
     public void onSpecialtySelected(Specialty specialty, int position) {
+        Log.d(TAG, "Specialty selected: " + specialty.getName() + " (ID: " + specialty.getSpecialtyId() + ")");
         Toast.makeText(requireContext(), "Đã chọn: " + specialty.getName(), Toast.LENGTH_SHORT).show();
 
         bookingData.specialtyId = specialty.getSpecialtyId();
         bookingData.specialtyName = specialty.getName();
+        
+        Log.d(TAG, "Updated bookingData - specialtyId: " + bookingData.specialtyId + ", specialtyName: " + bookingData.specialtyName);
 
         if (getActivity() instanceof BookingWizardActivity) {
             ((BookingWizardActivity) getActivity()).onStepDataChanged();
