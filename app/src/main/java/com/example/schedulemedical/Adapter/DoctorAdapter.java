@@ -1,6 +1,8 @@
 package com.example.schedulemedical.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +20,7 @@ import com.example.schedulemedical.model.dto.response.DoctorResponse;
 import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.model.dto.response.UserResponse;
+import com.example.schedulemedical.ui.booking.BookingWizardActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -180,8 +183,9 @@ public class DoctorAdapter extends RecyclerView.Adapter<DoctorAdapter.DoctorView
             if (btnBookAppointment != null) {
                 btnBookAppointment.setOnClickListener(v -> {
                     int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && onDoctorClickListener != null) {
-                        onDoctorClickListener.onBookAppointmentClick(filteredList.get(position));
+                    if (position != RecyclerView.NO_POSITION) {
+                        Intent intent = BookingWizardActivity.createIntentWithDoctor(context, filteredList.get(position));
+                        context.startActivity(intent);
                     }
                 });
             }

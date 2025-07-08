@@ -42,7 +42,7 @@ import retrofit2.Response;
 
 public class BookingActivity extends AppCompatActivity implements TimeSlotAdapter.OnTimeSlotClickListener {
     private static final String TAG = "BookingActivity";
-    
+
     // UI Components
     private ImageView ivBack;
     private TextView tvDoctorName;
@@ -54,7 +54,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
     private RecyclerView rvTimeSlots;
     private TextView tvNoTimeSlots;
     private Button btnBookAppointment;
-    
+
     // Data
     private Integer doctorId;
     private String doctorName;
@@ -65,13 +65,13 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
     private String selectedTimeSlot;
     private List<String> availableTimeSlots;
     private TimeSlotAdapter timeSlotAdapter;
-    
+
     // Services
     private DoctorApiService doctorApiService;
     private AppointmentApiService appointmentApiService;
     private AuthManager authManager;
     private ProgressDialog progressDialog;
-    
+
     // Date formatters
     private SimpleDateFormat displayDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
     private SimpleDateFormat apiDateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -80,7 +80,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
-        
+
         initializeServices();
         initializeViews();
         getIntentData();
@@ -89,7 +89,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         setupProgressDialog();
         updateUI();
     }
-    
+
     private void initializeServices() {
         ApiClient.init(this);
         doctorApiService = ApiClient.getDoctorApiService();
@@ -97,7 +97,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         authManager = new AuthManager(this);
         availableTimeSlots = new ArrayList<>();
     }
-    
+
     private void initializeViews() {
         ivBack = findViewById(R.id.ivBack);
         tvDoctorName = findViewById(R.id.tvDoctorName);
@@ -109,11 +109,11 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         rvTimeSlots = findViewById(R.id.rvTimeSlots);
         // tvNoTimeSlots = findViewById(R.id.tvNoTimeSlots); // Not exists in layout
         btnBookAppointment = findViewById(R.id.btnBookAppointment);
-        
+
         // Initialize with today's date
         selectedDate = Calendar.getInstance();
     }
-    
+
     private void getIntentData() {
         Intent intent = getIntent();
         doctorId = intent.getIntExtra("doctorId", -1);
@@ -121,111 +121,111 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         specialty = intent.getStringExtra("specialty");
         hospitalName = intent.getStringExtra("hospitalName");
         consultationFee = intent.getStringExtra("consultationFee");
-        
+
         if (doctorId == -1) {
             Toast.makeText(this, "Thông tin bác sĩ không hợp lệ", Toast.LENGTH_LONG).show();
             finish();
         }
     }
-    
+
     private void setupClickListeners() {
         // Back button
         ivBack.setOnClickListener(v -> finish());
-        
+
         // Date selector
         cardSelectDate.setOnClickListener(v -> showDatePicker());
-        
+
         // Book appointment button
         btnBookAppointment.setOnClickListener(v -> bookAppointment());
     }
-    
+
     private void setupRecyclerView() {
         timeSlotAdapter = new TimeSlotAdapter(this, availableTimeSlots);
         timeSlotAdapter.setOnTimeSlotClickListener(this);
-        
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         rvTimeSlots.setLayoutManager(gridLayoutManager);
         rvTimeSlots.setAdapter(timeSlotAdapter);
     }
-    
+
     private void setupProgressDialog() {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage("Đang xử lý...");
         progressDialog.setCancelable(false);
     }
-    
+
     private void updateUI() {
         // Update doctor info
         if (tvDoctorName != null) {
             tvDoctorName.setText(doctorName != null ? doctorName : "Bác sĩ");
         }
-        
+
         if (tvSpecialty != null) {
             tvSpecialty.setText(specialty != null ? specialty : "Chuyên khoa");
         }
-        
+
         if (tvHospitalName != null) {
             tvHospitalName.setText(hospitalName != null ? hospitalName : "Bệnh viện");
         }
-        
+
         if (tvConsultationFee != null) {
             tvConsultationFee.setText(consultationFee != null ? consultationFee + " VND" : "Phí khám");
         }
-        
+
         // Update selected date
         updateSelectedDateDisplay();
-        
+
         // Load available time slots for today
         loadTimeSlots();
-        
+
         // Initially disable book button
         updateBookButtonState();
     }
-    
+
     private void updateSelectedDateDisplay() {
         if (tvSelectedDate != null && selectedDate != null) {
             tvSelectedDate.setText(displayDateFormat.format(selectedDate.getTime()));
         }
     }
-    
+
     private void showDatePicker() {
         Calendar calendar = Calendar.getInstance();
-        
+
         DatePickerDialog datePickerDialog = new DatePickerDialog(
-            this,
-            (view, year, month, dayOfMonth) -> {
-                selectedDate.set(year, month, dayOfMonth);
-                updateSelectedDateDisplay();
-                loadTimeSlots();
-                
-                // Clear selected time slot when date changes
-                selectedTimeSlot = null;
-                timeSlotAdapter.clearSelection();
-                updateBookButtonState();
-            },
-            selectedDate.get(Calendar.YEAR),
-            selectedDate.get(Calendar.MONTH),
-            selectedDate.get(Calendar.DAY_OF_MONTH)
+                this,
+                (view, year, month, dayOfMonth) -> {
+                    selectedDate.set(year, month, dayOfMonth);
+                    updateSelectedDateDisplay();
+                    loadTimeSlots();
+
+                    // Clear selected time slot when date changes
+                    selectedTimeSlot = null;
+                    timeSlotAdapter.clearSelection();
+                    updateBookButtonState();
+                },
+                selectedDate.get(Calendar.YEAR),
+                selectedDate.get(Calendar.MONTH),
+                selectedDate.get(Calendar.DAY_OF_MONTH)
         );
-        
+
         // Set minimum date to today
         datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
-        
+
         // Set maximum date to 30 days from now
         calendar.add(Calendar.DAY_OF_MONTH, 30);
         datePickerDialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
-        
+
         datePickerDialog.show();
     }
-    
+
     private void loadTimeSlots() {
         if (selectedDate == null) {
             return;
         }
-        
+
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         String dateString = dateFormat.format(selectedDate.getTime());
-        
+
         // TODO: Implement getDoctorSchedule method in DoctorApiService
         // doctorApiService.getDoctorSchedule(doctorId, dateString)
         //     .enqueue(new Callback<ApiResponse<List<String>>>() {
@@ -245,25 +245,25 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         //             setupTimeSlots(getDefaultTimeSlots());
         //         }
         //     });
-        
+
         // For now, use default time slots
         setupTimeSlots(getDefaultTimeSlots());
     }
-    
+
     private void setupTimeSlots(List<String> timeSlots) {
         if (timeSlots != null && !timeSlots.isEmpty()) {
             availableTimeSlots.clear();
             availableTimeSlots.addAll(timeSlots);
-            
+
             timeSlotAdapter.notifyDataSetChanged();
-            
+
             rvTimeSlots.setVisibility(View.VISIBLE);
             // tvNoTimeSlots.setVisibility(View.GONE); // View doesn't exist
         } else {
             showNoTimeSlots();
         }
     }
-    
+
     private List<String> getDefaultTimeSlots() {
         List<String> defaultSlots = new ArrayList<>();
         defaultSlots.add("08:00");
@@ -276,7 +276,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         defaultSlots.add("17:00");
         return defaultSlots;
     }
-    
+
     private void showTimeSlots() {
         if (rvTimeSlots != null) {
             rvTimeSlots.setVisibility(View.VISIBLE);
@@ -285,40 +285,40 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
             tvNoTimeSlots.setVisibility(View.GONE);
         }
     }
-    
+
     private void showNoTimeSlots() {
         availableTimeSlots.clear();
         timeSlotAdapter.notifyDataSetChanged();
-        
+
         rvTimeSlots.setVisibility(View.GONE);
         // tvNoTimeSlots.setVisibility(View.VISIBLE); // View doesn't exist
-        
+
         Toast.makeText(this, "Không có lịch trống cho ngày này", Toast.LENGTH_SHORT).show();
     }
-    
+
     private void showError(String message) {
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
         Log.e(TAG, "Error: " + message);
     }
-    
+
     private void bookAppointment() {
         if (!authManager.isLoggedIn()) {
             Toast.makeText(this, "Vui lòng đăng nhập để đặt lịch", Toast.LENGTH_LONG).show();
             return;
         }
-        
+
         if (selectedTimeSlot == null || selectedTimeSlot.isEmpty()) {
             Toast.makeText(this, "Vui lòng chọn khung giờ", Toast.LENGTH_SHORT).show();
             return;
         }
-        
+
         showLoading();
-        
+
         // Create appointment request
         CreateAppointmentRequest request = new CreateAppointmentRequest();
         request.setDoctorId(doctorId);
         request.setUserId(authManager.getUserId());
-        
+
         // Combine date and time into ISO 8601 format for scheduledTime
         try {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -331,40 +331,40 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
             showError("Lỗi định dạng thời gian");
             return;
         }
-        
+
         request.setNote("Khám tổng quát");
         request.setStatus("SCHEDULED");
-        
+
         appointmentApiService.createAppointment(request)
-            .enqueue(new Callback<ApiResponse<Object>>() {
-                @Override
-                public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
-                    hideLoading();
-                    
-                    if (response.isSuccessful() && response.body() != null) {
-                        // Appointment created successfully
-                        showSuccessAndNavigateToPayment(response.body());
-                    } else {
-                        String errorMsg = "Không thể đặt lịch hẹn";
-                        if (response.code() == 409) {
-                            errorMsg = "Lịch hẹn đã được đặt bởi người khác";
+                .enqueue(new Callback<ApiResponse<Object>>() {
+                    @Override
+                    public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                        hideLoading();
+
+                        if (response.isSuccessful() && response.body() != null) {
+                            // Appointment created successfully
+                            showSuccessAndNavigateToPayment(response.body());
+                        } else {
+                            String errorMsg = "Không thể đặt lịch hẹn";
+                            if (response.code() == 409) {
+                                errorMsg = "Lịch hẹn đã được đặt bởi người khác";
+                            }
+                            Toast.makeText(BookingActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                         }
-                        Toast.makeText(BookingActivity.this, errorMsg, Toast.LENGTH_LONG).show();
                     }
-                }
-                
-                @Override
-                public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
-                    hideLoading();
-                    Log.e(TAG, "Failed to create appointment", t);
-                    Toast.makeText(BookingActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
+
+                    @Override
+                    public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                        hideLoading();
+                        Log.e(TAG, "Failed to create appointment", t);
+                        Toast.makeText(BookingActivity.this, "Lỗi kết nối: " + t.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                });
     }
-    
+
     private void showSuccessAndNavigateToPayment(ApiResponse<Object> response) {
         Toast.makeText(this, "Đặt lịch hẹn thành công!", Toast.LENGTH_SHORT).show();
-        
+
         // Navigate to payment
         Intent intent = new Intent(this, PaymentActivity.class);
         intent.putExtra("appointmentId", extractAppointmentId(response));
@@ -373,11 +373,11 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         intent.putExtra("appointmentTime", selectedTimeSlot);
         intent.putExtra("consultationFee", consultationFee);
         startActivity(intent);
-        
+
         // Close booking activity
         finish();
     }
-    
+
     private Integer extractAppointmentId(ApiResponse<Object> response) {
         try {
             // Try to extract appointment ID from response
@@ -392,7 +392,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
             return 1; // Fallback ID
         }
     }
-    
+
     private void updateBookButtonState() {
         if (btnBookAppointment != null) {
             boolean canBook = selectedTimeSlot != null && !selectedTimeSlot.isEmpty();
@@ -400,19 +400,19 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
             btnBookAppointment.setAlpha(canBook ? 1.0f : 0.5f);
         }
     }
-    
+
     private void showLoading() {
         if (progressDialog != null && !progressDialog.isShowing()) {
             progressDialog.show();
         }
     }
-    
+
     private void hideLoading() {
         if (progressDialog != null && progressDialog.isShowing()) {
             progressDialog.dismiss();
         }
     }
-    
+
     // TimeSlotAdapter.OnTimeSlotClickListener implementation
     @Override
     public void onTimeSlotClick(String timeSlot) {
@@ -420,7 +420,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
         updateBookButtonState();
         Log.d(TAG, "Selected time slot: " + timeSlot);
     }
-    
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
