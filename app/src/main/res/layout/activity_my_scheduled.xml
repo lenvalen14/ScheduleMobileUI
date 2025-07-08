@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/bg_default"
+    android:background="#F6F8FB"
     tools:context=".ui.schedule.MyScheduledActivity">
 
+    <!-- Toolbar -->
     <RelativeLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:layout_marginTop="16dp"
+        android:padding="16dp"
+        android:background="@drawable/bg_toolbar_rounded"
         tools:ignore="MissingConstraints">
 
         <ImageView
@@ -20,78 +22,75 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_alignParentStart="true"
+            android:layout_marginTop="8dp"
             android:src="@drawable/ic_arrow_back"
-            app:tint="@color/text_primary"
-            android:contentDescription="Back" />
+            android:contentDescription="Back"
+            app:tint="@color/text_primary" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="All Doctors"
-            android:textColor="@color/blue_007b"
+            android:layout_marginTop="8dp"
+            android:text="Lịch khám của tôi"
+            android:textColor="@color/text_primary"
             android:textSize="20sp"
             android:textStyle="bold"
             android:fontFamily="@font/inter_semibold" />
     </RelativeLayout>
 
+    <!-- ChipGroup lọc -->
     <com.google.android.material.chip.ChipGroup
         android:id="@+id/chipGroupFilter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        app:chipSpacingHorizontal="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:chipSpacingHorizontal="12dp"
+        app:singleSelection="true"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:singleSelection="true">
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipAll"
             style="@style/CustomFilterChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:checked="true"
             android:text="Tất cả" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipUpcoming"
             style="@style/CustomFilterChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Sắp tới" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipCompleted"
             style="@style/CustomFilterChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Hoàn thành" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chipCanceled"
             style="@style/CustomFilterChip"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:text="Đã hủy" />
-
     </com.google.android.material.chip.ChipGroup>
 
+    <!-- Text số lượng -->
     <TextView
         android:id="@+id/tvAppointmentCount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:textColor="#6C757D"
         android:textSize="14sp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:fontFamily="@font/inter_medium"
         app:layout_constraintTop_toBottomOf="@id/chipGroupFilter"
+        app:layout_constraintStart_toStartOf="parent"
         tools:text="3 lịch hẹn" />
 
+    <!-- RecyclerView danh sách -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvAppointments"
         android:layout_width="0dp"
@@ -101,12 +100,13 @@
         android:paddingHorizontal="16dp"
         android:paddingBottom="16dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvAppointmentCount"
+        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         tools:listitem="@layout/item_schedule" />
 
+    <!-- Divider -->
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"
@@ -114,11 +114,12 @@
         android:background="#1F000000"
         app:layout_constraintBottom_toTopOf="@id/bottom_navigation" />
 
+    <!-- Bottom Navigation -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#FFFFFF"
+        android:background="@drawable/bg_bottom_nav_rounded"
         app:itemActiveIndicatorStyle="@style/App.Custom.Indicator"
         app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
