@@ -192,6 +192,12 @@ public class NavigationHelper {
         context.startActivity(intent);
     }
 
+    public static void navigateToUserProfile(Context context) {
+        Intent intent = new Intent(context, MainProfileActivity.class);
+        context.startActivity(intent);
+    }
+
+
     /**
      * Điều hướng đến ChatActivity
      */

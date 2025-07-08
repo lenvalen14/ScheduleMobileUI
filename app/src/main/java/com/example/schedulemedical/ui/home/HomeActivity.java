@@ -117,9 +117,9 @@ public class HomeActivity extends BaseActivity {
         ivDoctorAvatar = findViewById(R.id.ivDoctorAvatar);
 
         // Quick navigation
-         tvHospital = findViewById(R.id.tvSeeAllHospital); // Not in layout
+        tvHospital = findViewById(R.id.tvSeeAllHospital); // Not in layout
         tvSpecialty = findViewById(R.id.tvSpecialty);
-         tvDoctor = findViewById(R.id.tvDoctor); // Not in layout
+        tvDoctor = findViewById(R.id.tvDoctor); // Not in layout
 
         recyclerDoctors = findViewById(R.id.recycler_doctors);
         recyclerHospitals = findViewById(R.id.recycler_hospitals);
@@ -178,10 +178,10 @@ public class HomeActivity extends BaseActivity {
             });
         }
 
-        // Notification click - Show dropdown menu
+        // Notification click - Show notification fragment
         if (ivNotification != null) {
             ivNotification.setOnClickListener(view -> {
-                showNotificationDropdown(view);
+                showNotificationFragment();
             });
         }
 
@@ -195,72 +195,44 @@ public class HomeActivity extends BaseActivity {
         // }
     }
 
-    private void showNotificationDropdown(View anchor) {
-        PopupMenu popup = new PopupMenu(this, anchor);
-
-        // Manually add menu items since we can't create menu XML file
-        popup.getMenu().add(0, R.id.menu_notifications, 0, "📢 Thông báo");
-        popup.getMenu().add(0, R.id.menu_profile, 1, "👤 Hồ sơ");
-        popup.getMenu().add(0, R.id.menu_settings, 2, "⚙️ Cài đặt");
-        popup.getMenu().add(0, R.id.menu_logout, 3, "🚪 Đăng xuất");
-
-        popup.setOnMenuItemClickListener(item -> {
-            int itemId = item.getItemId();
-
-            if (itemId == R.id.menu_notifications) {
-                // Navigate to notifications
-                Toast.makeText(this, "Thông báo đang được phát triển!", Toast.LENGTH_SHORT).show();
-                return true;
-//            } else if (itemId == R.id.menu_profile) {
-//                // Navigate to profile
-//                NavigationHelper.navigateToUserProfile(this, role);
-//                return true;
-            } else if (itemId == R.id.menu_settings) {
-                // Navigate to settings
-                Toast.makeText(this, "Cài đặt đang được phát triển!", Toast.LENGTH_SHORT).show();
-                return true;
-            } else if (itemId == R.id.menu_logout) {
-                // Logout
-                performLogout();
-                return true;
-            }
-
-            return false;
-        });
-
-        popup.show();
+    private void showNotificationFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new com.example.schedulemedical.ui.main.NotificationFragment())
+                .addToBackStack(null)
+                .commit();
     }
 
     private void performLogout() {
         // Show confirmation dialog first
         new androidx.appcompat.app.AlertDialog.Builder(this)
-            .setTitle("Đăng xuất")
-            .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
-            .setPositiveButton("Đăng xuất", (dialog, which) -> {
-                showLoading();
-                authManager.logout(new AuthManager.AuthCallback() {
-                    @Override
-                    public void onSuccess(String message) {
-                        runOnUiThread(() -> {
-                            hideLoading();
-                            Toast.makeText(HomeActivity.this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
-                            redirectToLogin();
-                        });
-                    }
+                .setTitle("Đăng xuất")
+                .setMessage("Bạn có chắc chắn muốn đăng xuất không?")
+                .setPositiveButton("Đăng xuất", (dialog, which) -> {
+                    showLoading();
+                    authManager.logout(new AuthManager.AuthCallback() {
+                        @Override
+                        public void onSuccess(String message) {
+                            runOnUiThread(() -> {
+                                hideLoading();
+                                Toast.makeText(HomeActivity.this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+                                redirectToLogin();
+                            });
+                        }
 
-                    @Override
-                    public void onError(String error) {
-                        runOnUiThread(() -> {
-                            hideLoading();
-                            Toast.makeText(HomeActivity.this, "Lỗi đăng xuất: " + error, Toast.LENGTH_SHORT).show();
-                            // Still redirect to login even if logout API fails
-                            redirectToLogin();
-                        });
-                    }
-                });
-            })
-            .setNegativeButton("Hủy", null)
-            .show();
+                        @Override
+                        public void onError(String error) {
+                            runOnUiThread(() -> {
+                                hideLoading();
+                                Toast.makeText(HomeActivity.this, "Lỗi đăng xuất: " + error, Toast.LENGTH_SHORT).show();
+                                // Still redirect to login even if logout API fails
+                                redirectToLogin();
+                            });
+                        }
+                    });
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
     }
 
     private void setupProgressDialog() {
@@ -559,12 +531,6 @@ public class HomeActivity extends BaseActivity {
                 } else if (itemId == R.id.nav_profile) {
                     String role = authManager.getUserRole();
                     NavigationHelper.navigateToUserProfile(this, role);
-
-//                    if ("DOCTOR".equalsIgnoreCase(role)) {
-//                        NavigationHelper.navigateToDoctorProfile(this);
-//                    } else {
-//                        NavigationHelper.navigateToUserProfile(this);
-//                    }
                     return true;
                 }
 

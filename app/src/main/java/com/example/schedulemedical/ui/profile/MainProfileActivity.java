@@ -70,7 +70,7 @@ public class MainProfileActivity extends BaseActivity {
         // Menu item setup
         setupMenuItem(R.id.itemMyAppointments, R.drawable.ic_calendar, "Lịch khám của tôi");
         setupMenuItem(R.id.itemPersonalDetails, R.drawable.ic_person_outline, "Thông tin cá nhân");
-        if(role.equalsIgnoreCase("DOCTOR")){
+        if("DOCTOR".equalsIgnoreCase(role)){
             setupMenuItem(R.id.itemSchedule, R.drawable.ic_calendar, "Lịch biểu của tôi");
         }
         setupMenuItem(R.id.itemPassword, R.drawable.ic_password, "Đổi mật khẩu");
