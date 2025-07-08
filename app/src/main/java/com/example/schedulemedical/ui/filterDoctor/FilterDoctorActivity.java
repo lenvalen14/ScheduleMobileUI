@@ -80,15 +80,29 @@ public class FilterDoctorActivity extends BaseActivity {
                 if (doctor != null && doctor.getUser() != null) {
                     String doctorName = doctor.getUser().getFullName() != null
                             ? doctor.getUser().getFullName() : "Unknown Doctor";
-                    Log.d(TAG, "Book appointment clicked for: " + doctorName);
+
+                    String specialty = doctor.getSpecialty().getName() != null ? doctor.getSpecialty().getName() : "Không rõ";
+                    String hospital = doctor.getHospital().getName() != null ? doctor.getHospital().getName() : "Không rõ";
+//                    String fee = doctor.getConsultationFee() != null ? doctor.getConsultationFee().toString() : "0";
+                    String fee =  "0";
+
+                    Log.d(TAG, "Book appointment clicked for: " + doctorName + " - " + doctor.getDoctorId());
 
                     if (doctor.getDoctorId() != null) {
-                        NavigationHelper.navigateToSchedule(FilterDoctorActivity.this, doctor.getDoctorId());
+                        NavigationHelper.navigateToSchedule(
+                                FilterDoctorActivity.this,
+                                doctor.getDoctorId(),
+                                doctorName,
+                                specialty,
+                                hospital,
+                                fee
+                        );
                     } else {
                         Toast.makeText(FilterDoctorActivity.this, "Không thể đặt lịch với bác sĩ này", Toast.LENGTH_SHORT).show();
                     }
                 }
             }
+
         });
 
         viewModel = new ViewModelProvider(this).get(FilterDoctorViewModel.class);

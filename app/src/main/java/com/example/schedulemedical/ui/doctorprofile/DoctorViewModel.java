@@ -4,7 +4,6 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.example.schedulemedical.data.repository.DoctorRepository;
-import com.example.schedulemedical.data.repository.LoginRepository;
 import com.example.schedulemedical.model.dto.response.ResponseWrapper;
 import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;

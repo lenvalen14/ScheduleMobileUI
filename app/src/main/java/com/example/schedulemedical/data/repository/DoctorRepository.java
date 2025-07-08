@@ -60,21 +60,23 @@ public class DoctorRepository {
     }
 
     public void getDoctorProfileByUserId(int userId, MutableLiveData<DoctorResponse> result) {
-        ApiClient.getDoctorApiService().getDoctorsByUserIds(String.valueOf(userId), 1, 1)
-                .enqueue(new Callback<ApiResponse<List<DoctorResponse>>>() {
+        ApiClient.getDoctorApiService().getDoctorByUserId(userId)
+                .enqueue(new Callback<ApiResponse<DoctorResponse>>() {
                     @Override
-                    public void onResponse(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Response<ApiResponse<List<DoctorResponse>>> response) {
-                        if (response.isSuccessful() && response.body() != null && response.body().getData() != null && !response.body().getData().isEmpty()) {
-                            result.setValue(response.body().getData().get(0));
+                    public void onResponse(@NonNull Call<ApiResponse<DoctorResponse>> call,
+                                           @NonNull Response<ApiResponse<DoctorResponse>> response) {
+                        if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
+                            result.setValue(response.body().getData());
                         } else {
                             result.setValue(null);
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<ApiResponse<List<DoctorResponse>>> call, @NonNull Throwable t) {
+                    public void onFailure(@NonNull Call<ApiResponse<DoctorResponse>> call, @NonNull Throwable t) {
                         result.setValue(null);
                     }
                 });
     }
+
 }
