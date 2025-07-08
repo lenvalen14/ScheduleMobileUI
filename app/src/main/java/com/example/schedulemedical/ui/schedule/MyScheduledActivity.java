@@ -3,6 +3,10 @@ package com.example.schedulemedical.ui.schedule;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.TextView;
+import android.widget.Toast;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -57,7 +61,8 @@ public class MyScheduledActivity extends BaseActivity implements AppointmentAdap
             chipGroup.setOnCheckedChangeListener((group, checkedId) -> {
                 String status = null;
                 if (checkedId == R.id.chipAll) status = null;
-                else if (checkedId == R.id.chipUpcoming) status = "PENDING";
+                else if (checkedId == R.id.chipPending) status = "PENDING";
+                else if (checkedId == R.id.chipUpcoming) status = "SCHEDULED";
                 else if (checkedId == R.id.chipCompleted) status = "COMPLETED";
                 else if (checkedId == R.id.chipCanceled) status = "CANCELLED";
                 loadAppointments(status);
@@ -117,9 +122,18 @@ public class MyScheduledActivity extends BaseActivity implements AppointmentAdap
 
     @Override
     public void onCancelAppointment(AppointmentResponse appointment) {
-        // TODO: Implement cancel appointment logic (call API to cancel)
-        // Sau khi cancel thành công, reload lại danh sách
-        loadAppointments(null);
+        if (appointment == null || appointment.getAppointmentId() == null) return;
+        appointmentRepository.cancelAppointment(appointment.getAppointmentId(), new AppointmentRepository.DataCallback<Boolean>() {
+            @Override
+            public void onSuccess(Boolean result) {
+                Toast.makeText(MyScheduledActivity.this, "Đã hủy lịch thành công!", Toast.LENGTH_SHORT).show();
+                loadAppointments(null);
+            }
+            @Override
+            public void onError(String error) {
+                Toast.makeText(MyScheduledActivity.this, "Hủy lịch thất bại!", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override

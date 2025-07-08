@@ -37,6 +37,23 @@ public class AppointmentRepository {
             });
     }
 
+    public void cancelAppointment(int appointmentId, DataCallback<Boolean> callback) {
+        ApiClient.getAppointmentApiService().deleteAppointment(appointmentId).enqueue(new Callback<ApiResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                if (response.isSuccessful()) {
+                    callback.onSuccess(true);
+                } else {
+                    callback.onError("Cancel failed");
+                }
+            }
+            @Override
+            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                callback.onError(t.getMessage());
+            }
+        });
+    }
+
     public interface DataCallback<T> {
         void onSuccess(T data);
         void onError(String error);

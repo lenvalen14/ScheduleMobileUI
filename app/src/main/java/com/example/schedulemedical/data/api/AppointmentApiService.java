@@ -117,4 +117,7 @@ public interface AppointmentApiService {
     
     @PATCH("appointment/notification/mark-all-read/{userId}")
     Call<ApiResponse> markAllNotificationsAsRead(@Path("userId") int userId);
+
+    @DELETE("appointment/{id}")
+    Call<ApiResponse<Object>> deleteAppointment(@Path("id") int appointmentId);
 } 
