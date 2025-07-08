@@ -69,14 +69,30 @@ public class BookingWizardActivity extends AppCompatActivity {
         
         public boolean isStepCompleted(int step) {
             boolean result;
+            String stepInfo;
             switch (step) {
-                case 0: result = specialtyId != null; break;
-                case 1: result = doctorId != null; break;
-                case 2: result = selectedDate != null && selectedTimeSlot != null; break;
-                case 3: result = serviceId != null; break;
-                default: result = false; break;
+                case 0: 
+                    result = specialtyId != null; 
+                    stepInfo = "specialtyId: " + specialtyId;
+                    break;
+                case 1: 
+                    result = doctorId != null; 
+                    stepInfo = "doctorId: " + doctorId;
+                    break;
+                case 2: 
+                    result = selectedDate != null && selectedTimeSlot != null; 
+                    stepInfo = "date: " + selectedDate + ", time: " + selectedTimeSlot;
+                    break;
+                case 3: 
+                    result = serviceId != null; 
+                    stepInfo = "serviceId: " + serviceId;
+                    break;
+                default: 
+                    result = false; 
+                    stepInfo = "unknown step";
+                    break;
             }
-            Log.d("BookingData", "Step " + step + " completed: " + result + " (serviceId: " + serviceId + ")");
+            Log.d("BookingData", "Step " + step + " completed: " + result + " (" + stepInfo + ")");
             return result;
         }
     }
@@ -88,11 +104,17 @@ public class BookingWizardActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_wizard);
         
+        Log.d(TAG, "BookingWizardActivity onCreate - initializing...");
+        
         initializeServices();
         initializeViews();
         setupClickListeners();
         setupViewPager();
         setupProgressDialog();
+        
+        Log.d(TAG, "Initial bookingData state:");
+        logBookingDataState();
+        
         updateStepUI();
     }
     
@@ -176,6 +198,8 @@ public class BookingWizardActivity extends AppCompatActivity {
     }
     
     private void updateStepUI() {
+        Log.d(TAG, "updateStepUI - currentStep: " + currentStep);
+        
         // Update step counter
         tvStepCounter.setText("Bước " + (currentStep + 1) + " / " + TOTAL_STEPS);
         
@@ -195,6 +219,8 @@ public class BookingWizardActivity extends AppCompatActivity {
         btnPrevious.setVisibility(currentStep > 0 ? View.VISIBLE : View.GONE);
         
         boolean stepCompleted = bookingData.isStepCompleted(currentStep);
+        Log.d(TAG, "Step " + currentStep + " completed: " + stepCompleted);
+        
         if (currentStep == TOTAL_STEPS - 1) {
             btnNext.setText("Đặt lịch ngay");
             btnNext.setEnabled(stepCompleted);
@@ -217,6 +243,9 @@ public class BookingWizardActivity extends AppCompatActivity {
     }
     
     public void onStepDataChanged() {
+        Log.d(TAG, "onStepDataChanged called - current step: " + currentStep);
+        logBookingDataState();
+        
         // Reduce logging to prevent main thread overload
         updateStepUI();
         
