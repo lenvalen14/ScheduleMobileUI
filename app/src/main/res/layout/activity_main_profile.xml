@@ -81,6 +81,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginBottom="16dp">
 
+        <include layout="@layout/item_profile_menu" android:id="@+id/itemSchedule"/>
         <include layout="@layout/item_profile_menu" android:id="@+id/itemMyAppointments" />
         <include layout="@layout/item_profile_menu" android:id="@+id/itemPersonalDetails" />
         <include layout="@layout/item_profile_menu" android:id="@+id/itemPassword" />

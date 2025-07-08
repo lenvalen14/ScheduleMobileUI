@@ -116,9 +116,9 @@ public class HospitalDetailActivity extends AppCompatActivity {
                 } else if (itemId == R.id.nav_calendar) {
                     NavigationHelper.navigateToBookingWizard(this);
                     return true;
-                } else if (itemId == R.id.nav_profile) {
-                    NavigationHelper.navigateToUserProfile(this);
-                    return true;
+//                } else if (itemId == R.id.nav_profile) {
+//                    NavigationHelper.navigateToUserProfile(this);
+//                    return true;
                 }
                 return false;
             });

@@ -35,6 +35,7 @@ public class NavigationHelper {
     public static final String EXTRA_EMAIL = "email";
     public static final String EXTRA_OTP_CODE = "otp_code";
     public static final String EXTRA_FILTER_DATA = "filter_data";
+    public static final String ROLE = "role";
 
     public static void navigateToSpecialty(Context context) {
         Intent intent = new Intent(context, SpecialtyActivity.class);
@@ -185,10 +186,17 @@ public class NavigationHelper {
     /**
      * Điều hướng đến UserProfileActivity
      */
+    public static void navigateToUserProfile(Context context, String role) {
+        Intent intent = new Intent(context, MainProfileActivity.class);
+        intent.putExtra(ROLE, role);
+        context.startActivity(intent);
+    }
+
     public static void navigateToUserProfile(Context context) {
         Intent intent = new Intent(context, MainProfileActivity.class);
         context.startActivity(intent);
     }
+
 
     /**
      * Điều hướng đến ChatActivity

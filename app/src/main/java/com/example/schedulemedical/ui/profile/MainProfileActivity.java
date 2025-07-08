@@ -1,5 +1,7 @@
 package com.example.schedulemedical.ui.profile;
 
+import static com.example.schedulemedical.utils.NavigationHelper.ROLE;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -31,6 +33,9 @@ public class MainProfileActivity extends BaseActivity {
 
     @Override
     protected void setupViews() {
+
+        String role = getIntent().getStringExtra(ROLE);
+
         ImageView btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
 
@@ -65,6 +70,9 @@ public class MainProfileActivity extends BaseActivity {
         // Menu item setup
         setupMenuItem(R.id.itemMyAppointments, R.drawable.ic_calendar, "Lịch khám của tôi");
         setupMenuItem(R.id.itemPersonalDetails, R.drawable.ic_person_outline, "Thông tin cá nhân");
+        if("DOCTOR".equalsIgnoreCase(role)){
+            setupMenuItem(R.id.itemSchedule, R.drawable.ic_calendar, "Lịch biểu của tôi");
+        }
         setupMenuItem(R.id.itemPassword, R.drawable.ic_password, "Đổi mật khẩu");
         setupMenuItem(R.id.itemSettings, R.drawable.ic_settings, "Cài đặt");
         setupMenuItem(R.id.itemLogout, R.drawable.ic_logout, "Đăng xuất");
