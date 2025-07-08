@@ -59,16 +59,13 @@ public class DoctorProfileActivity extends BaseActivity {
                     String doctorName = doctor.getUser() != null ? doctor.getUser().getFullName() : "Unknown";
                     String specialty = doctor.getSpecialty() != null ? doctor.getSpecialty().getName() : "Chưa rõ";
                     String hospital = doctor.getHospital() != null ? doctor.getHospital().getName() : "Chưa rõ";
-//                    String fee = doctor.getConsultationFee() != null ? doctor.getConsultationFee().toString() : "0";
-                    String fee =  "0";
 
                     NavigationHelper.navigateToSchedule(
                             this,
                             doctor.getDoctorId(),
                             doctorName,
                             specialty,
-                            hospital,
-                            fee
+                            hospital
                     );
                 } else {
                     Log.e("DoctorProfile", "Không có thông tin bác sĩ để đặt lịch");
@@ -169,7 +166,7 @@ public class DoctorProfileActivity extends BaseActivity {
 
                 Log.d("DoctorProfile lich", "Schedules: " + new Gson().toJson(doctor.getSchedules()));
 
-                String[] weekdays = {"Chủ nhật", "Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7"};
+                String[] weekdays = {"Thứ 2", "Thứ 3", "Thứ 4", "Thứ 5", "Thứ 6", "Thứ 7", "Chủ nhật"};
 
                 doctor.getSchedules().stream()
                         .sorted((a, b) -> Integer.compare(a.getDayOfWeek(), b.getDayOfWeek()))
