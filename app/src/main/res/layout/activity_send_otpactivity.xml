@@ -8,7 +8,7 @@
     tools:context=".ui.forgotPassword.SendOTPActivity">
 
     <ImageView
-        android:id="@+id/ivBack"
+        android:id="@+id/btnBack"
         android:layout_width="32dp"
         android:layout_height="32dp"
         android:layout_marginTop="16dp"

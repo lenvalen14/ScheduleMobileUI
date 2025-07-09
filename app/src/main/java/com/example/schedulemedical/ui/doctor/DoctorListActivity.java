@@ -49,7 +49,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     private static final String TAG = "DoctorListActivity";
 
     // UI Components
-    private ImageView ivBack;
+    private ImageView btnBack;
     private EditText etSearch;
     private ImageView ivFilter;
     private RecyclerView rvDoctors;
@@ -103,7 +103,7 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
     }
 
     private void initializeViews() {
-        ivBack = findViewById(R.id.btnBack);  // Use btnBack instead of ivBack
+        btnBack = findViewById(R.id.btnBack);
         ivFilter = findViewById(R.id.btnFilter); // Đảm bảo ánh xạ đúng
         // etSearch = findViewById(R.id.etSearch);  // View doesn't exist in layout
         // ivFilter = findViewById(R.id.ivFilter);  // View doesn't exist in layout
@@ -128,8 +128,8 @@ public class DoctorListActivity extends AppCompatActivity implements DoctorAdapt
 
     private void setupClickListeners() {
         // Back button
-        if (ivBack != null) {
-            ivBack.setOnClickListener(v -> finish());
+        if (btnBack != null) {
+            btnBack.setOnClickListener(v -> finish());
         }
 
         // Filter button

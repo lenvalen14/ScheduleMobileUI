@@ -16,7 +16,7 @@ import java.io.IOException;
 public class ApiClient {
     // Updated to match the NestJS backend URL
 //    private static final String BASE_URL = "http://10.0.2.2:3000/";
-    private static final String BASE_URL = "http://192.168.31.226:3000/";
+    private static final String BASE_URL = "http://192.168.1.10:3000/";
     private static Retrofit retrofit;
     private static Context appContext;
 

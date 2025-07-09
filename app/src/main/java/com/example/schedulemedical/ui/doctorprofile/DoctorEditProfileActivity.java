@@ -69,7 +69,7 @@ public class DoctorEditProfileActivity extends BaseActivity {
     private void setupNavigation() {
         ImageView backButton = findViewById(R.id.btnBack);
         if (backButton != null) {
-            backButton.setOnClickListener(view -> NavigationHelper.goBack(this));
+            backButton.setOnClickListener(v -> finish());
         }
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
