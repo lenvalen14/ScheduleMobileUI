@@ -13,6 +13,7 @@ import com.example.schedulemedical.model.dto.response.PatientProfileResponse;
 
 import java.io.IOException;
 
+import okhttp3.MultipartBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -80,6 +81,38 @@ public class UserRepository {
             @Override
             public void onFailure(Call<ApiResponse<PatientProfileResponse>> call, Throwable t) {
                 ApiResponse<PatientProfileResponse> errorResponse = new ApiResponse<>();
+                errorResponse.setCode(500);
+                errorResponse.setMessage("Lỗi kết nối: " + t.getMessage());
+                result.postValue(errorResponse);
+            }
+        });
+
+        return result;
+    }
+
+    public LiveData<ApiResponse<Object>> uploadAvatar(int userId, MultipartBody.Part filePart) {
+        MutableLiveData<ApiResponse<Object>> result = new MutableLiveData<>();
+
+        userApiService.uploadAvatar(userId, filePart).enqueue(new Callback<ApiResponse<Object>>() {
+            @Override
+            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    result.postValue(response.body());
+                } else {
+                    ApiResponse<Object> errorResponse = new ApiResponse<>();
+                    errorResponse.setCode(response.code());
+                    try {
+                        errorResponse.setMessage(response.errorBody() != null ? response.errorBody().string() : "Unknown error");
+                    } catch (IOException e) {
+                        errorResponse.setMessage("Error reading error body");
+                    }
+                    result.postValue(errorResponse);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
+                ApiResponse<Object> errorResponse = new ApiResponse<>();
                 errorResponse.setCode(500);
                 errorResponse.setMessage("Lỗi kết nối: " + t.getMessage());
                 result.postValue(errorResponse);

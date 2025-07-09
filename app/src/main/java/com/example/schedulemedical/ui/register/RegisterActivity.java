@@ -13,6 +13,7 @@ import androidx.activity.ComponentActivity;
 import androidx.lifecycle.MutableLiveData;
 
 import com.example.schedulemedical.R;
+import com.example.schedulemedical.ui.login.LoginActivity;
 import com.example.schedulemedical.utils.NavigationHelper;
 import com.example.schedulemedical.data.repository.RegisterRepository;
 import com.example.schedulemedical.model.dto.request.RegisterRequest;
@@ -86,15 +87,14 @@ public class RegisterActivity extends ComponentActivity {
                 registerResult.observe(this, response -> {
                     registerBtn.setEnabled(true);
 
-                    if (response != null && Boolean.TRUE.equals(response.getSuccess())) {
+                    if (response != null && response.getCode() == 201) {
                         Toast.makeText(RegisterActivity.this, "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
 
                         // Chuyển về trang login và đóng activity hiện tại
-                        NavigationHelper.navigateToLogin(RegisterActivity.this);
-                        finish(); // Đóng RegisterActivity để không quay lại được
-
+                        NavigationHelper.navigateToLogin(this);
+                        finish();
                         // Hoặc có thể clear toàn bộ back stack
-                        // NavigationHelper.navigateToLoginAndClearStack(RegisterActivity.this);
+//                         NavigationHelper.navigateToLoginAndClearStack(RegisterActivity.this);
                     } else {
                         String msg = "Đăng ký thất bại!";
                         if (response != null && response.getMessage() != null) {
