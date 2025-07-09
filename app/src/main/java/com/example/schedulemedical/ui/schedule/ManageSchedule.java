@@ -64,7 +64,7 @@ public class ManageSchedule extends BaseActivity implements ScheduleAdapter.OnSc
         doctorViewModel.loadSchedulesByDoctorId(doctorId);
 
         findViewById(R.id.btnAddSchedule).setOnClickListener(v -> showScheduleDialog(null));
-        findViewById(R.id.btnBack).setOnClickListener(v -> onBackPressed());
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
     }
 
     @Override
@@ -171,5 +171,11 @@ public class ManageSchedule extends BaseActivity implements ScheduleAdapter.OnSc
 
         builder.setNegativeButton("Huỷ", null);
         builder.show();
+    }
+
+    @Override
+    public void onBackPressed() {
+        com.example.schedulemedical.utils.NavigationHelper.navigateToMainProfile(this, "DOCTOR");
+        finish();
     }
 }

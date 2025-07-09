@@ -44,7 +44,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
     private static final String TAG = "BookingActivity";
 
     // UI Components
-    private ImageView ivBack;
+    private ImageView btnBack;
     private TextView tvDoctorName;
     private TextView tvSpecialty;
     private TextView tvHospitalName;
@@ -99,7 +99,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
     }
 
     private void initializeViews() {
-        ivBack = findViewById(R.id.ivBack);
+        btnBack = findViewById(R.id.btnBack);
         tvDoctorName = findViewById(R.id.tvDoctorName);
         tvSpecialty = findViewById(R.id.tvSpecialty);
         tvHospitalName = findViewById(R.id.tvHospitalName);
@@ -130,7 +130,7 @@ public class BookingActivity extends AppCompatActivity implements TimeSlotAdapte
 
     private void setupClickListeners() {
         // Back button
-        ivBack.setOnClickListener(v -> finish());
+        btnBack.setOnClickListener(v -> finish());
 
         // Date selector
         cardSelectDate.setOnClickListener(v -> showDatePicker());

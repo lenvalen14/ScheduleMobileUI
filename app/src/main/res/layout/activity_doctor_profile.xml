@@ -185,20 +185,20 @@
 
 
             <!-- Certifications -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Certifications"
-                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"
-                android:layout_marginTop="24dp"
-                android:textColor="@color/md_theme_onBackground" />
+<!--            <TextView-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="Certifications"-->
+<!--                android:textAppearance="@style/TextAppearance.Material3.TitleSmall"-->
+<!--                android:layout_marginTop="24dp"-->
+<!--                android:textColor="@color/md_theme_onBackground" />-->
 
-            <LinearLayout
-                android:id="@+id/layoutCertifications"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginTop="8dp" />
+<!--            <LinearLayout-->
+<!--                android:id="@+id/layoutCertifications"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:orientation="vertical"-->
+<!--                android:layout_marginTop="8dp" />-->
         </LinearLayout>
     </ScrollView>
 </LinearLayout>
