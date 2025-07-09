@@ -1,6 +1,7 @@
 package com.example.schedulemedical.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.model.Specialty;
+import com.example.schedulemedical.utils.SpecialtyIconUtil;
 
 import java.util.List;
 
@@ -55,7 +57,25 @@ public class SpecialtyAdapter extends RecyclerView.Adapter<SpecialtyAdapter.Spec
         }
         
         holder.tvDoctorCount.setText(specialty.getDoctorCountText());
-        
+
+        // Log tên chuyên khoa gốc và tên chuẩn hóa
+        Log.d("SpecialtyAdapter", "Specialty name raw: '" + specialty.getName() + "', normalized: '" + (specialty.getName() != null ? specialty.getName().trim().toLowerCase() : "") + "'");
+
+        // Map icon và background: luôn trim và toLowerCase tên chuyên khoa
+        String name = specialty.getName() != null ? specialty.getName().trim().toLowerCase() : "";
+        int iconResId = SpecialtyIconUtil.getIconResId(name);
+        int bgResId = SpecialtyIconUtil.getBackgroundResId(name);
+        ImageView ivIcon = holder.itemView.findViewById(R.id.ivSpecialtyIcon);
+        if (ivIcon != null) {
+            ivIcon.setImageResource(iconResId);
+            View flIconBg = (View) ivIcon.getParent();
+            if (flIconBg != null) {
+                flIconBg.setBackgroundResource(bgResId);
+            }
+        } else {
+            holder.itemView.setBackgroundResource(bgResId);
+        }
+
         // Handle selection
         boolean isSelected = position == selectedPosition;
         holder.itemView.setSelected(isSelected);
@@ -64,15 +84,10 @@ public class SpecialtyAdapter extends RecyclerView.Adapter<SpecialtyAdapter.Spec
         holder.itemView.setOnClickListener(v -> {
             int previousPosition = selectedPosition;
             selectedPosition = holder.getAdapterPosition();
-            
-            // Notify previous selected item
             if (previousPosition != -1) {
                 notifyItemChanged(previousPosition);
             }
-            
-            // Notify current selected item
             notifyItemChanged(selectedPosition);
-            
             if (listener != null) {
                 listener.onSpecialtySelected(specialty, selectedPosition);
             }

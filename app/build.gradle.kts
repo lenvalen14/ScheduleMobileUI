@@ -52,6 +52,7 @@ dependencies {
     implementation(libs.play.services.maps)
     implementation(libs.navigation.fragment)
     implementation(libs.navigation.ui)
+    implementation(libs.material.v1120)
     
     // Glide for image loading
     implementation(libs.glide)
