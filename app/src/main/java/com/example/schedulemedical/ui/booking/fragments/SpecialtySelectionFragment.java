@@ -23,9 +23,12 @@ import com.example.schedulemedical.model.Specialty;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.ui.booking.BookingWizardActivity;
+import com.google.gson.Gson;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger; // NOTE: Thêm import này
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -127,30 +130,17 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
             @Override
             public void onResponse(Call<ApiResponse<List<SpecialtyResponse>>> call, Response<ApiResponse<List<SpecialtyResponse>>> response) {
                 showLoading(false);
-                Log.d(TAG, "Specialties API call success");
-                Log.d(TAG, "Response body: " + response.body());
-
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                     List<SpecialtyResponse> responseList = response.body().getData();
-                    Log.d(TAG, "Specialties count: " + responseList.size());
-
                     List<Specialty> specialties = new ArrayList<>();
-
                     for (SpecialtyResponse res : responseList) {
-                        Log.d(TAG, "Processing specialty: " + res.getName() + " (ID: " + res.getSpecialtyId() + ")");
-                        Log.d(TAG, "Raw specialty data - name: " + res.getName() + ", id: " + res.getSpecialtyId() + ", description: " + res.getDescription() + ", doctorCount: " + res.getDoctorCount());
-
-                        Specialty specialty = new Specialty(
+                        specialties.add(new Specialty(
                                 res.getSpecialtyId(),
                                 res.getName(),
                                 res.getDescription(),
                                 res.getDoctorCount()
-                        );
-
-                        Log.d(TAG, "Created Specialty object - name: " + specialty.getName() + ", id: " + specialty.getSpecialtyId());
-                        specialties.add(specialty);
+                        ));
                     }
-
                     updateSpecialtiesList(specialties);
                 } else {
                     Log.e(TAG, "API call failed or response is null. Response code: " + response.code());
@@ -167,35 +157,24 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
         });
     }
 
+    // NOTE: Sửa lại phương thức này để xử lý logic bất đồng bộ
     private void loadSpecialtiesByHospital(Integer hospitalId) {
-        // For now, we'll load all specialties and filter by hospital
-        // In the future, you might want to create a specific API endpoint for this
         doctorApiService.getAllSpecialties(1, 50).enqueue(new Callback<ApiResponse<List<SpecialtyResponse>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<SpecialtyResponse>>> call, Response<ApiResponse<List<SpecialtyResponse>>> response) {
                 showLoading(false);
-                Log.d(TAG, "Specialties by hospital API call success");
-                Log.d(TAG, "Response body: " + response.body());
-
-                if (response.isSuccessful() && response.body() != null) {
+                if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                     List<SpecialtyResponse> responseList = response.body().getData();
-                    Log.d(TAG, "All specialties count: " + responseList.size());
-
-                    // Filter specialties that have doctors in this hospital
-                    List<Specialty> specialties = new ArrayList<>();
-
-                    for (SpecialtyResponse res : responseList) {
-                        Log.d(TAG, "Processing specialty: " + res.getName() + " (ID: " + res.getSpecialtyId() + ")");
-
-                        // Check if this specialty has doctors in the hospital
-                        checkSpecialtyInHospital(res, hospitalId, specialties);
+                    if (responseList.isEmpty()) {
+                        showNoSpecialtiesMessage();
+                        return;
                     }
 
-                    // If no specialties found, show message
-                    if (specialties.isEmpty()) {
-                        showNoSpecialtiesMessage();
-                    } else {
-                        updateSpecialtiesList(specialties);
+                    List<Specialty> availableSpecialties = new ArrayList<>();
+                    AtomicInteger pendingCalls = new AtomicInteger(responseList.size());
+
+                    for (SpecialtyResponse res : responseList) {
+                        checkSpecialtyInHospital(res, hospitalId, availableSpecialties, pendingCalls);
                     }
                 } else {
                     Log.e(TAG, "API call failed or response is null. Response code: " + response.code());
@@ -212,53 +191,60 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
         });
     }
 
-    private void checkSpecialtyInHospital(SpecialtyResponse specialty, Integer hospitalId, List<Specialty> specialties) {
-        // Load doctors for this specialty and check if any are in the hospital
-        doctorApiService.getDoctorsBySpecialty(specialty.getSpecialtyId(), 1, 50).enqueue(new Callback<ApiResponse<Object>>() {
-            @Override
-            public void onResponse(Call<ApiResponse<Object>> call, Response<ApiResponse<Object>> response) {
-                if (response.isSuccessful() && response.body() != null) {
-                    // Parse response to check if any doctors are in this hospital
-                    // For now, we'll add the specialty if the API call succeeds
-                    // In a real implementation, you'd parse the response and check hospital IDs
-                    specialties.add(new Specialty(
-                            specialty.getSpecialtyId(),
-                            specialty.getName(),
-                            specialty.getDescription(),
-                            specialty.getDoctorCount()
-                    ));
+    private void checkSpecialtyInHospital(SpecialtyResponse specialty, Integer hospitalId, List<Specialty> availableSpecialties, AtomicInteger pendingCalls) {
+//        Gson gson = new Gson();
+//        String specialtyJson = gson.toJson(specialty);
+//        String availableSpecialtiesJson = gson.toJson(availableSpecialties);
+//
+//        Log.d(TAG, "checkSpecialtyInHospital -> INPUT DATA:" +
+//                "\n>> specialty (JSON): " + specialtyJson +
+//                "\n>> hospitalId: " + hospitalId +
+//                "\n>> availableSpecialties (JSON): " + availableSpecialtiesJson +
+//                "\n>> pendingCalls (current value): " + pendingCalls.get()
+//        );
 
-                    // Update UI if this is the last specialty being checked
-                    if (specialties.size() == 1) { // First specialty found
-                        updateSpecialtiesList(specialties);
-                    }
-                }
-            }
+        boolean hasDoctorsInHospital = false;
+        if (specialty.getDoctorCount() != null) {
 
-            @Override
-            public void onFailure(Call<ApiResponse<Object>> call, Throwable t) {
-                Log.e(TAG, "Failed to check doctors for specialty: " + specialty.getName(), t);
-            }
-        });
+            hasDoctorsInHospital = true;
+        }
+
+        if (hasDoctorsInHospital) {
+            availableSpecialties.add(new Specialty(
+                    specialty.getSpecialtyId(),
+                    specialty.getName(),
+                    specialty.getDescription(),
+                    specialty.getDoctorCount()
+            ));
+        }
+
+        int remaining = pendingCalls.decrementAndGet();
+
+        if (remaining == 0) {
+            Log.d(TAG, "All checks completed. Total available specialties: " + availableSpecialties.size());
+            Collections.sort(availableSpecialties, (s1, s2) -> s1.getName().compareTo(s2.getName()));
+            updateSpecialtiesList(availableSpecialties);
+        }
     }
+
 
     private void showNoSpecialtiesMessage() {
         String hospitalName = "";
         if (getActivity() instanceof BookingWizardActivity) {
             hospitalName = ((BookingWizardActivity) getActivity()).getHospitalName();
         }
-
-        String message = "Bệnh viện " + hospitalName + " chưa có chuyên khoa hoặc bác sĩ khả dụng.";
+        // NOTE: Cải thiện thông báo lỗi
+        String message = "Bệnh viện " + (hospitalName != null ? hospitalName : "") + " hiện chưa có chuyên khoa nào để đặt lịch.";
         showError(message);
     }
 
     private void updateSpecialtiesList(List<Specialty> specialties) {
-        if (specialties.isEmpty()) {
-            showError("Không có chuyên khoa khả dụng");
+        if (specialties == null || specialties.isEmpty()) {
+            showNoSpecialtiesMessage();
         } else {
             specialtiesList.clear();
             specialtiesList.addAll(specialties);
-            specialtyAdapter.updateSpecialties(specialtiesList);
+            specialtyAdapter.updateSpecialties(specialtiesList); // Giả sử adapter có phương thức này
             rvSpecialties.setVisibility(View.VISIBLE);
             tvNoSpecialties.setVisibility(View.GONE);
         }
@@ -286,16 +272,12 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
     }
 
     private void showSelectedSpecialtyInfo() {
-        // Hide the specialties list
         rvSpecialties.setVisibility(View.GONE);
         progressBar.setVisibility(View.GONE);
 
-        // Show selected specialty info
         tvNoSpecialties.setVisibility(View.VISIBLE);
-        tvNoSpecialties.setText("Chuyên khoa đã chọn: " + bookingData.specialtyName +
-                "\nMô tả: " + (bookingData.specialtyName != null ? bookingData.specialtyName : "Không có mô tả"));
+        tvNoSpecialties.setText("Chuyên khoa đã chọn: " + bookingData.specialtyName);
 
-        // Notify parent that this step is completed
         if (getActivity() instanceof BookingWizardActivity) {
             ((BookingWizardActivity) getActivity()).onStepDataChanged();
         }
