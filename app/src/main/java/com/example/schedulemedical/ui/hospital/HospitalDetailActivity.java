@@ -29,7 +29,7 @@ import retrofit2.Response;
 
 public class HospitalDetailActivity extends AppCompatActivity {
     private TextView tvName, tvType, tvAddress, tvPhone, tvEmail, tvDescription, tvEstablishYear, tvWorkScheduling, tvWebsite, tvCertificates, tvGallery, tvLatitude, tvLongitude, tvRating, tvReviews, tvTotalBeds, tvTotalNurses, tvVerified, tvDoctorCount;
-    private ImageView ivLogo, btnBack, btnNotification;
+    private ImageView ivLogo, btnBack;
     private RecyclerView recyclerGallery;
     private GalleryAdapter galleryAdapter;
     private int hospitalId;
@@ -56,7 +56,6 @@ public class HospitalDetailActivity extends AppCompatActivity {
     private void initViews() {
         // Navigation elements
         btnBack = findViewById(R.id.btnBack);
-        btnNotification = findViewById(R.id.btnNotification);
         
         // Content elements
         ivLogo = findViewById(R.id.ivLogo);
@@ -93,13 +92,6 @@ public class HospitalDetailActivity extends AppCompatActivity {
             }
         });
 
-        // Notification button
-        btnNotification.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(HospitalDetailActivity.this, "Notifications feature coming soon!", Toast.LENGTH_SHORT).show();
-            }
-        });
     }
 
     private void setupBottomNavigation() {

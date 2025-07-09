@@ -17,6 +17,8 @@ import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
 import com.example.schedulemedical.ui.filterDoctor.DoctorFilterOptionsViewModel;
 import com.example.schedulemedical.ui.filterDoctor.DoctorFilterOptionsViewModelFactory;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.List;

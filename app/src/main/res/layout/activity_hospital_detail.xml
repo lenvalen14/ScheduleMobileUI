@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA"
+    android:background="@color/beige"
     tools:context=".ui.hospital.HospitalActivity">
 
     <!-- Fixed Header Section -->
@@ -49,15 +49,6 @@
                 android:textColor="#212529"
                 android:textSize="18sp"
                 android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/btnNotification"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:background="?android:attr/selectableItemBackgroundBorderless"
-                android:padding="4dp"
-                android:src="@drawable/ic_notification_bell"
-                app:tint="#6C757D" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

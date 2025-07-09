@@ -36,7 +36,7 @@ public interface DoctorApiService {
     
     // Get doctor by ID
     @GET("doctor/{id}")
-    Call<ApiResponse<Object>> getDoctorById(@Path("id") int doctorId);
+    Call<ApiResponse<DoctorResponse>> getDoctorById(@Path("id") int doctorId);
     
     // Get doctor by user ID
     @GET("doctor/user/{id}")

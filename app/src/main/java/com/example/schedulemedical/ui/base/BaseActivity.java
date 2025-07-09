@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.schedulemedical.R;
+import com.example.schedulemedical.utils.AuthManager;
 import com.example.schedulemedical.utils.NavigationHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -21,7 +22,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResourceId());
-        
         setupBottomNavigation();
         setupViews();
     }
@@ -74,7 +74,9 @@ public abstract class BaseActivity extends AppCompatActivity {
             return true;
         } else if (itemId == R.id.nav_profile) {
             if (!(this instanceof com.example.schedulemedical.ui.profile.MainProfileActivity)) {
-                NavigationHelper.navigateToMainProfile(this);
+                AuthManager authManager = new AuthManager(this);
+                String role = authManager.getUserRole();
+                NavigationHelper.navigateToMainProfile(this, role);
             }
             return true;
         }

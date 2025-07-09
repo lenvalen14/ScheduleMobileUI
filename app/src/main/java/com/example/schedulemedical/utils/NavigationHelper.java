@@ -186,12 +186,6 @@ public class NavigationHelper {
     /**
      * Điều hướng đến UserProfileActivity
      */
-    public static void navigateToUserProfile(Context context, String role) {
-        Intent intent = new Intent(context, MainProfileActivity.class);
-        intent.putExtra(ROLE, role);
-        context.startActivity(intent);
-    }
-
     public static void navigateToUserProfile(Context context) {
         Intent intent = new Intent(context, MainProfileActivity.class);
         context.startActivity(intent);
@@ -226,8 +220,9 @@ public class NavigationHelper {
     /**
      * Điều hướng đến MainProfileActivity (trang profile chính)
      */
-    public static void navigateToMainProfile(Context context) {
-        Intent intent = new Intent(context, com.example.schedulemedical.ui.profile.MainProfileActivity.class);
+    public static void navigateToMainProfile(Context context, String role) {
+        Intent intent = new Intent(context, MainProfileActivity.class);
+        intent.putExtra(ROLE, role);
         context.startActivity(intent);
     }
 

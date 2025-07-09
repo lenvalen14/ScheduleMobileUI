@@ -60,6 +60,7 @@ dependencies {
     implementation(libs.socket.io.client)
     implementation(libs.swiperefreshlayout)
     implementation(libs.google.flexbox)
+    implementation(libs.gridlayout)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)

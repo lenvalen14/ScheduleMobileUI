@@ -7,35 +7,45 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import com.bumptech.glide.Glide;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.google.android.material.button.MaterialButton;
+import androidx.recyclerview.widget.RecyclerView;
 
-import java.util.List;
-
-public class HospitalCardAdapter extends RecyclerView.Adapter<HospitalCardAdapter.HospitalViewHolder> {
+public class HospitalCardAdapter extends ListAdapter<HospitalResponse, HospitalCardAdapter.HospitalViewHolder> {
     private final Context context;
-    private final List<HospitalResponse> hospitalList;
     private OnHospitalClickListener onHospitalClickListener;
 
     public interface OnHospitalClickListener {
         void onHospitalClick(HospitalResponse hospital);
         void onBookNowClick(HospitalResponse hospital);
-        boolean isHospitalBookable(HospitalResponse hospital); // Add method to check if hospital is bookable
+        boolean isHospitalBookable(HospitalResponse hospital);
     }
 
-    public HospitalCardAdapter(Context context, List<HospitalResponse> hospitalList) {
+    public HospitalCardAdapter(Context context) {
+        super(new DiffUtil.ItemCallback<HospitalResponse>() {
+            @Override
+            public boolean areItemsTheSame(@NonNull HospitalResponse oldItem, @NonNull HospitalResponse newItem) {
+                return oldItem.getHospitalId() == newItem.getHospitalId();
+            }
+            @Override
+            public boolean areContentsTheSame(@NonNull HospitalResponse oldItem, @NonNull HospitalResponse newItem) {
+                return oldItem.equals(newItem);
+            }
+        });
         this.context = context;
-        this.hospitalList = hospitalList;
     }
 
     public void setOnHospitalClickListener(OnHospitalClickListener listener) {
         this.onHospitalClickListener = listener;
+    }
+
+    public void updateData(java.util.List<HospitalResponse> newList) {
+        submitList(newList != null ? new java.util.ArrayList<>(newList) : new java.util.ArrayList<>());
     }
 
     @NonNull
@@ -47,13 +57,8 @@ public class HospitalCardAdapter extends RecyclerView.Adapter<HospitalCardAdapte
 
     @Override
     public void onBindViewHolder(@NonNull HospitalViewHolder holder, int position) {
-        HospitalResponse hospital = hospitalList.get(position);
+        HospitalResponse hospital = getItem(position);
         holder.bind(hospital);
-    }
-
-    @Override
-    public int getItemCount() {
-        return hospitalList != null ? hospitalList.size() : 0;
     }
 
     class HospitalViewHolder extends RecyclerView.ViewHolder {
@@ -68,7 +73,6 @@ public class HospitalCardAdapter extends RecyclerView.Adapter<HospitalCardAdapte
             ivHospitalLogo = itemView.findViewById(R.id.ivHospitalLogo);
             tvHospitalName = itemView.findViewById(R.id.tvHospitalName);
             tvHospitalAddress = itemView.findViewById(R.id.tvHospitalAddress);
-            // Tìm TextView rating trong layoutRating
             View layoutRating = itemView.findViewById(R.id.layoutRating);
             TextView ratingText = null;
             if (layoutRating instanceof ViewGroup) {
@@ -82,28 +86,24 @@ public class HospitalCardAdapter extends RecyclerView.Adapter<HospitalCardAdapte
             }
             tvRating = ratingText;
             btnBookNow = itemView.findViewById(R.id.btnBookNow);
-
             itemView.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION && onHospitalClickListener != null) {
-                    onHospitalClickListener.onHospitalClick(hospitalList.get(pos));
+                    onHospitalClickListener.onHospitalClick(getItem(pos));
                 }
             });
-
             btnBookNow.setOnClickListener(v -> {
                 int pos = getAdapterPosition();
                 if (pos != RecyclerView.NO_POSITION) {
                     if (onHospitalClickListener != null) {
-                        onHospitalClickListener.onBookNowClick(hospitalList.get(pos));
+                        onHospitalClickListener.onBookNowClick(getItem(pos));
                     } else {
-                        // Fallback: direct navigation to booking
-                        Intent intent = com.example.schedulemedical.ui.booking.BookingWizardActivity.createIntentWithHospital(context, hospitalList.get(pos));
+                        Intent intent = com.example.schedulemedical.ui.booking.BookingWizardActivity.createIntentWithHospital(context, getItem(pos));
                         context.startActivity(intent);
                     }
                 }
             });
         }
-
         public void bind(HospitalResponse hospital) {
             tvHospitalName.setText(hospital.getName());
             tvHospitalAddress.setText(hospital.getAddress());
@@ -115,13 +115,10 @@ public class HospitalCardAdapter extends RecyclerView.Adapter<HospitalCardAdapte
             } else {
                 ivHospitalLogo.setImageResource(R.drawable.logo_benh_vien_mat);
             }
-            
-            // Check if hospital is bookable
             boolean isBookable = true;
             if (onHospitalClickListener != null) {
                 isBookable = onHospitalClickListener.isHospitalBookable(hospital);
             }
-            
             btnBookNow.setEnabled(isBookable);
             if (!isBookable) {
                 btnBookNow.setText("Chưa có dịch vụ");

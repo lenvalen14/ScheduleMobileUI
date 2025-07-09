@@ -7,423 +7,441 @@
     android:background="#F8F9FA"
     tools:context=".ui.home.HomeActivity">
 
-    <androidx.core.widget.NestedScrollView
+    <!-- Bọc toàn bộ nội dung cuộn bằng SwipeRefreshLayout -->
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@+id/bottom_navigation"
-        android:scrollbars="none">
+        android:layout_height="match_parent">
 
-        <LinearLayout
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="24dp">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/bottom_navigation"
+            android:scrollbars="none">
 
-            <!-- Header -->
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingHorizontal="24dp"
-                android:paddingTop="32dp"
-                android:paddingBottom="16dp">
-
-                <ImageView
-                    android:id="@+id/ivLogo"
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    android:src="@drawable/ic_medical_logo"
-                    app:tint="#007BFF"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-
-                <LinearLayout
-                    android:id="@+id/layoutWelcome"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    app:layout_constraintStart_toEndOf="@id/ivLogo"
-                    app:layout_constraintEnd_toStartOf="@id/ivNotification"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:gravity="center">
-
-                    <TextView
-                        android:id="@+id/tvWelcome"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Welcome back,"
-                        android:textColor="#212529"
-                        android:textSize="16sp" />
-
-                    <TextView
-                        android:id="@+id/tvUsername"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="JsonDoe"
-                        android:textColor="#212529"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-                <ImageView
-                    android:id="@+id/ivNotification"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:src="@drawable/ic_notification_bell"
-                    app:tint="#6C757D"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <!-- Search Bar -->
+            <!-- Giữ nguyên LinearLayout và toàn bộ nội dung bên trong -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/search_bar_bg"
-                android:orientation="horizontal"
-                android:gravity="center_vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp">
-
-                <ImageView
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:src="@drawable/ic_search"
-                    app:tint="#9E9E9E" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Search Doctor, Hospital"
-                    android:textColor="#9E9E9E"
-                    android:textSize="14sp" />
-            </LinearLayout>
-
-            <!-- Appointment Card -->
-            <!-- Appointment Card - PHIÊN BẢN CẢI TIẾN -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardAppointment"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp"
-                app:cardBackgroundColor="@color/teal_primary"> <!-- SỬ DỤNG MÀU NỀN ĐƠN SẮC -->
+                android:orientation="vertical"
+                android:paddingBottom="24dp">
 
+                <!-- Header -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="20dp">
+                    android:paddingHorizontal="24dp"
+                    android:paddingTop="32dp"
+                    android:paddingBottom="16dp">
 
-                    <!-- Thay đổi: Avatar với viền trắng nhẹ nhàng -->
-                    <com.google.android.material.imageview.ShapeableImageView
-                        android:id="@+id/ivDoctorAvatar"
-                        android:layout_width="60dp"
-                        android:layout_height="60dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/sample_profile_image"
-                        android:padding="2dp"
-                        app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
-                        app:strokeColor="@color/white_alpha_30"
-                        app:strokeWidth="2dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <!-- Thay đổi: Bỏ LinearLayout, dùng ConstraintLayout hoàn toàn -->
-                    <TextView
-                        android:id="@+id/tvDoctorName"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
-                        android:layout_marginEnd="16dp"
-                        android:ellipsize="end"
-                        android:maxLines="1"
-                        android:text="Ths. BS. Chae Song Hwa"
-                        android:textColor="@color/white"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/ivArrowDetails"
-                        app:layout_constraintStart_toEndOf="@id/ivDoctorAvatar"
-                        app:layout_constraintTop_toTopOf="@id/ivDoctorAvatar" />
-
-                    <TextView
-                        android:id="@+id/tvAppointmentDesc"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:alpha="0.85"
-                        android:text="Bạn có một lịch hẹn với bác sĩ"
-                        android:textColor="@color/white"
-                        android:textSize="13sp"
-                        app:layout_constraintEnd_toEndOf="@id/tvDoctorName"
-                        app:layout_constraintStart_toStartOf="@id/tvDoctorName"
-                        app:layout_constraintTop_toBottomOf="@id/tvDoctorName" />
-
-                    <!-- MỚI: Icon mũi tên đóng vai trò CTA -->
                     <ImageView
-                        android:id="@+id/ivArrowDetails"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_arrow_forward"
-                        app:tint="@color/white"
-                        app:layout_constraintEnd_toEndOf="parent"
+                        android:id="@+id/ivLogo"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@drawable/ic_medical_logo"
+                        app:tint="#007BFF"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent" />
 
-                    <!-- Thay đổi: Gộp thông tin ngày giờ và số ngày còn lại -->
                     <LinearLayout
+                        android:id="@+id/layoutWelcome"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:background="@drawable/appointment_info_bg_new"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="6dp"
-                        app:layout_constraintStart_toStartOf="@id/tvDoctorName"
-                        app:layout_constraintTop_toBottomOf="@id/tvAppointmentDesc">
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/ic_calendar"
-                            app:tint="@color/white" />
+                        android:orientation="vertical"
+                        app:layout_constraintStart_toEndOf="@id/ivLogo"
+                        app:layout_constraintEnd_toStartOf="@id/ivNotification"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:gravity="center">
 
                         <TextView
-                            android:id="@+id/tvAppointmentDateTime"
+                            android:id="@+id/tvWelcome"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:text="June 1, 9:30 AM  •  11 days"
-                            android:textColor="@color/white"
-                            android:textSize="13sp"
+                            android:text="Welcome back,"
+                            android:textColor="#212529"
+                            android:textSize="16sp" />
+
+                        <TextView
+                            android:id="@+id/tvUsername"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="JsonDoe"
+                            android:textColor="#212529"
+                            android:textSize="18sp"
                             android:textStyle="bold" />
                     </LinearLayout>
 
+                    <ImageView
+                        android:id="@+id/ivNotification"
+                        android:layout_width="32dp"
+                        android:layout_height="32dp"
+                        android:src="@drawable/ic_notification_bell"
+                        app:tint="#6C757D"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintBottom_toBottomOf="parent" />
                 </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <!-- Specialist Banner -->
-            <com.google.android.material.card.MaterialCardView
-                android:id="@+id/cardSpecialistBanner"
-                android:layout_width="match_parent"
-                android:layout_height="180dp"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginBottom="24dp"
-                app:cardCornerRadius="20dp"
-                app:cardElevation="8dp">
-
-                <ImageView
+                <!-- Search Bar -->
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/img_specialist_banner" />
+                    android:layout_height="48dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="20dp"
+                    android:background="@drawable/search_bar_bg"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:paddingStart="20dp"
+                    android:paddingEnd="20dp">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/scrim_gradient_bottom" />
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:padding="20dp">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_search"
+                        app:tint="#9E9E9E" />
 
                     <TextView
-                        android:id="@+id/tvBannerTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Cần gặp bác sĩ\n chuyên môn?"
-                        android:textColor="@color/white"
-                        android:textSize="22sp"
-                        android:textStyle="bold"
-                        android:lineSpacingExtra="4dp"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:layout_marginStart="12dp"
+                        android:text="Search Doctor, Hospital"
+                        android:textColor="#9E9E9E"
+                        android:textSize="14sp" />
+                </LinearLayout>
 
-                    <TextView
-                        android:id="@+id/tvBannerSubtitle"
-                        android:layout_width="0dp"
+                <!-- Appointment Card -->
+                <!-- Appointment Card - PHIÊN BẢN CẢI TIẾN -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardAppointment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="24dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp"
+                    app:cardBackgroundColor="@color/teal_primary"> <!-- SỬ DỤNG MÀU NỀN ĐƠN SẮC -->
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:text="Tìm và đặt lịch hẹn \n với các chuyên gia được đánh \n giá cao nhất của chúng tôi."
-                        android:textColor="@color/white"
-                        android:alpha="0.9"
-                        android:textSize="14sp"
-                        app:layout_constraintTop_toBottomOf="@id/tvBannerTitle"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        android:padding="20dp">
+
+                        <!-- Thay đổi: Avatar với viền trắng nhẹ nhàng -->
+                        <com.google.android.material.imageview.ShapeableImageView
+                            android:id="@+id/ivDoctorAvatar"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/sample_profile_image"
+                            android:padding="2dp"
+                            app:shapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Full"
+                            app:strokeColor="@color/white_alpha_30"
+                            app:strokeWidth="2dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <!-- Thay đổi: Bỏ LinearLayout, dùng ConstraintLayout hoàn toàn -->
+                        <TextView
+                            android:id="@+id/tvDoctorName"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Ths. BS. Chae Song Hwa"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
+                            android:textStyle="bold"
+                            app:layout_constraintEnd_toStartOf="@+id/ivArrowDetails"
+                            app:layout_constraintStart_toEndOf="@id/ivDoctorAvatar"
+                            app:layout_constraintTop_toTopOf="@id/ivDoctorAvatar" />
+
+                        <TextView
+                            android:id="@+id/tvAppointmentDesc"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:alpha="0.85"
+                            android:text="Bạn có một lịch hẹn với bác sĩ"
+                            android:textColor="@color/white"
+                            android:textSize="13sp"
+                            app:layout_constraintEnd_toEndOf="@id/tvDoctorName"
+                            app:layout_constraintStart_toStartOf="@id/tvDoctorName"
+                            app:layout_constraintTop_toBottomOf="@id/tvDoctorName" />
+
+                        <!-- MỚI: Icon mũi tên đóng vai trò CTA -->
+                        <ImageView
+                            android:id="@+id/ivArrowDetails"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:src="@drawable/ic_arrow_forward"
+                            app:tint="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintBottom_toBottomOf="parent" />
+
+                        <!-- Thay đổi: Gộp thông tin ngày giờ và số ngày còn lại -->
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:background="@drawable/appointment_info_bg_new"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal"
+                            android:paddingHorizontal="12dp"
+                            android:paddingVertical="6dp"
+                            app:layout_constraintStart_toStartOf="@id/tvDoctorName"
+                            app:layout_constraintTop_toBottomOf="@id/tvAppointmentDesc">
+
+                            <ImageView
+                                android:layout_width="16dp"
+                                android:layout_height="16dp"
+                                android:src="@drawable/ic_calendar"
+                                app:tint="@color/white" />
+
+                            <TextView
+                                android:id="@+id/tvAppointmentDateTime"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:text="June 1, 9:30 AM  •  11 days"
+                                android:textColor="@color/white"
+                                android:textSize="13sp"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Specialist Banner -->
+                <com.google.android.material.card.MaterialCardView
+                    android:id="@+id/cardSpecialistBanner"
+                    android:layout_width="match_parent"
+                    android:layout_height="180dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginBottom="24dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="8dp">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_specialist_banner" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/scrim_gradient_bottom" />
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:padding="20dp">
+
+                        <TextView
+                            android:id="@+id/tvBannerTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Cần gặp bác sĩ\n chuyên môn?"
+                            android:textColor="@color/white"
+                            android:textSize="22sp"
+                            android:textStyle="bold"
+                            android:lineSpacingExtra="4dp"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <TextView
+                            android:id="@+id/tvBannerSubtitle"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:text="Tìm và đặt lịch hẹn \n với các chuyên gia được đánh \n giá cao nhất của chúng tôi."
+                            android:textColor="@color/white"
+                            android:alpha="0.9"
+                            android:textSize="14sp"
+                            app:layout_constraintTop_toBottomOf="@id/tvBannerTitle"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"/>
+
+                        <LinearLayout
+                            android:id="@+id/dotsIndicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            tools:layout_editor_absoluteY="132dp"
+                            tools:ignore="MissingConstraints">
+
+                            <View
+                                android:layout_width="12dp"
+                                android:layout_height="8dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/ic_dot_active_new" />
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:layout_marginEnd="6dp"
+                                android:background="@drawable/ic_dot_inactive_new" />
+
+                            <View
+                                android:layout_width="8dp"
+                                android:layout_height="8dp"
+                                android:background="@drawable/ic_dot_inactive_new" />
+                        </LinearLayout>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+                </com.google.android.material.card.MaterialCardView>
+                <!-- Doctors -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="24dp"
+                    android:layout_marginBottom="24dp">
 
                     <LinearLayout
-                        android:id="@+id/dotsIndicator"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        tools:layout_editor_absoluteY="132dp">
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
 
-                        <View
-                            android:layout_width="12dp"
-                            android:layout_height="8dp"
-                            android:layout_marginEnd="6dp"
-                            android:background="@drawable/ic_dot_active_new" />
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Bác sĩ tư vấn"
+                            android:textSize="18sp"
+                            android:textColor="#212529"
+                            android:textStyle="bold" />
 
-                        <View
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:layout_marginEnd="6dp"
-                            android:background="@drawable/ic_dot_inactive_new" />
-
-                        <View
-                            android:layout_width="8dp"
-                            android:layout_height="8dp"
-                            android:background="@drawable/ic_dot_inactive_new" />
+                        <TextView
+                            android:id="@+id/tvDoctor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="See all >>"
+                            android:textColor="#9E9E9E"
+                            android:textSize="14sp" />
                     </LinearLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
-            </com.google.android.material.card.MaterialCardView>
-            <!-- Doctors -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:layout_marginBottom="24dp">
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_doctors"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/list_item_doctor" />
+                </LinearLayout>
 
+                <!-- Hospitals -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
+                    android:orientation="vertical"
+                    android:paddingHorizontal="24dp"
+                    android:layout_marginBottom="24dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Bác sĩ tư vấn"
-                        android:textSize="18sp"
-                        android:textColor="#212529"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
 
-                    <TextView
-                        android:id="@+id/tvDoctor"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Cơ sở y tế"
+                            android:textSize="18sp"
+                            android:textColor="#212529"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSeeAllHospital"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="See all >>"
+                            android:textColor="#9E9E9E"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_hospitals"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="See all >>"
-                        android:textColor="#9E9E9E"
-                        android:textSize="14sp" />
+                        android:clipToPadding="false"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        tools:itemCount="3"
+                        tools:listitem="@layout/list_item_hospital" />
                 </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_doctors"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/list_item_doctor" />
-            </LinearLayout>
-
-            <!-- Hospitals -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="24dp"
-                android:layout_marginBottom="24dp">
-
+                <!-- Specialties -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
+                    android:orientation="vertical"
+                    android:paddingHorizontal="24dp">
 
-                    <TextView
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Cơ sở y tế"
-                        android:textSize="18sp"
-                        android:textColor="#212529"
-                        android:textStyle="bold" />
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="12dp">
 
-                    <TextView
-                        android:id="@+id/tvSeeAllHospital"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Chuyên khoa"
+                            android:textSize="18sp"
+                            android:textColor="#212529"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/tvSpecialty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="See all >>"
+                            android:textColor="#9E9E9E"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recycler_specialties"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="See all >>"
-                        android:textColor="#9E9E9E"
-                        android:textSize="14sp" />
+                        android:nestedScrollingEnabled="false"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        tools:spanCount="3"
+                        tools:itemCount="10"
+                        tools:listitem="@layout/grid_item_specialty" />
                 </LinearLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_hospitals"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clipToPadding="false"
-                    android:orientation="horizontal"
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:itemCount="3"
-                    tools:listitem="@layout/list_item_hospital" />
             </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-            <!-- Specialties -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingHorizontal="24dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:gravity="center_vertical"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="Chuyên khoa"
-                        android:textSize="18sp"
-                        android:textColor="#212529"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/tvSpecialty"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="See all >>"
-                        android:textColor="#9E9E9E"
-                        android:textSize="14sp" />
-                </LinearLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recycler_specialties"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:nestedScrollingEnabled="false"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-                    tools:spanCount="3"
-                    tools:itemCount="10"
-                    tools:listitem="@layout/grid_item_specialty" />
-            </LinearLayout>
-
-        </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
+    <!-- ProgressBar overlay loading -->
+    <ProgressBar
+        android:id="@+id/homeProgressBar"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        style="?android:attr/progressBarStyleLarge" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
