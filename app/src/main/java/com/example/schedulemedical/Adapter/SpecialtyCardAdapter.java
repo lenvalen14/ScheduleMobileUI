@@ -1,5 +1,6 @@
 package com.example.schedulemedical.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,8 @@ import androidx.recyclerview.widget.ListAdapter;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.model.Specialty;
 import androidx.recyclerview.widget.RecyclerView;
+import com.example.schedulemedical.utils.SpecialtyIconUtil;
+import android.util.Log;
 
 public class SpecialtyCardAdapter extends ListAdapter<Specialty, SpecialtyCardAdapter.SpecialtyViewHolder> {
     private final Context context;
@@ -27,6 +30,7 @@ public class SpecialtyCardAdapter extends ListAdapter<Specialty, SpecialtyCardAd
             public boolean areItemsTheSame(@NonNull Specialty oldItem, @NonNull Specialty newItem) {
                 return oldItem.getName().equals(newItem.getName());
             }
+            @SuppressLint("DiffUtilEquals")
             @Override
             public boolean areContentsTheSame(@NonNull Specialty oldItem, @NonNull Specialty newItem) {
                 return oldItem.equals(newItem);
@@ -72,7 +76,16 @@ public class SpecialtyCardAdapter extends ListAdapter<Specialty, SpecialtyCardAd
         }
         public void bind(Specialty specialty) {
             tvSpecialtyName.setText(specialty.getName());
-            // Nếu muốn set icon động, có thể map specialty.getName() sang icon tương ứng ở đây
+            // Map icon và background động
+            String name = specialty.getName() != null ? specialty.getName().trim().toLowerCase() : "";
+            Log.d("SpecialtyCardAdapter", "Specialty name raw: '" + specialty.getName() + "', normalized: '" + name + "'");
+            int iconResId = SpecialtyIconUtil.getIconResId(name);
+            int bgResId = SpecialtyIconUtil.getBackgroundResId(name);
+            ivSpecialtyIcon.setImageResource(iconResId);
+            View flIconBg = (View) ivSpecialtyIcon.getParent();
+            if (flIconBg != null) {
+                flIconBg.setBackgroundResource(bgResId);
+            }
         }
     }
 } 

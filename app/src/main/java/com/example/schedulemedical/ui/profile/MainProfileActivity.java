@@ -75,27 +75,30 @@ public class MainProfileActivity extends BaseActivity {
                                 .placeholder(R.drawable.sample_profile_image)
                                 .into(ivAvatar);
                     }
+
+                    String role = profile.getRole();
+                    View itemSchedule = findViewById(R.id.itemSchedule);
+                    if ("DOCTOR".equalsIgnoreCase(role)) {
+                        setupMenuItem(R.id.itemSchedule, R.drawable.ic_calendar, "Lịch biểu của tôi");
+                        itemSchedule.setVisibility(View.VISIBLE);
+                    } else {
+                        itemSchedule.setVisibility(View.GONE);
+                    }
                 } else {
                     fallbackProfile(tvFullName, tvEmail, tvPhone, ivAvatar);
+                    findViewById(R.id.itemSchedule).setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(Call<ApiResponse<ProfileResponse>> call, Throwable t) {
                 fallbackProfile(tvFullName, tvEmail, tvPhone, ivAvatar);
+                findViewById(R.id.itemSchedule).setVisibility(View.GONE);
             }
         });
 
         setupMenuItem(R.id.itemMyAppointments, R.drawable.ic_calendar, "Lịch khám của tôi");
         setupMenuItem(R.id.itemPersonalDetails, R.drawable.ic_person_outline, "Thông tin cá nhân");
-
-        View itemSchedule = findViewById(R.id.itemSchedule);
-        if ("DOCTOR".equalsIgnoreCase(role)) {
-            setupMenuItem(R.id.itemSchedule, R.drawable.ic_calendar, "Lịch biểu của tôi");
-            itemSchedule.setVisibility(View.VISIBLE);
-        } else {
-            itemSchedule.setVisibility(View.GONE);
-        }
 
         setupMenuItem(R.id.itemPassword, R.drawable.ic_password, "Đổi mật khẩu");
         setupMenuItem(R.id.itemSettings, R.drawable.ic_settings, "Cài đặt");

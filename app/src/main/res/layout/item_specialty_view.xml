@@ -1,86 +1,89 @@
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="150dp"
     android:layout_marginBottom="12dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    app:strokeWidth="2dp"
-    app:strokeColor="@color/gray_e0"
-    app:cardBackgroundColor="@color/white">
+    android:layout_margin="8dp"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="4dp"
+    app:strokeWidth="0dp"
+    app:cardBackgroundColor="@android:color/white">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
+        android:layout_height="match_parent"
         android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <FrameLayout
+            android:id="@+id/flIconBg"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:background="@drawable/bg_icon_circle_soft"
+            android:padding="12dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivSpecialtyIcon"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:contentDescription="Specialty Icon"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_specialty_placeholder" />
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvSpecialtyName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center_vertical">
+            android:layout_marginStart="16dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Tên chuyên khoa"
+            android:textColor="@color/text_primary"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@id/flIconBg"
+            app:layout_constraintTop_toTopOf="@id/flIconBg" />
 
-            <!-- Specialty Icon -->
-            <ImageView
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_specialty_placeholder"
-                android:background="@drawable/bg_specialty_icon"
-                android:padding="12dp"
-                app:tint="@color/blue_007b" />
+        <TextView
+            android:id="@+id/tvSpecialtyDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="Mô tả chuyên khoa"
+            android:textColor="@color/text_secondary"
+            android:textSize="13sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/flIconBg"
+            app:layout_constraintTop_toBottomOf="@id/tvSpecialtyName" />
 
-            <!-- Specialty Info -->
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tvSpecialtyName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Khoa Tim mạch"
-                    android:textColor="@color/text_primary"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvSpecialtyDescription"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="4dp"
-                    android:text="Chuyên điều trị các bệnh về tim và mạch máu"
-                    android:textColor="@color/text_secondary"
-                    android:textSize="14sp"
-                    android:maxLines="2"
-                    android:ellipsize="end" />
-
-            </LinearLayout>
-
-            <!-- Selection Indicator -->
-            <ImageView
-                android:id="@+id/iconSelected"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/ic_check_circle"
-                app:tint="@color/blue_007b"
-                android:visibility="gone" />
-        </LinearLayout>
-
-        <!-- Đặt lịch ngay Button -->
-        <com.google.android.material.button.MaterialButton
+        <Button
             android:id="@+id/btnBookNow"
-            android:layout_width="match_parent"
-            android:layout_height="49dp"
-            android:layout_marginTop="16dp"
-            android:backgroundTint="@color/blue_447f"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_primary"
+            android:backgroundTint="@color/blue_007b"
+            android:fontFamily="@font/inter_medium"
+            android:gravity="center"
+            android:paddingStart="24dp"
+            android:paddingEnd="24dp"
             android:text="Đặt lịch ngay"
-            android:textColor="@color/white"
+            android:textColor="@android:color/white"
             android:textSize="14sp"
-            app:cornerRadius="18dp" />
-    </LinearLayout>
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="@id/flIconBg"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tvSpecialtyDescription"
+            app:layout_constraintVertical_bias="0.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </com.google.android.material.card.MaterialCardView>
