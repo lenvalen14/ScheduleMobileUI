@@ -27,8 +27,8 @@ public class VerifyCodeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_verify_code);
 
         String email = getIntent().getStringExtra("email");
-        ImageView ivBack = findViewById(R.id.ivBack);
-        ivBack.setOnClickListener(v -> finish());
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
 
         EditText etOtp1 = findViewById(R.id.etOtp1);
         EditText etOtp2 = findViewById(R.id.etOtp2);

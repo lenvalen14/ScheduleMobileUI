@@ -38,7 +38,7 @@ public class PaymentActivity extends AppCompatActivity {
     private static final String TAG = "PaymentActivity";
     
     // UI Components
-    private ImageView ivBack;
+    private ImageView btnBack;
     private TextView tvDoctorName;
     private TextView tvAppointmentDate;
     private TextView tvAppointmentTime;
@@ -88,7 +88,7 @@ public class PaymentActivity extends AppCompatActivity {
     }
     
     private void initializeViews() {
-        ivBack = findViewById(R.id.ivBack);
+        btnBack = findViewById(R.id.btnBack);
         tvDoctorName = findViewById(R.id.tvDoctorName);
         // tvAppointmentDate = findViewById(R.id.tvAppointmentDate); // Not in layout
         // tvAppointmentTime = findViewById(R.id.tvAppointmentTime); // Not in layout
@@ -127,7 +127,7 @@ public class PaymentActivity extends AppCompatActivity {
     
     private void setupClickListeners() {
         // Back button
-        ivBack.setOnClickListener(v -> onBackPressed());
+        btnBack.setOnClickListener(v -> finish());
         
         // Payment method selection
         // cardVnpay.setOnClickListener(v -> selectPaymentMethod("VNPAY")); // Not in layout

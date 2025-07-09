@@ -4,11 +4,9 @@ import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import androidx.gridlayout.widget.GridLayout;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,10 +15,8 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
-import com.example.schedulemedical.model.dto.response.doctor.CertificationResponseDTO;
 import com.example.schedulemedical.ui.base.BaseActivity;
 import com.example.schedulemedical.ui.booking.BookingWizardActivity;
-import com.example.schedulemedical.ui.filterDoctor.FilterDoctorActivity;
 import com.example.schedulemedical.utils.AuthManager;
 import com.example.schedulemedical.utils.NavigationHelper;
 import com.google.gson.Gson;
@@ -100,7 +96,7 @@ public class DoctorProfileActivity extends BaseActivity {
             Log.d("DoctorProfile", "Doctor profile updated: " + new Gson().toJson(doctor));
             if (doctor != null) {
                 mapDoctorProfileToUI(doctor);
-                setupCertifications(doctor.getDoctorId());
+//                setupCertifications(doctor.getDoctorId());
             } else {
                 Log.e("DoctorProfile", "Doctor profile is null");
             }
@@ -130,8 +126,8 @@ public class DoctorProfileActivity extends BaseActivity {
             doctorRating.setText(rating);
         }
         if (doctorExperience != null) {
-            String exp = doctor.getYearsOfExperience() != null ? doctor.getYearsOfExperience() : "Chưa cập nhật kinh nghiệm";
-            doctorExperience.setText(exp);
+            String introduction = generateDoctorIntroduction(doctor);
+            doctorExperience.setText(introduction);
         }
         if (doctorAvatar != null && doctor.getUser() != null && doctor.getUser().getAvatar() != null) {
             Glide.with(this)
@@ -172,29 +168,73 @@ public class DoctorProfileActivity extends BaseActivity {
         }
     }
 
-    private void setupCertifications(Integer doctorId) {
-        if (doctorId == null || doctorId == -1) return;
-        viewModel.loadDoctorCertifications(doctorId, 1, 10);
-        LinearLayout layoutCertifications = findViewById(R.id.layoutCertifications);
-        viewModel.certifications.observe(this, response -> {
-            if (layoutCertifications == null || response == null || response.getData() == null) return;
-            layoutCertifications.removeAllViews();
-            for (CertificationResponseDTO cert : response.getData()) {
-                String fileUrl = cert.getFileUrl();
-                ImageView imageView = new ImageView(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT
-                );
-                params.setMargins(0, 16, 0, 16);
-                imageView.setLayoutParams(params);
-                imageView.setAdjustViewBounds(true);
-                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-                Glide.with(this)
-                        .load(fileUrl)
-                        .into(imageView);
-                layoutCertifications.addView(imageView);
-            }
-        });
+
+    private String generateDoctorIntroduction(DoctorResponse doctor) {
+        StringBuilder intro = new StringBuilder();
+
+        String name = doctor.getUser() != null ? doctor.getUser().getFullName() : null;
+        String specialty = doctor.getSpecialty() != null ? doctor.getSpecialty().getName() : null;
+        String hospital = doctor.getHospital() != null ? doctor.getHospital().getName() : null;
+        String experience = doctor.getYearsOfExperience() != null ? doctor.getYearsOfExperience() + " năm kinh nghiệm" : null;
+        String rating = doctor.getRating() != null ? String.format("%.1f ★", doctor.getRating()) : null;
+        int numSchedules = doctor.getSchedules() != null ? doctor.getSchedules().size() : 0;
+
+        if (name != null) {
+            intro.append(name);
+        } else {
+            intro.append("Bác sĩ");
+        }
+
+        if (specialty != null) {
+            intro.append(" là bác sĩ chuyên ngành ").append(specialty);
+        }
+
+        if (hospital != null) {
+            intro.append(", đang công tác tại ").append(hospital);
+        }
+
+        intro.append(".");
+
+        if (experience != null) {
+            intro.append(" Với ").append(experience).append(" trong lĩnh vực");
+        } else {
+            intro.append(" Với nhiều năm kinh nghiệm trong lĩnh vực");
+        }
+
+        intro.append(", bác sĩ đã xây dựng được uy tín qua chất lượng khám chữa bệnh và sự tin tưởng từ bệnh nhân.");
+
+        if (numSchedules > 0) {
+            intro.append(" Hiện tại, bác sĩ có ").append(numSchedules).append(" khung giờ làm việc mỗi tuần có thể tham khảo ở phần Time slots ở bên dưới nhé.");
+        }
+
+        return intro.toString();
     }
+
+
+
+//    private void setupCertifications(Integer doctorId) {
+//        if (doctorId == null || doctorId == -1) return;
+//        viewModel.loadDoctorCertifications(doctorId, 1, 10);
+//        LinearLayout layoutCertifications = findViewById(R.id.layoutCertifications);
+//        viewModel.certifications.observe(this, response -> {
+//            if (layoutCertifications == null || response == null || response.getData() == null) return;
+//            layoutCertifications.removeAllViews();
+//            for (CertificationResponseDTO cert : response.getData()) {
+//                String fileUrl = cert.getFileUrl();
+//                ImageView imageView = new ImageView(this);
+//                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+//                        ViewGroup.LayoutParams.MATCH_PARENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT
+//                );
+//                params.setMargins(0, 16, 0, 16);
+//                imageView.setLayoutParams(params);
+//                imageView.setAdjustViewBounds(true);
+//                imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+//                Glide.with(this)
+//                        .load(fileUrl)
+//                        .into(imageView);
+//                layoutCertifications.addView(imageView);
+//            }
+//        });
+//    }
 }

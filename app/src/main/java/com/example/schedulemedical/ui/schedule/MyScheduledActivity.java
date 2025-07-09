@@ -181,4 +181,10 @@ public class MyScheduledActivity extends BaseActivity implements AppointmentAdap
             }
         });
     }
+
+    @Override
+    public void onBackPressed() {
+        com.example.schedulemedical.utils.NavigationHelper.navigateToMainProfile(this, "DOCTOR");
+        finish();
+    }
 }

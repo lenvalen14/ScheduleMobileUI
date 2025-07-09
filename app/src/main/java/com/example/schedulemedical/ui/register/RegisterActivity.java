@@ -54,7 +54,7 @@ public class RegisterActivity extends ComponentActivity {
         // AutoCompleteTextView genderEdt = findViewById(R.id.autoCompleteGender);
         CheckBox cbTerms = findViewById(R.id.cbTerms);
         Button registerBtn = findViewById(R.id.btnRegister);
-        ImageView btn_back = findViewById(R.id.ivBack);
+        ImageView btnBack = findViewById(R.id.btnBack);
 
         registerBtn.setOnClickListener(view -> {
             String name = nameEdt.getText().toString().trim();
@@ -108,7 +108,7 @@ public class RegisterActivity extends ComponentActivity {
             }
         });
 
-        btn_back.setOnClickListener(v -> {
+        btnBack.setOnClickListener(v -> {
             // Chuyển về trang login khi bấm back
             NavigationHelper.navigateToLogin(RegisterActivity.this);
             finish();

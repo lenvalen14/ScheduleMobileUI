@@ -52,7 +52,7 @@ public class ProfileActivity extends BaseActivity {
     private static final String TAG = "ProfileActivity";
     
     // UI Components
-    private ImageView ivBack;
+    private ImageView btnBack;
     private ImageView ivProfileImage;
     private MaterialCardView cardChangePhoto;
     private EditText etFullName;
@@ -122,7 +122,7 @@ public class ProfileActivity extends BaseActivity {
     }
     
     private void initializeViews() {
-        ivBack = findViewById(R.id.ivBack);
+        btnBack = findViewById(R.id.btnBack);
         // ivProfileImage = findViewById(R.id.ivProfileImage); // Not in layout
         // cardChangePhoto = findViewById(R.id.cardChangePhoto); // Not in layout
         etFullName = findViewById(R.id.etFullName);
@@ -186,7 +186,7 @@ public class ProfileActivity extends BaseActivity {
     
     private void setupClickListeners() {
         // Back button
-        ivBack.setOnClickListener(v -> finish());
+        btnBack.setOnClickListener(v -> finish());
         
         // Change photo
         // cardChangePhoto.setOnClickListener(v -> selectImage()); // View commented out

@@ -27,8 +27,8 @@ public class SendOTPActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_otpactivity);
 
-        ImageView ivBack = findViewById(R.id.ivBack);
-        ivBack.setOnClickListener(v -> finish());
+        ImageView btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(v -> finish());
 
         TextInputLayout tilEmail = findViewById(R.id.tilEmail);
         TextInputEditText etEmail = findViewById(R.id.etEmail);
