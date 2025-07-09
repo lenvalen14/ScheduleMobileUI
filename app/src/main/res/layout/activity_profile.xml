@@ -27,16 +27,19 @@
                 android:elevation="4dp"
                 android:paddingHorizontal="16dp">
 
-                <Button
+                <ImageView
                     android:id="@+id/btnBack"
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:src="@drawable/ic_arrow_back"
-                    android:background="?android:attr/selectableItemBackgroundBorderless"
-                    android:padding="4dp"
+                    android:contentDescription="Back"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    android:layout_marginStart="16dp"
+                    />
+
+
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -69,12 +72,11 @@
                     app:cardCornerRadius="60dp"
                     app:cardElevation="4dp">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/ivProfilePicture"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:src="@drawable/sample_profile_image"
-                        android:scaleType="centerCrop" />
+                        android:src="@drawable/sample_profile_image" />
 
                 </androidx.cardview.widget.CardView>
 

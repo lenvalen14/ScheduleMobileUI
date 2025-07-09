@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CircleCrop;
@@ -34,16 +35,25 @@ import com.example.schedulemedical.model.dto.request.UpdateUserRequest;
 import com.example.schedulemedical.model.dto.request.UpdatePatientProfileRequest;
 import com.example.schedulemedical.model.dto.response.UserResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
+import com.example.schedulemedical.ui.home.HomeActivity;
 import com.example.schedulemedical.ui.login.LoginActivity;
 import com.example.schedulemedical.utils.AuthManager;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.button.MaterialButton;
 import com.example.schedulemedical.ui.schedule.MyScheduledActivity;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -53,8 +63,8 @@ public class ProfileActivity extends BaseActivity {
     
     // UI Components
     private ImageView btnBack;
-    private ImageView ivProfileImage;
-    private MaterialCardView cardChangePhoto;
+    private CircleImageView ivProfileImage;
+    private TextView ivChangePhoto;
     private EditText etFullName;
     private EditText etEmail;
     private EditText etPhoneNumber;
@@ -83,6 +93,7 @@ public class ProfileActivity extends BaseActivity {
     private UserApiService userApiService;
     private AuthManager authManager;
     private ProgressDialog progressDialog;
+    private ProfileViewModel profileViewModel;
     
     // Date formatter
     private SimpleDateFormat dateFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
@@ -94,7 +105,6 @@ public class ProfileActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // Không cần setContentView, không cần gọi lại các hàm setup ở đây
     }
 
     @Override
@@ -111,6 +121,9 @@ public class ProfileActivity extends BaseActivity {
         setupProgressDialog();
         loadUserProfile();
         loadPatientProfile();
+
+        profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
+
     }
 
     private void initializeServices() {
@@ -123,12 +136,12 @@ public class ProfileActivity extends BaseActivity {
     
     private void initializeViews() {
         btnBack = findViewById(R.id.btnBack);
-        // ivProfileImage = findViewById(R.id.ivProfileImage); // Not in layout
-        // cardChangePhoto = findViewById(R.id.cardChangePhoto); // Not in layout
+        ivProfileImage = findViewById(R.id.ivProfilePicture);
+        ivChangePhoto = findViewById(R.id.tvChangePhoto);
         etFullName = findViewById(R.id.etFullName);
         etEmail = findViewById(R.id.etEmail);
         etPhoneNumber = findViewById(R.id.etPhoneNumber);
-        // etDateOfBirth = findViewById(R.id.etDateOfBirth); // Not in layout
+        // etDateOfBirth = findViewById(R.id.etDateOfBirth);
         rgGender = findViewById(R.id.rgGender);
         rbMale = findViewById(R.id.rbMale);
         rbFemale = findViewById(R.id.rbFemale);
@@ -145,8 +158,7 @@ public class ProfileActivity extends BaseActivity {
         etMedicationHistory = findViewById(R.id.etMedicationHistory);
         etNationalId = findViewById(R.id.etNationalId);
         Button btnSaveProfile = findViewById(R.id.btnUpdateProfile);
-        // tvChangePassword = findViewById(R.id.tvChangePassword); // Not in layout
-        
+
         // Disable email editing (usually not changeable)
         if (etEmail != null) {
             etEmail.setEnabled(false);
@@ -162,34 +174,80 @@ public class ProfileActivity extends BaseActivity {
         });
         
     }
-    
+
     private void setupImagePickerLauncher() {
         imagePickerLauncher = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            result -> {
-                if (result.getResultCode() == RESULT_OK && result.getData() != null) {
-                    selectedImageUri = result.getData().getData();
-                    if (selectedImageUri != null) {
-                        // Display selected image
-                        Glide.with(this)
-                                .load(selectedImageUri)
-                                .transform(new CircleCrop())
-                                .into(ivProfileImage);
-                        
-                        // TODO: Upload image to server
-                        Toast.makeText(this, "Ảnh đã được chọn. Lưu hồ sơ để cập nhật.", Toast.LENGTH_SHORT).show();
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            Glide.with(this).load(selectedImageUri).into(ivProfileImage);
+                            uploadAvatarToServer();
+                        }
                     }
                 }
-            }
         );
+    }
+
+    private void uploadAvatarToServer() {
+        int userId = authManager.getUserId();
+        if (selectedImageUri == null || userId == -1) return;
+
+        try {
+            File file = getFileFromUri(selectedImageUri);
+            if (file == null) {
+                Toast.makeText(this, "Không thể xử lý file ảnh", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String mimeType = getContentResolver().getType(selectedImageUri); // e.g., image/jpeg
+
+            RequestBody requestFile = RequestBody.create(MediaType.parse(mimeType), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+
+            profileViewModel.uploadAvatar(userId, body).observe(this, response -> {
+                if (response != null && response.getCode() == 201) {
+                    Toast.makeText(this, "Cập nhật ảnh thành công!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "Lỗi cập nhật ảnh: " + (response != null ? response.getMessage() : "Không rõ lỗi"), Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Lỗi xử lý ảnh: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private File getFileFromUri(Uri uri) throws IOException {
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        File file = new File(getCacheDir(), "avatar_temp.jpg");
+        FileOutputStream outputStream = new FileOutputStream(file);
+
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, len);
+        }
+
+        outputStream.close();
+        inputStream.close();
+
+        return file;
     }
     
     private void setupClickListeners() {
         // Back button
         btnBack.setOnClickListener(v -> finish());
-        
+
         // Change photo
-        // cardChangePhoto.setOnClickListener(v -> selectImage()); // View commented out
+        ivChangePhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            imagePickerLauncher.launch(intent);
+        });
         
         // Date of birth picker
         // etDateOfBirth.setOnClickListener(v -> showDatePicker()); // View commented out

@@ -9,6 +9,8 @@ import com.example.schedulemedical.model.dto.request.UpdateUserRequest;
 import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.PatientProfileResponse;
 
+import okhttp3.MultipartBody;
+
 public class ProfileViewModel extends ViewModel {
 
     private final UserRepository userRepository = new UserRepository();
@@ -19,5 +21,9 @@ public class ProfileViewModel extends ViewModel {
 
     public LiveData<ApiResponse<PatientProfileResponse>> updatePatientProfile(int userId, UpdatePatientProfileRequest request) {
         return userRepository.updatePatientProfile(userId, request);
+    }
+
+    public LiveData<ApiResponse<Object>> uploadAvatar(int userId, MultipartBody.Part filePart) {
+        return userRepository.uploadAvatar(userId, filePart);
     }
 }

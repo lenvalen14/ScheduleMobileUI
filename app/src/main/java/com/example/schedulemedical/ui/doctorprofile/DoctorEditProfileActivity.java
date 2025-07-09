@@ -1,8 +1,12 @@
 package com.example.schedulemedical.ui.doctorprofile;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -11,25 +15,38 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.bumptech.glide.Glide;
 import com.example.schedulemedical.R;
 import com.example.schedulemedical.model.dto.request.UpdateUserRequest;
 import com.example.schedulemedical.model.dto.request.doctor.UpdateDoctorDTO;
 import com.example.schedulemedical.model.dto.response.DoctorResponse;
 import com.example.schedulemedical.model.dto.response.UserResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
+import com.example.schedulemedical.ui.home.HomeActivity;
 import com.example.schedulemedical.ui.profile.ProfileViewModel;
 import com.example.schedulemedical.utils.AuthManager;
 import com.example.schedulemedical.utils.NavigationHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 public class DoctorEditProfileActivity extends BaseActivity {
 
@@ -40,6 +57,10 @@ public class DoctorEditProfileActivity extends BaseActivity {
     private int userId = -1;
 
     private TextView tvDateOfBirth;
+    private CircleImageView ivProfileImage;
+    private TextView tvChangePhoto;
+    private Uri selectedImageUri;
+    private ActivityResultLauncher<Intent> imagePickerLauncher;
 
     @Override
     protected int getLayoutResourceId() {
@@ -60,10 +81,84 @@ public class DoctorEditProfileActivity extends BaseActivity {
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
 
         tvDateOfBirth = findViewById(R.id.tvDateOfBirth);
+        ivProfileImage = findViewById(R.id.profile_image);
+        tvChangePhoto = findViewById(R.id.tvChangePhoto);
 
+        setupImagePickerLauncher();
+        setupChangePhotoClick();
         setupNavigation();
         setupDatePicker();
         loadDoctorProfileByUserId();
+    }
+
+    private void setupChangePhotoClick() {
+        tvChangePhoto.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType("image/*");
+            imagePickerLauncher.launch(intent);
+        });
+    }
+
+    private void setupImagePickerLauncher() {
+        imagePickerLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                        selectedImageUri = result.getData().getData();
+                        if (selectedImageUri != null) {
+                            Glide.with(this).load(selectedImageUri).into(ivProfileImage);
+                            uploadAvatarToServer();
+                        }
+                    }
+                }
+        );
+    }
+
+    private void uploadAvatarToServer() {
+        if (selectedImageUri == null || userId == -1) return;
+
+        try {
+            File file = getFileFromUri(selectedImageUri);
+            if (file == null) {
+                Toast.makeText(this, "Không thể xử lý file ảnh", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            String mimeType = getContentResolver().getType(selectedImageUri); // e.g., image/jpeg
+
+            RequestBody requestFile = RequestBody.create(MediaType.parse(mimeType), file);
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+
+            profileViewModel.uploadAvatar(userId, body).observe(this, response -> {
+                if (response != null && response.getCode() == 201) {
+                    Toast.makeText(this, "Cập nhật ảnh thành công!", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(this, HomeActivity.class);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(this, "Lỗi cập nhật ảnh: " + (response != null ? response.getMessage() : "Không rõ lỗi"), Toast.LENGTH_LONG).show();
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Lỗi xử lý ảnh: " + e.getMessage(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private File getFileFromUri(Uri uri) throws IOException {
+        InputStream inputStream = getContentResolver().openInputStream(uri);
+        File file = new File(getCacheDir(), "avatar_temp.jpg");
+        FileOutputStream outputStream = new FileOutputStream(file);
+
+        byte[] buffer = new byte[1024];
+        int len;
+        while ((len = inputStream.read(buffer)) > 0) {
+            outputStream.write(buffer, 0, len);
+        }
+
+        outputStream.close();
+        inputStream.close();
+
+        return file;
     }
 
     private void setupNavigation() {
@@ -112,6 +207,14 @@ public class DoctorEditProfileActivity extends BaseActivity {
         if (doctorResponse == null) return;
 
         UserResponse user = doctorResponse.getUser();
+
+        if (user != null && user.getAvatar() != null && !user.getAvatar().isEmpty()) {
+            Glide.with(this)
+                    .load(user.getAvatar())
+                    .placeholder(R.drawable.sample_profile_image)
+                    .error(R.drawable.sample_profile_image)
+                    .into(ivProfileImage);
+        }
 
         ((EditText) findViewById(R.id.etFullName)).setText(user != null ? user.getFullName() : "");
         ((EditText) findViewById(R.id.etPhoneNumber)).setText(user != null ? user.getPhone() : "");
@@ -224,7 +327,6 @@ public class DoctorEditProfileActivity extends BaseActivity {
         });
     }
 
-    // ✅ Xử lý sự kiện bấm LinearLayout chọn ngày sinh
     private void setupDatePicker() {
         LinearLayout layoutDatePicker = findViewById(R.id.layoutDatePicker);
         if (layoutDatePicker != null) {
@@ -234,21 +336,17 @@ public class DoctorEditProfileActivity extends BaseActivity {
 
     public String formatIsoDate(String isoDate) {
         try {
-            // Parse ISO date string
             SimpleDateFormat isoFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault());
-            isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));  // rất quan trọng để đúng giờ UTC
+            isoFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
             Date date = isoFormat.parse(isoDate);
-
-            // Format lại sang dạng mong muốn
             SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault());
             return outputFormat.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
-            return isoDate; // fallback nếu lỗi
+            return isoDate;
         }
     }
-
 
     private void showDatePickerDialog() {
         final Calendar calendar = Calendar.getInstance();
