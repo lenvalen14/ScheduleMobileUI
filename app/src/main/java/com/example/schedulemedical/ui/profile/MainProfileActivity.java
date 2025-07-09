@@ -117,7 +117,6 @@ public class MainProfileActivity extends BaseActivity {
             });
         });
 
-
         findViewById(R.id.itemMyAppointments).setOnClickListener(v -> {
             Intent intent = new Intent(this, MyScheduledActivity.class);
             intent.putExtra("role", role);
