@@ -64,6 +64,12 @@ public interface DoctorApiService {
             @Query("page") int page,
             @Query("limit") int limit
     );
+    @GET("doctor/specialty/{hospitalId}")
+    Call<ApiResponse<List<SpecialtyResponse>>> getSpecialtiesByHospitalNew(
+            @Path("hospitalId") int hospitalId,
+            @Query("page") int page,
+            @Query("limit") int limit
+    );
     
     // Get specialties by hospital
     @GET("doctor/specialty/{hospitalId}")

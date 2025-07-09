@@ -24,6 +24,7 @@ import com.example.schedulemedical.model.dto.response.ApiResponse;
 import com.example.schedulemedical.model.dto.response.SpecialtyResponse;
 import com.example.schedulemedical.ui.booking.BookingWizardActivity;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -116,11 +117,13 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
             hospitalId = ((BookingWizardActivity) getActivity()).getHospitalId();
         }
 
+        Log.d("ham nay dc goi n1",hospitalId.toString() );
         if (hospitalId != null && hospitalId > 0) {
             // Load specialties for specific hospital
             loadSpecialtiesByHospital(hospitalId);
         } else {
             // Load all specialties
+            Log.d("ham nay dc goi", "all specialties");
             loadAllSpecialties();
         }
     }
@@ -159,10 +162,14 @@ public class SpecialtySelectionFragment extends Fragment implements SpecialtyAda
 
     // NOTE: Sửa lại phương thức này để xử lý logic bất đồng bộ
     private void loadSpecialtiesByHospital(Integer hospitalId) {
-        doctorApiService.getAllSpecialties(1, 50).enqueue(new Callback<ApiResponse<List<SpecialtyResponse>>>() {
+        doctorApiService.getSpecialtiesByHospitalNew(hospitalId, 1,50).enqueue(new Callback<ApiResponse<List<SpecialtyResponse>>>() {
             @Override
             public void onResponse(Call<ApiResponse<List<SpecialtyResponse>>> call, Response<ApiResponse<List<SpecialtyResponse>>> response) {
                 showLoading(false);
+                Log.d("ham nay dc goi n2 dang bat dau",hospitalId.toString() );
+                Gson gson = new GsonBuilder().setPrettyPrinting().create();
+                String json = gson.toJson(response.body());
+                Log.d("API RESPONSE", json);
                 if (response.isSuccessful() && response.body() != null && response.body().getData() != null) {
                     List<SpecialtyResponse> responseList = response.body().getData();
                     if (responseList.isEmpty()) {
