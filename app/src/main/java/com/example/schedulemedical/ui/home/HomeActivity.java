@@ -3,6 +3,7 @@ package com.example.schedulemedical.ui.home;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,6 +34,7 @@ public class HomeActivity extends BaseActivity {
     private View homeProgressBar;
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefreshLayout;
     private TextView tvSeeAllDoctor, tvSeeAllHospital, tvSeeAllSpecialty;
+    private ImageView ivNotification;
 
     @Override
     protected int getLayoutResourceId() {
@@ -50,6 +52,7 @@ public class HomeActivity extends BaseActivity {
         tvSeeAllDoctor = findViewById(R.id.tvDoctor);
         tvSeeAllHospital = findViewById(R.id.tvSeeAllHospital);
         tvSeeAllSpecialty = findViewById(R.id.tvSpecialty);
+        ivNotification = findViewById(R.id.ivNotification);
         setupAdapters();
         setupObservers();
         setupSeeAllClicks();
@@ -162,5 +165,18 @@ public class HomeActivity extends BaseActivity {
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show();
             }
         });
+        if (ivNotification != null) {
+            ivNotification.setOnClickListener(view -> {
+                showNotificationFragment();
+            });
+        }
     }
+
+    private void showNotificationFragment() {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(android.R.id.content, new com.example.schedulemedical.ui.main.NotificationFragment())
+                .addToBackStack(null)
+                .commit();}
+
 }
