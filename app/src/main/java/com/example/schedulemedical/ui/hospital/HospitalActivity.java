@@ -19,6 +19,7 @@ import com.example.schedulemedical.data.api.HospitalApiService;
 import com.example.schedulemedical.model.dto.response.HospitalListResponse;
 import com.example.schedulemedical.model.dto.response.HospitalResponse;
 import com.example.schedulemedical.ui.base.BaseActivity;
+import com.example.schedulemedical.ui.booking.BookingWizardActivity;
 import com.example.schedulemedical.utils.NavigationHelper;
 import com.google.android.material.card.MaterialCardView;
 
@@ -204,7 +205,9 @@ public class HospitalActivity extends BaseActivity implements HospitalAdapter.On
 
     @Override
     public void onBookNowClick(HospitalResponse hospital) {
-
+        Log.d(TAG, "Book now clicked for hospital: " + hospital);
+        Intent intent = BookingWizardActivity.createIntentWithHospital(this, hospital);
+        startActivity(intent);
     }
 
     private void searchHospitals(String keyword) {

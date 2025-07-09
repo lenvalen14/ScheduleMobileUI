@@ -168,7 +168,7 @@ public class BookingWizardActivity extends AppCompatActivity {
                 Log.d(TAG, "Auto-advancing to schedule selection (step 2) - doctor and specialty already selected");
             } else {
                 // We have doctor but no specialty, skip to doctor selection (will show selected doctor)
-                currentStep = 1;
+                currentStep = 2;
                 Log.d(TAG, "Auto-advancing to doctor selection (step 1) - doctor selected but need specialty info");
             }
         } else if (bookingData.specialtyId != null && bookingData.specialtyId > 0) {
