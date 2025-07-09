@@ -33,8 +33,9 @@ public class HomeActivity extends BaseActivity {
     private RecyclerView recyclerDoctors, recyclerHospitals, recyclerSpecialties;
     private View homeProgressBar;
     private androidx.swiperefreshlayout.widget.SwipeRefreshLayout swipeRefreshLayout;
-    private TextView tvSeeAllDoctor, tvSeeAllHospital, tvSeeAllSpecialty;
+    private TextView tvSeeAllDoctor, tvSeeAllHospital, tvSeeAllSpecialty, tvUsername;
     private ImageView ivNotification;
+    private AuthManager authManager;
 
     @Override
     protected int getLayoutResourceId() {
@@ -53,6 +54,16 @@ public class HomeActivity extends BaseActivity {
         tvSeeAllHospital = findViewById(R.id.tvSeeAllHospital);
         tvSeeAllSpecialty = findViewById(R.id.tvSpecialty);
         ivNotification = findViewById(R.id.ivNotification);
+        tvUsername = findViewById(R.id.tvUsername);
+
+        authManager = new AuthManager(this);
+        String userName = authManager.getUserName();
+        if (userName != null && !userName.isEmpty()) {
+            tvUsername.setText(userName);
+        } else {
+            tvUsername.setText("User");
+        }
+
         setupAdapters();
         setupObservers();
         setupSeeAllClicks();

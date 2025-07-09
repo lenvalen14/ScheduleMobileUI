@@ -43,11 +43,13 @@ public class MainProfileActivity extends BaseActivity {
     protected void setupViews() {
 
         authManager = new AuthManager(this);
+        android.util.Log.d("DEBUG_ROLE", "Current role from AuthManager: " + authManager.getUserRole());
 
         // ✅ Khởi tạo ViewModel ở đây
         viewModel = new ViewModelProvider(this).get(DoctorViewModel.class);
 
         String role = getIntent().getStringExtra(ROLE);
+        android.util.Log.d("DEBUG_ROLE", "Role from Intent: " + role);
 
         ImageView btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(v -> finish());
